@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>环球寻物 · 第一关</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23161b4d'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23ffb31a'/%3E%3C/svg%3E">
+<meta name="description" content="环球寻物：扮演寻物员小年，在墨西哥球迷街寻找穿绿色球衣的小狗吉拿。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+KuaiLe&display=swap">
+</head>
+<body>
+<div id="cesium" aria-hidden="true"></div>
+<div id="iris" aria-hidden="true"></div>
+
+<!-- 加载 / 错误遮罩 -->
+<div id="loading" role="status" aria-live="polite">
+  <p class="loading-main" id="loadingText">正在准备地球…</p>
+  <div class="loading-bar"><i></i></div>
+  <p class="loading-slow" id="loadingSlow" hidden>加载较慢，请检查网络后重试。<button class="chip" id="loadingRetry" type="button">重试</button></p>
+</div>
+<div id="fail" hidden role="alert">
+  <p>3D 画面加载失败。请确认浏览器支持 WebGL，然后刷新页面。</p>
+  <button class="chip" type="button" onclick="location.reload()">刷新页面</button>
+</div>
+
+<!-- 选关 -->
+<section id="select" class="screen" aria-label="选择关卡">
+  <header>
+    <h1>环球寻物</h1>
+    <p>地球上亮起小点的地方，就有人在找丢失的东西。寻物员小年会去当地，把失物带回来。</p>
+  </header>
+  <ul class="flags" id="flags"></ul>
+  <p class="foot-note">第一关为虚构街区与虚构事件，不使用真实品牌标识。本期仅开放第一关。</p>
+</section>
+
+<!-- 地球 -->
+<section id="earthUI" class="screen" hidden aria-label="地球">
+  <div class="topbar">
+    <button class="chip" id="earthBack" type="button">返回选关</button>
+    <div class="group">
+      <button class="chip sound" type="button" aria-pressed="true">声音：开</button>
+      <button class="chip" id="earthDone" type="button" hidden>返回选关</button>
+    </div>
+  </div>
+  <div class="guide">
+    <div class="avatar" data-who="莫">莫</div>
+    <p id="earthLine">小年，墨西哥的球迷街传来了求助。点击发光区域，去看看吧。</p>
+  </div>
+</section>
+
+<!-- 球迷街 -->
+<section id="streetUI" class="screen" hidden aria-label="球迷街探索">
+  <div class="topbar">
+    <button class="chip" id="streetBack" type="button">返回地球</button>
+    <div class="group">
+      <span class="chip" id="timer">00:00</span>
+      <button class="chip sound" type="button" aria-pressed="true">声音：开</button>
+    </div>
+    <div class="target" id="targetCard">
+      <img id="thumb" alt="穿绿色球衣的小狗吉拿" width="56" height="56">
+      <div><b>吉拿</b><span>穿绿色球衣的小狗</span></div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="left-col">
+      <button class="hint-btn" id="hint" type="button" hidden>听叫声（剩 2 次）</button>
+      <div class="stick" id="stick" hidden aria-label="移动摇杆" role="application">
+        <span class="knob" id="knob"></span>
+      </div>
+    </div>
+    <div class="acts">
+      <button class="act crouch" id="crouch" type="button" aria-pressed="false" hidden>蹲</button>
+      <button class="act take" id="takeDog" type="button" hidden>抱起吉拿</button>
+    </div>
+  </div>
+
+  <div id="coach" hidden></div>
+</section>
+
+<!-- 任务说明 -->
+<div id="task" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="taskTitle">
+  <div class="card">
+    <div class="talk">
+      <div class="avatar" data-who="卢">卢</div>
+      <div>
+        <b id="taskTitle">摊主卢佩</b>
+        <p>吉拿一转眼就跑丢了。它穿着绿色球衣，你能帮我找找吗？</p>
+      </div>
+    </div>
+    <ul class="task-list">
+      <li>目标：找到小狗<b>吉拿</b>（穿绿色球衣）</li>
+      <li>电脑：WASD 移动，按住鼠标拖动转视角，C 键蹲下，E 键确认</li>
+      <li>手机：左下摇杆移动，拖动画面转视角，右侧按钮蹲下或确认</li>
+    </ul>
+    <p class="task-note">阅读任务不计时，点击“开始寻找”后开始计时。</p>
+    <button class="primary" id="startFind" type="button">开始寻找</button>
+  </div>
+</div>
+
+<!-- 结算 -->
+<div id="result" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+  <div class="card">
+    <h2 id="resultTitle">找到吉拿啦</h2>
+    <p class="stars" id="stars" aria-label="本局星级"></p>
+    <div class="talk">
+      <div class="avatar" data-who="卢">卢</div>
+      <div><p>谢谢你，小年！它总爱追着足球跑。</p></div>
+    </div>
+    <dl class="stats">
+      <div><dt>用时</dt><dd id="resTime">00:00</dd></div>
+      <div><dt>提示</dt><dd id="resHint">0 次</dd></div>
+      <div><dt>最高</dt><dd id="resBest">0 星</dd></div>
+    </dl>
+    <p class="res-note" id="resNote"></p>
+    <div class="card-actions">
+      <button class="primary" id="again" type="button">再玩一次</button>
+      <button class="chip" id="toEarth" type="button">回到地球</button>
+    </div>
+  </div>
+</div>
+
+<div id="near" hidden role="status"><span id="nearText"></span></div>
+<div id="tip" hidden></div>
+<div id="toast" role="status" hidden></div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
