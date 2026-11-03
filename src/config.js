@@ -88,11 +88,13 @@ export const TUNING = {
   nearDog: 2.2, // 吉拿确认距离（米，中心水平距离）
   hintsPerRound: 2,
   hintHighlightMs: 2800,
-  camDist: 11.5,
-  camPitch: 0.4,
+  camDist: 14.5,
+  camPitch: 0.55,
+  overviewPitch: 0.8,
+  overviewYaw: 0.35,
   camFocusHeight: 1.2,
   camMinDist: 4,
-  camMaxDist: 18,
+  camMaxDist: 22,
   star3: { time: 60000, hints: 0 },
   star2: { time: 120000, hints: 1 },
 };

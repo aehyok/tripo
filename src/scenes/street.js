@@ -1,5 +1,6 @@
 import * as Cesium from 'cesium';
 import { ANCHOR, LAYOUT, DOG_SPOTS, TUNING } from '../config.js';
+import { REDUCED } from '../core/tween.js';
 import {
   createProp, createModelEntity, propMeta, makeFrameMatrix, frameQuat, localToWorld, rotate2, C,
 } from './streetProps.js';
@@ -413,6 +414,11 @@ export class StreetScene {
     this.round++;
     this.placeDog(spot);
     this.resetHero();
+    this.overview = true;
+    this.overviewZoom = 1;
+    this.overviewBlend = 0;
+    this.s.camYaw = TUNING.overviewYaw;
+    this.s.camPitch = TUNING.overviewPitch;
     this.hintState = { left: TUNING.hintsPerRound, used: 0 };
     this.elapsed = 0;
     this.startAt = 0;
@@ -460,6 +466,9 @@ export class StreetScene {
   }
 
   beginPlay(now = performance.now()) {
+    this.overview = false;
+    this.overviewBlend = REDUCED ? 0 : 1;
+    this.s.camPitch = TUNING.camPitch;
     this.s.playing = true;
     this.startAt = now;
     this.elapsed = 0;
@@ -546,8 +555,7 @@ export class StreetScene {
         const [a, b] = [...this.pointers.values()];
         const d = Math.hypot(a.x - b.x, a.y - b.y);
         if (this.pinch) {
-          const k = this.distScale || 1;
-          this.s.camDist = Math.max(TUNING.camMinDist, Math.min(TUNING.camMaxDist * k, this.s.camDist * (this.pinch / d)));
+          this.zoomCamera(this.pinch / d);
         }
         this.pinch = d;
       }
@@ -565,8 +573,7 @@ export class StreetScene {
       (e) => {
         if (!this.active) return;
         e.preventDefault();
-        const k = this.distScale || 1;
-        this.s.camDist = Math.max(TUNING.camMinDist, Math.min(TUNING.camMaxDist * k, this.s.camDist * (1 + e.deltaY * 0.001)));
+        this.zoomCamera(Math.max(0.1, 1 + e.deltaY * 0.001));
       },
       { passive: false },
     );
@@ -578,6 +585,15 @@ export class StreetScene {
     this.joy.y = 0;
     this.pointers.clear();
     this.dragActive = false;
+  }
+
+  zoomCamera(factor) {
+    if (this.overview) {
+      this.overviewZoom = Cesium.Math.clamp(this.overviewZoom * factor, 0.85, 1.5);
+      return;
+    }
+    const k = this.distScale || 1;
+    this.s.camDist = Cesium.Math.clamp(this.s.camDist * factor, TUNING.camMinDist, TUNING.camMaxDist * k);
   }
 
   bindJoystick(el, knob) {
@@ -703,6 +719,11 @@ export class StreetScene {
   }
 
   updateCamera(dt) {
+    if (this.overview) {
+      this.updateOverviewCamera();
+      return;
+    }
+    this.overviewBlend = Math.max(0, this.overviewBlend - dt / 0.9);
     const s = this.s;
     const full = s.found ? Math.min(s.camDist, 7) : s.camDist;
     const need = Math.min(full, 5.5);
@@ -747,6 +768,38 @@ export class StreetScene {
       Cesium.Cartesian3.multiplyByScalar(dir, s.curDist, new Cesium.Cartesian3()),
       new Cesium.Cartesian3(),
     );
+    if (this.overviewBlend > 0 && this.overviewPose) {
+      const t = this.overviewBlend * this.overviewBlend * (3 - 2 * this.overviewBlend);
+      Cesium.Cartesian3.lerp(focusLocal, this.overviewPose.focus, t, focusLocal);
+      Cesium.Cartesian3.lerp(camLocal, this.overviewPose.camera, t, camLocal);
+    }
+    this.setCameraPose(focusLocal, camLocal);
+  }
+
+  /** 以整个街区为焦点，按视口最窄的方向留出完整的立体轮廓。 */
+  updateOverviewCamera() {
+    const canvas = this.viewer.canvas;
+    const aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
+    const fovy = this.viewer.camera.frustum.fovy;
+    const halfFov = Math.min(fovy / 2, Math.atan(Math.tan(fovy / 2) * aspect));
+    const radius = TUNING.groundRadius + 2;
+    const distance = radius / Math.sin(halfFov) / 0.75 * this.overviewZoom;
+    const pitch = Cesium.Math.clamp(this.s.camPitch, 0.4, 1.2);
+    const direction = this.cameraDir(this.s.camYaw, pitch);
+    const focus = new Cesium.Cartesian3(0, 0, 1.7);
+    // 窄屏的任务卡在底部，把完整街区稍微向上摆放。
+    if (canvas.clientWidth <= 720) {
+      const right = Cesium.Cartesian3.normalize(Cesium.Cartesian3.cross(UP, direction, new Cesium.Cartesian3()), new Cesium.Cartesian3());
+      const viewUp = Cesium.Cartesian3.normalize(Cesium.Cartesian3.cross(direction, right, new Cesium.Cartesian3()), new Cesium.Cartesian3());
+      Cesium.Cartesian3.multiplyByScalar(viewUp, -distance * Math.tan(fovy / 2) * 0.24, focus);
+      focus.z += 1.7;
+    }
+    const camera = Cesium.Cartesian3.add(focus, Cesium.Cartesian3.multiplyByScalar(direction, distance, new Cesium.Cartesian3()), new Cesium.Cartesian3());
+    this.overviewPose = { focus, camera };
+    this.setCameraPose(focus, camera);
+  }
+
+  setCameraPose(focusLocal, camLocal) {
     const focusEcef = Cesium.Matrix4.multiplyByPoint(this.frame, focusLocal, new Cesium.Cartesian3());
     const camEcef = Cesium.Matrix4.multiplyByPoint(this.frame, camLocal, new Cesium.Cartesian3());
     const direction = Cesium.Cartesian3.normalize(Cesium.Cartesian3.subtract(focusEcef, camEcef, new Cesium.Cartesian3()), new Cesium.Cartesian3());
