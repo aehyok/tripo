@@ -439,7 +439,7 @@ Cesium 的 [Model 文档](https://cesium.com/learn/cesiumjs/ref-doc/Model.html#f
 
 ### 10.3 底图、地形、灯光与部署
 
-- **底图与地形：** 地图服务提供方待确认。迁移第一版先具备本地简化底图与椭球地球的可运行方案；Cesium 提供 [EllipsoidTerrainProvider](https://cesium.com/learn/cesiumjs/ref-doc/EllipsoidTerrainProvider.html)作为椭球表面。后续配置在线底图或地形时保持第一关可独立加载。
+- **底图与地形：** 地图服务提供方待确认。当前版本使用项目自绘的**分块矢量瓦片**（`src/scenes/globeTiles.js`）：按 Cesium 的 `GeographicTilingScheme` 逐级把内置海岸线数据重绘成瓦片，放大时逐级请求新瓦片，海岸线与经纬网保持清晰；云层由世界坐标的分形噪声逐瓦片生成，瓦片之间无缝。球体使用固定方向光照明并开启大气，因此有明暗过渡。Cesium 提供 [EllipsoidTerrainProvider](https://cesium.com/learn/cesiumjs/ref-doc/EllipsoidTerrainProvider.html)作为椭球表面。该方案不接入任何在线地图或影像服务，断网可用；后续配置在线底图或地形时保持第一关可独立加载。
 - **街区锚点：** 经纬度、高度及可玩地面共同配置；第一版以固定地面为准。若以后接入真实地形，需要重新验收贴地与相机，不在加载过程中直接改变本局地面。
 - **夜景方案：** 首版使用可控制的主光源、模型发光材质与烘焙明暗营造暖色夜景，以角色和目标清晰可见为验收标准。Cesium 的场景主光源配置见 [Scene.light](https://cesium.com/learn/cesiumjs/ref-doc/Scene.html#light)，具体效果由迁移样机验证。Cesium 不提供多盏实时点光源，路灯、串灯和摊位灯只作为发光材质与贴图表现，不规划真实照明范围；若样机验证发现局部光感不足，只能通过材质、贴花或后期调色补偿，不把“多光源夜景”列为可实现目标。
 - **异步与转场：** 退出时取消当前飞行，并让旧回合的加载结果和延迟回调失效；恢复地球控制前重置街区相机参考系。相机接口依据 [Camera 文档](https://cesium.com/learn/cesiumjs/ref-doc/Camera.html#cancelFlight)。

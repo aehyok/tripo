@@ -1,8 +1,12 @@
 import * as Cesium from 'cesium';
 import geo from '../data/world.json';
 import { ANCHOR, REGION } from '../config.js';
+import { createGlobeImagery, createCloudImagery } from './globeTiles.js';
 
 const NIGHT = Cesium.Color.fromCssColorString('#161b4d');
+
+/** 固定光源的「日下点」：让墨西哥落在受光面偏侧，球体才有明暗过渡 */
+const SUBSOLAR = { lon: -55, lat: 12 };
 
 /** 把原型地理数据（x = 经度 + 180，y = 90 - 纬度）还原成经纬度 */
 function ringToPositions(ring) {
@@ -13,51 +17,6 @@ function ringToPositions(ring) {
     out.push(lon, lat);
   }
   return Cesium.Cartesian3.fromDegreesArray(out);
-}
-
-/** 本地简化底图：自绘风格化地球，不接入卫星影像，规避底图授权与国内访问问题 */
-function paintGlobe(size) {
-  const W = size;
-  const H = size / 2;
-  const canvas = document.createElement('canvas');
-  canvas.width = W;
-  canvas.height = H;
-  const c = canvas.getContext('2d');
-
-  c.fillStyle = '#1b3f9c';
-  c.fillRect(0, 0, W, H);
-
-  const s = W / 360;
-  c.setTransform(s, 0, 0, s, 0, 0);
-
-  c.strokeStyle = 'rgba(180,200,255,.13)';
-  c.lineWidth = 0.12;
-  for (let x = 0; x <= 360; x += 30) {
-    c.beginPath();
-    c.moveTo(x, 0);
-    c.lineTo(x, 180);
-    c.stroke();
-  }
-  for (let y = 0; y <= 180; y += 30) {
-    c.beginPath();
-    c.moveTo(0, y);
-    c.lineTo(360, y);
-    c.stroke();
-  }
-
-  c.beginPath();
-  for (const ring of geo.land) {
-    c.moveTo(ring[0], ring[1]);
-    for (let i = 2; i < ring.length; i += 2) c.lineTo(ring[i], ring[i + 1]);
-    c.closePath();
-  }
-  c.fillStyle = '#8c95dc';
-  c.fill('evenodd');
-  c.strokeStyle = '#c4c9f2';
-  c.lineWidth = 0.1;
-  c.stroke();
-
-  return canvas;
 }
 
 function ringTexture(size, color, width) {
@@ -104,28 +63,45 @@ export class EarthScene {
     const scene = viewer.scene;
 
     scene.backgroundColor = NIGHT;
-    scene.globe.baseColor = Cesium.Color.fromCssColorString('#1b3f9c');
-    scene.globe.enableLighting = false;
+    scene.globe.baseColor = Cesium.Color.fromCssColorString('#10336f');
+    scene.globe.enableLighting = true;
     scene.globe.showGroundAtmosphere = true;
+    scene.globe.nightAlpha = 0.55;
+    scene.globe.dayAlpha = 1;
     scene.fog.enabled = false;
     scene.skyAtmosphere.show = true;
-    scene.skyAtmosphere.brightnessShift = -0.25;
+    scene.skyAtmosphere.brightnessShift = 0.05;
     scene.sun.show = false;
     scene.moon.show = false;
     scene.highDynamicRange = true;
 
-    const size = window.innerWidth < 760 || navigator.hardwareConcurrency <= 4 ? 2048 : 4096;
-    const dataUrl = paintGlobe(size).toDataURL('image/png');
-    const provider = await Cesium.SingleTileImageryProvider.fromUrl(dataUrl);
+    // 分块矢量瓦片：放大时逐级请求新瓦片，海岸线与经纬网始终保持清晰
     viewer.imageryLayers.removeAll();
-    viewer.imageryLayers.addImageryProvider(provider);
+    viewer.imageryLayers.addImageryProvider(createGlobeImagery());
+    const clouds = viewer.imageryLayers.addImageryProvider(createCloudImagery());
+    clouds.alpha = 0.48;
+    clouds.brightness = 1.05;
+    this.clouds = clouds;
 
+    this.applyLight();
     this.buildRegion();
+  }
+
+  /** 地球用固定方向光，返回地球页时要从街区的局部光恢复回来 */
+  applyLight() {
+    const normal = Cesium.Cartesian3.normalize(
+      Cesium.Cartesian3.fromDegrees(SUBSOLAR.lon, SUBSOLAR.lat, 0),
+      new Cesium.Cartesian3(),
+    );
+    const direction = Cesium.Cartesian3.negate(normal, new Cesium.Cartesian3());
+    this.viewer.scene.light = new Cesium.DirectionalLight({ direction, intensity: 1.7 });
   }
 
   buildRegion() {
     const { viewer } = this;
-    const highlight = Cesium.Color.fromCssColorString('#ffb31a').withAlpha(0.88);
+    this.baseColor = Cesium.Color.fromCssColorString('#ffb31a');
+    this.fillAlpha = -1;
+    const highlight = this.baseColor.withAlpha(0.86);
     const outline = Cesium.Color.fromCssColorString('#fff4dc').withAlpha(0.95);
 
     for (const ring of geo.mex) {
@@ -181,13 +157,25 @@ export class EarthScene {
 
   setCompleted(done) {
     this.completed = done;
-    const base = Cesium.Color.fromCssColorString(done ? '#12a66a' : '#ffb31a');
-    this.mexEntities.forEach((e) => {
-      e.polygon.material = base.withAlpha(0.88);
-    });
+    this.baseColor = Cesium.Color.fromCssColorString(done ? '#12a66a' : '#ffb31a');
+    this.applyFill(this.fillAlpha, true);
     /* 完成后不再显示小点，避免暗示还有未完成的线索 */
     this.dotEntities.forEach((e) => {
       e.show = !done;
+    });
+  }
+
+  /**
+   * 高亮块的浓度跟随镜头高度：远看是醒目的色块，推近后逐渐透明，
+   * 让云和地表透出来——否则一放大整个屏幕就是一块纯色。
+   */
+  applyFill(alpha, force = false) {
+    const a = Cesium.Math.clamp(alpha, 0, 1);
+    if (!force && Math.abs(a - this.fillAlpha) < 0.015) return;
+    this.fillAlpha = a;
+    const color = this.baseColor.withAlpha(a);
+    this.mexEntities.forEach((e) => {
+      e.polygon.material = color;
     });
   }
 
@@ -196,6 +184,7 @@ export class EarthScene {
     const { camera } = this.viewer;
     const dest = Cesium.Cartesian3.fromDegrees(-64, 32, 3.15e7);
     const orientation = { heading: 0, pitch: -Math.PI / 2, roll: 0 };
+    this.setCloudAlpha(0.3);
     this.cancelFlight();
     this.spin = false;
     if (instant) {
@@ -221,6 +210,7 @@ export class EarthScene {
     const portrait = this.viewer.canvas.clientHeight > this.viewer.canvas.clientWidth;
     const height = portrait ? 2.4e7 : 1.85e7;
     this.spin = false;
+    this.setCloudAlpha(0.48);
     const token = ++this.flightToken;
     return new Promise((resolve) => {
       camera.flyTo({
@@ -258,6 +248,7 @@ export class EarthScene {
     const portrait = this.viewer.canvas.clientHeight > this.viewer.canvas.clientWidth;
     const height = portrait ? 2.4e7 : 1.85e7;
     this.spin = false;
+    this.setCloudAlpha(0.48);
     const token = ++this.flightToken;
     return new Promise((resolve) => {
       camera.flyTo({
@@ -279,12 +270,18 @@ export class EarthScene {
     }
   }
 
+  /** 选关页地球只是背景，云淡一点才不会盖住卡片 */
+  setCloudAlpha(a) {
+    if (this.clouds) this.clouds.alpha = a;
+  }
+
   setControlsEnabled(on) {
     const c = this.viewer.scene.screenSpaceCameraController;
     c.enableInputs = on;
     c.enableTranslate = false;
-    c.minimumZoomDistance = 1.4e6;
+    c.minimumZoomDistance = 4e5;
     c.maximumZoomDistance = 9e7;
+    if (on) this.applyLight();
   }
 
   /** 命中墨西哥区域或小点（带触屏容错范围） */
@@ -299,6 +296,10 @@ export class EarthScene {
     if (this.spin) {
       this.viewer.camera.rotate(Cesium.Cartesian3.UNIT_Z, -dt * 0.045);
     }
+    const h = this.viewer.camera.positionCartographic.height;
+    // 进入区域内部后色块就没意义了，直接让位给地表；区域还完整可见时保持醒目
+    const k = Cesium.Math.clamp((h - 1.05e6) / (2.2e6 - 1.05e6), 0, 1);
+    this.applyFill(0.86 * k * k * (3 - 2 * k));
   }
 
   dispose() {
