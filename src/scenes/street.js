@@ -842,7 +842,8 @@ export class StreetScene {
     this.hopDog(2);
 
     if (used === 1) {
-      return { index: 1, text: `汪汪！叫声来自${where}。`, pan: Math.max(-1, Math.min(1, Math.sin(a))), where };
+      // a 的正方向为画面左侧，StereoPanner 的正值则代表右声道。
+      return { index: 1, text: `汪汪！叫声来自${where}。`, pan: Math.max(-1, Math.min(1, -Math.sin(a))), where };
     }
 
     /* 第二次提示：短暂标出位置 */

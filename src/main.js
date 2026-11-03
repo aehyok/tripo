@@ -74,7 +74,7 @@ $('flags').addEventListener('click', (e) => {
 function updateEarthLine() {
   const done = app.progress.done;
   $('earthLine').textContent = done
-    ? '墨西哥点亮了！当前版本可再次挑战第一关。'
+    ? '墨西哥点亮了！点击发光区域，再次挑战第一关。'
     : '小年，墨西哥的球迷街传来了求助。点击发光区域，去看看吧。';
   $('earthDone').hidden = !done;
   $('earthBack').hidden = done;
@@ -97,6 +97,8 @@ function toSelect() {
   if (app.mode === 'select' || app.mode === 'street' || app.mode === 'result') return;
   app.round++;
   earth.cancelFlight();
+  // 取消进场时同时使旧遮罩动画失效，并立即恢复选关画面。
+  irisInstant(true);
   app.mode = 'select';
   setGlobeVisible(true);
   earth.setCompleted(app.progress.done);
@@ -240,6 +242,7 @@ async function leaveStreet() {
   updateEarthLine();
   app.mode = 'earth';
   await iris(true, 420);
+  if (token !== app.round) return;
   await earth.flyBack();
 }
 
@@ -384,7 +387,6 @@ function bindEarthPointer() {
     const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
     down = null;
     if (moved > 8) return;
-    if (app.progress.done) return;
     if (earth.pickRegion(e.clientX, e.clientY, COARSE ? 32 : 22)) enterStreet();
   });
 
@@ -394,7 +396,7 @@ function bindEarthPointer() {
 
   canvas.addEventListener('pointermove', (e) => {
     if (app.mode !== 'earth' || e.pointerType !== 'mouse') return;
-    const on = !app.progress.done && earth.pickRegion(e.clientX, e.clientY, 18);
+    const on = earth.pickRegion(e.clientX, e.clientY, 18);
     canvas.style.cursor = on ? 'pointer' : 'grab';
     const tip = $('tip');
     tip.hidden = !on;
