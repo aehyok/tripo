@@ -2,6 +2,7 @@ import * as Cesium from 'cesium';
 import geo from '../data/world.json';
 import { ANCHOR, REGION } from '../config.js';
 import { createGlobeImagery, createCloudImagery } from './globeTiles.js';
+import { REDUCED } from '../core/tween.js';
 
 const NIGHT = Cesium.Color.fromCssColorString('#161b4d');
 
@@ -56,6 +57,8 @@ export class EarthScene {
     this.completed = false;
     this.flightToken = 0;
     this.spin = true;
+    this.interacting = false;
+    this.spinResumeAt = 0;
   }
 
   async init() {
@@ -187,9 +190,11 @@ export class EarthScene {
     this.setCloudAlpha(0.3);
     this.cancelFlight();
     this.spin = false;
+    this.setInteracting(false);
     if (instant) {
       camera.setView({ destination: dest, orientation });
       this.spin = true;
+      this.setControlsEnabled(true, true);
       onDone?.();
       return;
     }
@@ -199,6 +204,7 @@ export class EarthScene {
       duration: 1.1,
       complete: () => {
         this.spin = true;
+        this.setControlsEnabled(true, true);
         onDone?.();
       },
     });
@@ -223,23 +229,100 @@ export class EarthScene {
     });
   }
 
-  /** 从地球飞向街区锚点，作为进场转场的第一段 */
-  flyToAnchor() {
+  /** 先锁定航线，再侧倾俯冲，最后拉平镜头进入城市。 */
+  async flyToAnchor(onProgress) {
+    this.cancelFlight();
     const { camera } = this.viewer;
     const token = ++this.flightToken;
-    return new Promise((resolve) => {
-      camera.flyTo({
-        destination: Cesium.Cartesian3.fromDegrees(ANCHOR.lon, ANCHOR.lat, 900),
-        orientation: {
-          heading: 0,
-          pitch: Cesium.Math.toRadians(-55),
-          roll: 0,
-        },
-        duration: 1.7,
-        complete: () => resolve(token === this.flightToken),
-        cancel: () => resolve(false),
+    this.spin = false;
+    this.setControlsEnabled(false);
+    this.journeyProgress = 0;
+    if (!REDUCED) this.buildFlightEffects();
+    const stages = REDUCED
+      ? [{ lon: ANCHOR.lon, lat: ANCHOR.lat, height: ANCHOR.height + 700, heading: 0, pitch: -55, roll: 0, duration: 0, from: 0, to: 1 }]
+      : [
+        { lon: ANCHOR.lon - 6, lat: ANCHOR.lat - 3, height: 4.8e6, heading: 22, pitch: -72, roll: -7, duration: 1.05, from: 0, to: 0.24 },
+        { lon: ANCHOR.lon - 0.14, lat: ANCHOR.lat - 0.12, height: 95000, heading: -12, pitch: -64, roll: 9, duration: 1.8, from: 0.24, to: 0.72 },
+        { lon: ANCHOR.lon, lat: ANCHOR.lat, height: ANCHOR.height + 700, heading: 0, pitch: -55, roll: 0, duration: 1.25, from: 0.72, to: 1 },
+      ];
+
+    for (const stage of stages) {
+      if (token !== this.flightToken) return false;
+      this.flightStage = { ...stage, started: performance.now(), onProgress };
+      onProgress?.(stage.from);
+      const done = await new Promise((resolve) => {
+        camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(stage.lon, stage.lat, stage.height),
+          orientation: {
+            heading: Cesium.Math.toRadians(stage.heading),
+            pitch: Cesium.Math.toRadians(stage.pitch),
+            roll: Cesium.Math.toRadians(stage.roll),
+          },
+          duration: stage.duration,
+          easingFunction: Cesium.EasingFunction.SINUSOIDAL_IN_OUT,
+          complete: () => resolve(token === this.flightToken),
+          cancel: () => resolve(false),
+        });
       });
+      if (!done) {
+        if (token === this.flightToken) this.clearFlightEffects();
+        return false;
+      }
+    }
+    this.clearFlightEffects();
+    onProgress?.(1);
+    return true;
+  }
+
+  buildFlightEffects() {
+    const { viewer } = this;
+    this.flightEffectTime = performance.now();
+    const start = viewer.camera.positionCartographic;
+    const lon = Cesium.Math.toDegrees(start.longitude);
+    const lat = Cesium.Math.toDegrees(start.latitude);
+    const positions = Array.from({ length: 97 }, (_, i) => {
+      const t = i / 96;
+      // 最短经度方向，地表上方拱起的航线不会穿入地球。
+      const delta = Cesium.Math.negativePiToPi(Cesium.Math.toRadians(ANCHOR.lon - lon));
+      return Cesium.Cartesian3.fromDegrees(
+        lon + Cesium.Math.toDegrees(delta) * t,
+        lat + (ANCHOR.lat - lat) * t,
+        ANCHOR.height + 2000 + Math.sin(t * Math.PI) * 8e5,
+      );
     });
+    this.flightEntities = [viewer.entities.add({
+      polyline: {
+        positions: new Cesium.CallbackProperty(() => positions.slice(0, Math.max(2, Math.ceil(Math.min(1, this.journeyProgress / 0.24) * positions.length))), false),
+        width: 5,
+        material: new Cesium.PolylineGlowMaterialProperty({
+          color: new Cesium.CallbackProperty(() => Cesium.Color.fromCssColorString('#6af5ec').withAlpha(Cesium.Math.clamp((0.7 - this.journeyProgress) / 0.2, 0, 1)), false),
+          glowPower: 0.28,
+        }),
+      },
+    })];
+    for (let i = 0; i < 3; i++) {
+      const radius = () => {
+        const t = ((this.flightEffectTime / 1300) + i / 3) % 1;
+        return Math.max(45, Math.min(6e5, viewer.camera.positionCartographic.height * 0.12)) * (0.3 + t);
+      };
+      this.flightEntities.push(viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(ANCHOR.lon, ANCHOR.lat, ANCHOR.height + 30),
+        ellipse: {
+          semiMajorAxis: new Cesium.CallbackProperty(radius, false),
+          semiMinorAxis: new Cesium.CallbackProperty(radius, false),
+          height: ANCHOR.height + 30 + i * 10,
+          fill: false,
+          outline: true,
+          outlineColor: new Cesium.CallbackProperty(() => Cesium.Color.fromCssColorString('#ffcf70').withAlpha((1 - ((this.flightEffectTime / 1300 + i / 3) % 1)) * 0.8), false),
+        },
+      }));
+    }
+  }
+
+  clearFlightEffects() {
+    this.flightStage = null;
+    this.flightEntities?.forEach((entity) => this.viewer.entities.remove(entity));
+    this.flightEntities = [];
   }
 
   /** 离开街区后回到地球浏览视角 */
@@ -263,6 +346,7 @@ export class EarthScene {
 
   cancelFlight() {
     this.flightToken++;
+    this.clearFlightEffects();
     try {
       this.viewer.camera.cancelFlight();
     } catch {
@@ -275,13 +359,19 @@ export class EarthScene {
     if (this.clouds) this.clouds.alpha = a;
   }
 
-  setControlsEnabled(on) {
+  setControlsEnabled(on, overview = false) {
     const c = this.viewer.scene.screenSpaceCameraController;
     c.enableInputs = on;
     c.enableTranslate = false;
-    c.minimumZoomDistance = 4e5;
-    c.maximumZoomDistance = 9e7;
+    c.minimumZoomDistance = overview ? 1.1e7 : 4e5;
+    c.maximumZoomDistance = overview ? 5e7 : 9e7;
     if (on) this.applyLight();
+  }
+
+  /** 拖动时暂停自转，松手后留一点时间看清当前位置。 */
+  setInteracting(on) {
+    this.interacting = on;
+    this.spinResumeAt = performance.now() + 2400;
   }
 
   /** 命中墨西哥区域或小点（带触屏容错范围） */
@@ -293,7 +383,15 @@ export class EarthScene {
   }
 
   update(dt) {
-    if (this.spin) {
+    if (this.flightStage) {
+      this.flightEffectTime = performance.now();
+      const s = this.flightStage;
+      const t = Math.min(1, (performance.now() - s.started) / Math.max(1, s.duration * 1000));
+      this.journeyProgress = s.from + (s.to - s.from) * t;
+      this.setCloudAlpha(0.48 * (1 - this.journeyProgress));
+      s.onProgress?.(this.journeyProgress);
+    }
+    if (this.spin && !this.interacting && performance.now() >= this.spinResumeAt && !REDUCED) {
       this.viewer.camera.rotate(Cesium.Cartesian3.UNIT_Z, -dt * 0.045);
     }
     const h = this.viewer.camera.positionCartographic.height;

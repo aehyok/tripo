@@ -7,7 +7,8 @@ import { EarthScene } from './scenes/earth.js';
 import { StreetScene } from './scenes/street.js';
 import { dogThumbnail } from './ui/dogArt.js';
 import { getProgress, updateProgress, recordClear } from './core/progress.js';
-import { runTweens } from './core/tween.js';
+import { runTweens, REDUCED } from './core/tween.js';
+import { JourneyEffects } from './core/journey.js';
 import * as sfx from './core/audio.js';
 import {
   $, fmtTime, toast, showScreen, iris, irisInstant,
@@ -20,6 +21,7 @@ const COARSE = window.matchMedia('(pointer: coarse)').matches;
 let viewer = null;
 let earth = null;
 let street = null;
+let journey = null;
 
 const app = {
   mode: 'boot',
@@ -97,6 +99,7 @@ function toSelect() {
   if (app.mode === 'select' || app.mode === 'street' || app.mode === 'result') return;
   app.round++;
   earth.cancelFlight();
+  journey.stop();
   // 取消进场时同时使旧遮罩动画失效，并立即恢复选关画面。
   irisInstant(true);
   app.mode = 'select';
@@ -171,10 +174,17 @@ async function enterStreet() {
   sfx.blip();
   hideTip();
 
-  await earth.flyToAnchor();
+  journey.start();
+  const landed = await earth.flyToAnchor((progress) => journey.setProgress(progress));
   if (token !== app.round) return;
+  if (!landed) {
+    journey.stop();
+    earth.setControlsEnabled(true);
+    app.mode = 'earth';
+    return;
+  }
 
-  await iris(false, 400);
+  await iris(false, 260);
   if (token !== app.round) return;
 
   setGlobeVisible(false);
@@ -182,6 +192,7 @@ async function enterStreet() {
     await ensureStreet();
   } catch (err) {
     console.error('街区构建失败', err);
+    journey.stop();
     loadingFail('街区资源加载失败，请刷新页面重试。');
     app.mode = 'error';
     return;
@@ -192,7 +203,26 @@ async function enterStreet() {
   street.enterRound();
   showScreen('street');
   resetStreetUI();
-  await iris(true, 520);
+  // 从街区上空轻轻落入跟随视角，遮罩揭开后仍有真实的镜头运动。
+  const camera = viewer.camera;
+  const destination = Cesium.Cartesian3.clone(camera.positionWC);
+  const orientation = {
+    direction: Cesium.Cartesian3.clone(camera.directionWC),
+    up: Cesium.Cartesian3.clone(camera.upWC),
+  };
+  if (!REDUCED) {
+    const offset = Cesium.Matrix4.multiplyByPointAsVector(street.frame, new Cesium.Cartesian3(7, 5, 15), new Cesium.Cartesian3());
+    camera.setView({ destination: Cesium.Cartesian3.add(destination, offset, new Cesium.Cartesian3()), orientation });
+  }
+  journey.arrive();
+  await Promise.all([
+    iris(true, 650),
+    new Promise((resolve) => camera.flyTo({
+      destination, orientation, duration: REDUCED ? 0 : 1.2,
+      easingFunction: Cesium.EasingFunction.CUBIC_OUT,
+      complete: resolve, cancel: resolve,
+    })),
+  ]);
   if (token !== app.round) return;
 
   app.mode = 'street';
@@ -221,6 +251,7 @@ function beginFind() {
 async function leaveStreet() {
   if (app.mode !== 'street' && app.mode !== 'result') return;
   app.mode = 'leaving';
+  journey.stop();
   const token = ++app.round;
   sfx.blip();
   clearResultTimer();
@@ -373,8 +404,32 @@ function setGlobeVisible(on) {
 function bindEarthPointer() {
   const canvas = viewer.canvas;
   let down = null;
+  const overviewPointers = new Set();
+
+  const releaseOverview = (e) => {
+    if (!overviewPointers.delete(e.pointerId)) return;
+    earth.setInteracting(overviewPointers.size > 0);
+    if (!overviewPointers.size) canvas.style.cursor = '';
+  };
+  // 在卡片或画布外松手，也要结束拖动，避免自转一直暂停。
+  window.addEventListener('pointerup', releaseOverview);
+  window.addEventListener('pointercancel', releaseOverview);
+  window.addEventListener('blur', () => {
+    overviewPointers.clear();
+    earth.setInteracting(false);
+    canvas.style.cursor = '';
+  });
+  canvas.addEventListener('wheel', () => {
+    if (app.mode === 'select') earth.setInteracting(overviewPointers.size > 0);
+  }, { passive: true });
 
   canvas.addEventListener('pointerdown', (e) => {
+    if (app.mode === 'select') {
+      overviewPointers.add(e.pointerId);
+      earth.setInteracting(true);
+      canvas.style.cursor = 'grabbing';
+      return;
+    }
     if (app.mode !== 'earth') return;
     down = { x: e.clientX, y: e.clientY };
   });
@@ -395,6 +450,10 @@ function bindEarthPointer() {
   });
 
   canvas.addEventListener('pointermove', (e) => {
+    if (app.mode === 'select') {
+      canvas.style.cursor = overviewPointers.size ? 'grabbing' : 'grab';
+      return;
+    }
     if (app.mode !== 'earth' || e.pointerType !== 'mouse') return;
     const on = earth.pickRegion(e.clientX, e.clientY, 18);
     canvas.style.cursor = on ? 'pointer' : 'grab';
@@ -443,6 +502,7 @@ function startLoop() {
     runTweens(dt);
     if (app.mode === 'select' || app.mode === 'earth' || app.mode === 'flying') earth.update(dt);
     if (app.mode === 'street' || app.mode === 'result' || app.mode === 'leaving') street.update(dt, now);
+    journey.update(now);
   });
 }
 
@@ -465,6 +525,7 @@ async function boot() {
 
   earth = new EarthScene(viewer);
   street = new StreetScene(viewer, streetHooks());
+  journey = new JourneyEffects(viewer);
   app.earth = earth;
   app.street = street;
   app.viewer = viewer;

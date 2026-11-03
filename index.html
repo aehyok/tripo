@@ -13,6 +13,16 @@
 <body>
 <div id="cesium" aria-hidden="true"></div>
 <div id="iris" aria-hidden="true"></div>
+<div id="journey" hidden>
+  <canvas id="journeyCanvas" aria-hidden="true"></canvas>
+  <div class="journey-letterbox" aria-hidden="true"></div>
+  <div class="journey-hud">
+    <span class="journey-eyebrow">下一站 / MEXICO CITY</span>
+    <strong>墨西哥 · 球迷街</strong>
+    <span id="journeyStage" role="status" aria-live="polite"></span>
+    <div class="journey-track" aria-hidden="true"><i id="journeyMeter"></i></div>
+  </div>
+</div>
 
 <!-- 加载 / 错误遮罩 -->
 <div id="loading" role="status" aria-live="polite">
@@ -32,7 +42,9 @@
     <p>地球上亮起小点的地方，就有人在找丢失的东西。寻物员小年会去当地，把失物带回来。</p>
   </header>
   <ul class="flags" id="flags"></ul>
-  <p class="foot-note">第一关为虚构街区与虚构事件，不使用真实品牌标识。本期仅开放第一关。</p>
+  <p class="foot-note">第一关为虚构街区与虚构事件，不使用真实品牌标识。本期仅开放第一关。
+    <span class="globe-hint">拖动地球旋转 · 滚轮或双指缩放</span>
+  </p>
 </section>
 
 <!-- 地球 -->
