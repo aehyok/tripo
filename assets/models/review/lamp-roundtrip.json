@@ -1,0 +1,28 @@
+{
+  "lamp": {
+    "dimensions_m": [
+      0.6663259267807007,
+      0.6748486757278442,
+      3.1999998092651367
+    ],
+    "minimum": [
+      -0.33316296339035034,
+      -0.3374243378639221,
+      0.0
+    ],
+    "maximum": [
+      0.33316296339035034,
+      0.3374243378639221,
+      3.1999998092651367
+    ],
+    "triangles": 1410,
+    "materials": [
+      "lamp_iron_glass"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0
+    }
+  }
+}

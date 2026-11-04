@@ -1,0 +1,87 @@
+{
+  "asset": "小吃车",
+  "date": "2026-11-04",
+  "stage": "Blender重拓扑与Cesium接入",
+  "source": "../raw/cart_tripo.glb",
+  "source_sha256": "d14db2c1605e8841987c52730f91cafb9f11529ad011aafeca11209cab054019",
+  "file": "../../../public/assets/models/cart.glb",
+  "bytes": 699056,
+  "sha256": "92e0326820b115fd218a7a2c8ff041118a7fec94d9e2e15df051709a26a0e291",
+  "triangles": 2892,
+  "raw_triangles": 3495,
+  "dimensions_m": [
+    2.2,
+    1.1,
+    2.4
+  ],
+  "origin": "整体水平包围盒中心、轮胎最低点Z=0",
+  "front_blender": "-Y",
+  "wheel_count": 4,
+  "wheel_centers": [
+    [
+      -0.73,
+      -0.3,
+      0.18
+    ],
+    [
+      -0.73,
+      0.46,
+      0.18
+    ],
+    [
+      0.73,
+      -0.3,
+      0.18
+    ],
+    [
+      0.73,
+      0.46,
+      0.18
+    ]
+  ],
+  "bulb_count": 11,
+  "emission_strength": 2.5,
+  "window": "不透明浅蓝灰，alphaMode OPAQUE",
+  "mesh_audit": {
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "loose_vertices": 0
+  },
+  "operations": [
+    "按原造型重建平整车身、展示窗、折叠台板和斜撑",
+    "重建四轮及轮毂、固定车轴",
+    "重建28片封闭条纹篷布垂边",
+    "复用原配色/颜色贴图，重新烘焙1K PBR，12像素UV边距",
+    "11颗屋顶固定暖色灯泡，发光强度2.5，无悬空电线"
+  ],
+  "new_tripo_credits": 0,
+  "limitations": [
+    "静态展示车，未制作行驶或折叠动画",
+    "机械和布面构件有内部交叠，不作打印级布尔实体认证",
+    "全量与真实移动设备性能待验收"
+  ],
+  "previews": [
+    "cart-final-front.png",
+    "cart-final-back.png",
+    "cart-final-left.png",
+    "cart-final-right.png",
+    "cart-final-top.png",
+    "cart-final-bottom.png",
+    "cart-final-quarter.png"
+  ],
+  "blend": "../blender/cart.blend",
+  "validation": "cart.validation.json",
+  "roundtrip": "cart-roundtrip.json",
+  "browser_checks": "cart-browser-checks.txt",
+  "checks_completed": [
+    "正/后/左右/顶底与3/4实际网格渲染",
+    "GLB结构、三张1K和实际2,892三角面检查",
+    "回导2.2×1.1×2.4米、水平中心和轮胎底部Z=0、网格边界/非流形检查",
+    "22项小吃车浏览器检查，包括GPU、真实比例、布局朝向、发光2.5、不透明材质、碰撞、三藏点出生遮挡/可达/近距确认和缺失回退",
+    "24项吉拿回归检查",
+    "正式关卡选关→墨西哥→开始寻找，W移动、C下蹲/站起通过，当前控制台无警告/错误"
+  ],
+  "collider": "cart-colliders.json",
+  "path_note": "机械构件保留分离壳的内部交叠；薄篷布片间设1毫米接缝，未使用Draco",
+  "game_preview": "cart-game.png"
+}

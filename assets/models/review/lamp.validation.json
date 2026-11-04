@@ -1,0 +1,54 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/lamp.glb",
+    "bytes": 1151448,
+    "sha256": "2e22af444d4ec822e554b9a69fbbbf2077db253948734c8f974ef94907ce3c4a",
+    "triangles": 1410,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "lamp_emissive",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "tripo_image_07109698-3bb5-4829-a23c-e1c5f829a74b_0_3",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "tripo_image_07109698-3bb5-4829-a23c-e1c5f829a74b_0_0",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "lamp_tripo_metallic-lamp_tripo_roughness",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

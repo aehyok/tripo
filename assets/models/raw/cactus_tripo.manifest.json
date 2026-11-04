@@ -2,7 +2,7 @@
   "asset": "盆栽仙人掌",
   "date": "2026-11-04",
   "stage": "Tripo原始模型",
-  "status": "已提交，生成中，尚未下载",
+  "status": "原始Tripo文件保留未改；已由Blender修整为正式版，见../review/cactus.manifest.json",
   "file": "cactus_tripo.glb",
   "source_page": "https://studio.tripo3d.ai/workspace/generate/3ea48efd-26ab-404a-84a1-e0c8a957022b",
   "input": "../../ref/cactus.png",
@@ -19,21 +19,84 @@
     "generate_in_parts": false,
     "8k_texture": false,
     "topology": "Quad",
-    "privacy": "Sharing Only（沿用）"
+    "privacy": "Sharing Only（沿用）",
+    "ui_quad_faces": 497,
+    "ui_vertices": 513,
+    "texture_exported": "1K"
   },
   "credits_before": 24775,
   "credits_after_submission": 24725,
   "credits_used": 50,
   "generation_submissions": 1,
   "checks_completed": [
-    "参考图主体完整，两个向上侧枝分离，橙色花盆，未生成立体刺"
+    "参考图主体完整，两个向上侧枝分离，橙色花盆，未生成立体刺",
+    "网页生成完成；Quad 497面、513顶点",
+    "正面PBR、斜侧面/顶部/底部无光照预览已观察并留图",
+    "已收到导出成功提示；下载原件保留并复制归档",
+    "GLB 2.0头、长度、分块、缓冲区范围检查通过",
+    "实际978三角面≤1000预算；三张1024×1024内嵌贴图",
+    "一个网格、一个材质，无骨骼、无动画；结构报告无错误和警告"
   ],
   "checks_pending": [
-    "等待生成完成",
-    "正面、侧面、背面及顶部/底部验收",
-    "GLB导出、结构校验与预览归档",
-    "最终1000三角面预算、1K贴图验收",
-    "Blender修整：0.5×0.5×1.1米、底部原点及朝向",
-    "Cesium实际加载"
-  ]
+    "背面及另一侧完整环绕复核，视角工具不稳定，未声明环绕合格",
+    "修复盆土/根部绿色溢色、浅色刺点局部重复/拖影；检查PBR凹凸是否过强",
+    "检查侧枝连接处与盆口低面数轮廓，轻微杂面在Blender处理",
+    "米制尺寸0.5×0.5×1.1米、底部原点与正面-Y校正",
+    "碰撞、两实例复用、Cesium实际加载及性能验收"
+  ],
+  "bytes": 788384,
+  "sha256": "a3164363634351b6e7a5c3f2b0aa77f2fc742ff8b02c5c0d8d7208b246a2ec35",
+  "triangles": 978,
+  "embedded_images": [
+    {
+      "name": "tripo_image_a7ee10d3-8acc-4273-b1d2-a1e5057b062f_0_3",
+      "mimeType": "image/jpeg",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "name": "tripo_image_a7ee10d3-8acc-4273-b1d2-a1e5057b062f_0_0",
+      "mimeType": "image/jpeg",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "name": "cactus_tripo_metallic-cactus_tripo_roughness",
+      "mimeType": "image/png",
+      "size": [
+        1024,
+        1024
+      ]
+    }
+  ],
+  "materials": 1,
+  "skins": 0,
+  "joint_count": 0,
+  "weighted_primitives": 0,
+  "skinned_nodes": 0,
+  "animations": [],
+  "meshes": 1,
+  "download_original": "/Users/aehyok/Downloads/cactus_tripo.glb",
+  "credits_after": 24725,
+  "preview": "../../ref/tripo-cactus.png",
+  "previews": {
+    "front_pbr": "../../ref/tripo-cactus.png",
+    "oblique_side_unlit": "../../ref/tripo-cactus-side.png",
+    "top_unlit": "../../ref/tripo-cactus-top.png",
+    "bottom_unlit": "../../ref/tripo-cactus-bottom.png"
+  },
+  "validation_report": "cactus_tripo.validation.json",
+  "final_triangle_budget": 1000,
+  "visual_review": {
+    "front": "PBR重载后正常，主干、两个向上侧枝、橙色花盆完整；侧枝与主干间隙可见",
+    "oblique_side": "无光照模式查看，未见额外侧枝或背景残片；浅色点局部重复/拖影",
+    "top": "无光照模式查看，盆口和顶部封闭；盆土/根部绿色贴图溢色",
+    "bottom": "无光照模式查看，花盆底部封闭，无明显洞口",
+    "back": "网页未完成；已在Blender正式版渲染中补验通过（cactus-final-back.png）",
+    "pbr": "初始黑屏；仅重载相同结果后恢复彩色显示，未重新生成"
+  }
 }

@@ -1,0 +1,83 @@
+{
+  "ball": {
+    "dimensions_m": [
+      0.3917728364467621,
+      0.3917728364467621,
+      0.3917728364467621
+    ],
+    "minimum": [
+      -0.19588641822338104,
+      -0.19588641822338104,
+      0.004113584756851196
+    ],
+    "maximum": [
+      0.19588641822338104,
+      0.19588641822338104,
+      0.3958864212036133
+    ],
+    "triangles": 180,
+    "materials": [
+      "ball_1K"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0
+    }
+  },
+  "crate": {
+    "dimensions_m": [
+      0.6000000238418579,
+      0.5999999642372131,
+      0.5999999977648258
+    ],
+    "minimum": [
+      -0.30000001192092896,
+      -0.29999998211860657,
+      2.60770320892334e-08
+    ],
+    "maximum": [
+      0.30000001192092896,
+      0.29999998211860657,
+      0.6000000238418579
+    ],
+    "triangles": 204,
+    "materials": [
+      "crate_wood_1K"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 0,
+      "nonmanifold_edges": 24,
+      "loose_vertices": 0
+    }
+  },
+  "bunting": {
+    "dimensions_m": [
+      18.0,
+      0.20000000298023224,
+      4.740000247955322
+    ],
+    "minimum": [
+      -9.0,
+      -0.10000000149011612,
+      0.0
+    ],
+    "maximum": [
+      9.0,
+      0.10000000149011612,
+      4.740000247955322
+    ],
+    "triangles": 1696,
+    "materials": [
+      "bunting_bulb",
+      "bunting_flags",
+      "bunting_pole",
+      "bunting_rope"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 180,
+      "nonmanifold_edges": 180,
+      "loose_vertices": 0
+    }
+  }
+}

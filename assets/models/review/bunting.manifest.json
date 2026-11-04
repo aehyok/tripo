@@ -1,0 +1,105 @@
+{
+  "asset": "纸旗与串灯",
+  "date": "2026-11-04",
+  "stage": "Blender手建与Cesium接入",
+  "file": "../../../public/assets/models/bunting.glb",
+  "bytes": 1050996,
+  "sha256": "e938d508e049b7af28b60793c9a0b84d3a8dd204ef085ae660ed79b02ee7fa26",
+  "triangles": 1696,
+  "dimensions_m": [
+    18.0,
+    0.2,
+    4.74
+  ],
+  "origin": "两立柱中点地面Z=0",
+  "front_blender": "-Y",
+  "span": {
+    "pole_x_m": 8.9,
+    "pole_height_m": 4.6,
+    "rope_end_z_m": 4.5,
+    "sag_m": 1.1,
+    "rope_length_m": 17.98
+  },
+  "unit": {
+    "length_m": 1.1986,
+    "nominal_m": 1.2,
+    "count": 15,
+    "pattern": "灯泡、两面旗、灯泡、两面旗"
+  },
+  "flag": {
+    "height_m": 0.18,
+    "width_m": 0.1846,
+    "count": 60,
+    "atlas": "assets/ref/flags_atlas.png 缩至1K，16种图案循环"
+  },
+  "bulbs": {
+    "count": 29,
+    "color": "#FFD79A",
+    "emission_strength": 3.0
+  },
+  "mesh_audit": {
+    "solid_boundary_edges": 0,
+    "solid_nonmanifold_edges": 0,
+    "flag_faces": 60,
+    "loose_vertices": 0
+  },
+  "operations": [
+    "按弧长把绳索分成1.2米单元：每单元两盏灯泡、四面纸旗，旗面上沿顺绳、尖角垂直向下",
+    "纸旗贴图按图集像素自动定位16个三角形并内缩4%防止深色分隔线渗色，双面显示",
+    "四棱绳索管、两根4.6米奶油白立柱与顶球；灯泡发光强度3.0，无实时灯",
+    "整串导出为一个GLB（一次绘制），单元规则保留在脚本与源工程中"
+  ],
+  "new_tripo_credits": 0,
+  "limitations": [
+    "纸旗为单面三角片（双面材质），无厚度",
+    "静态，无风吹摆动",
+    "未单独导出bunting_unit.glb：游戏直接使用整串，单元由脚本参数生成"
+  ],
+  "previews": [
+    "bunting-final-front.png",
+    "bunting-final-back.png",
+    "bunting-final-unit.png",
+    "bunting-final-end.png",
+    "bunting-final-night.png",
+    "bunting-final-contact.png",
+    "bunting-cesium.png",
+    "props-game.png"
+  ],
+  "evidence": {
+    "validation": "bunting.validation.json",
+    "roundtrip": "props-roundtrip.json",
+    "browser_checks": "props-browser-checks.txt",
+    "qa_page": "../../../qa/props-model.html"
+  },
+  "roundtrip": {
+    "dimensions_m": [
+      18.0,
+      0.20000000298023224,
+      4.740000247955322
+    ],
+    "minimum": [
+      -9.0,
+      -0.10000000149011612,
+      0.0
+    ],
+    "maximum": [
+      9.0,
+      0.10000000149011612,
+      4.740000247955322
+    ],
+    "triangles": 1696,
+    "materials": [
+      "bunting_bulb",
+      "bunting_flags",
+      "bunting_pole",
+      "bunting_rope"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 180,
+      "nonmanifold_edges": 180,
+      "loose_vertices": 0
+    }
+  },
+  "game_integration": "z=0.04；沿用两根立柱碰撞，纸旗与绳索不碰撞",
+  "roundtrip_note": "180条开放边为60面单片三角旗边（双面材质）；绳索、立柱、灯泡封闭"
+}

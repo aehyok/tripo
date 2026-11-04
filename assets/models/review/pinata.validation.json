@@ -1,0 +1,46 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/pinata.glb",
+    "bytes": 507216,
+    "sha256": "50acae04c3f2fb994ead746644ff6431cb046fa5b763879c4cc3df0b2209b3f5",
+    "triangles": 1400,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "pinata_normal",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "pinata_basecolor",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "pinata_roughness",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

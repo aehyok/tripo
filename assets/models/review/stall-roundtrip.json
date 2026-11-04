@@ -1,0 +1,113 @@
+[
+  {
+    "file": "stall.glb",
+    "dimensions": [
+      2.4000000953674316,
+      1.2000000476837158,
+      2.200000047683716
+    ],
+    "minimum": [
+      -1.2000000476837158,
+      -0.6000000238418579,
+      0.0
+    ],
+    "maximum": [
+      1.2000000476837158,
+      0.6000000238418579,
+      2.200000047683716
+    ],
+    "mesh_audit_after_weld": [
+      {
+        "mesh": "stall",
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0
+      }
+    ],
+    "triangles": 1282
+  },
+  {
+    "file": "stall_scarf.glb",
+    "dimensions": [
+      0.2800000011920929,
+      0.770241305232048,
+      0.34172268724069
+    ],
+    "minimum": [
+      -0.14000000059604645,
+      -0.550000011920929,
+      0.005277315620332956
+    ],
+    "maximum": [
+      0.14000000059604645,
+      0.22024129331111908,
+      0.34700000286102295
+    ],
+    "mesh_audit_after_weld": [
+      {
+        "mesh": "stall_scarf",
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0
+      }
+    ],
+    "triangles": 60
+  },
+  {
+    "file": "stall_caps.glb",
+    "dimensions": [
+      1.5299999713897705,
+      0.39000000059604645,
+      0.1599999964237213
+    ],
+    "minimum": [
+      -0.7649999856948853,
+      -0.24500000476837158,
+      0.0
+    ],
+    "maximum": [
+      0.7649999856948853,
+      0.14499999582767487,
+      0.1599999964237213
+    ],
+    "mesh_audit_after_weld": [
+      {
+        "mesh": "cap_brim",
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0
+      },
+      {
+        "mesh": "cap_brim.001",
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0
+      },
+      {
+        "mesh": "cap_brim.002",
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0
+      },
+      {
+        "mesh": "fan_cap_1",
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0
+      },
+      {
+        "mesh": "fan_cap_2",
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0
+      },
+      {
+        "mesh": "fan_cap_3",
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0
+      }
+    ],
+    "triangles": 414
+  }
+]

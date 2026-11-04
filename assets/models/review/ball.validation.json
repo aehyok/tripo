@@ -1,0 +1,38 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/ball.glb",
+    "bytes": 762964,
+    "sha256": "8a38e5e250274b55dc0bf7032d00aaaad71b9611a0d5731a8d204b2fffa15e58",
+    "triangles": 180,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "ball_normal",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "ball_basecolor",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

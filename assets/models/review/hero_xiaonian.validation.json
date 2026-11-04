@@ -1,0 +1,53 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/hero_xiaonian.glb",
+    "bytes": 6385252,
+    "sha256": "98c7118dd48f320a390f8dadee801818e663b074471be45a53045038283759c4",
+    "triangles": 14240,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "hero_xiaonian_rigged_tripo_normal",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "hero_xiaonian_rigged_tripo_basecolor",
+        "mimeType": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "hero_xiaonian_rigged_tripo_rm",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "skins": 1,
+    "joint_count": 65,
+    "weighted_primitives": 1,
+    "skinned_nodes": 1,
+    "animations": [
+      "idle",
+      "walk",
+      "run",
+      "crouch",
+      "crouch_down",
+      "crouch_up"
+    ],
+    "warnings": [],
+    "errors": []
+  }
+]

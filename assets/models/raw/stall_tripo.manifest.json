@@ -1,7 +1,7 @@
 {
   "asset": "球迷摊位基础造型",
   "date": "2026-11-04",
-  "status": "Tripo原始模型，待Blender修整及完整环绕验收",
+  "status": "原始Tripo文件保留未改；已由Blender重拓扑为正式版并另做围巾/帽子商品，见../review/stall.manifest.json",
   "file": "stall_tripo.glb",
   "bytes": 839472,
   "sha256": "63b87286007f4af2353f73fd3f727eff2db76c9711c6bd252315cd2a4c964277",
@@ -62,5 +62,18 @@
     "补充围巾/帽子独立道具，制作两个摊位实例",
     "独立碰撞代理与Cesium加载验收"
   ],
-  "preview": "../../ref/tripo-stall.png"
+  "preview": "../../ref/tripo-stall.png",
+  "downstream": {
+    "date": "2026-11-04",
+    "stage": "Blender重拓扑、独立商品与Cesium接入完成",
+    "base": "../../../public/assets/models/stall.glb",
+    "accessories": [
+      "../../../public/assets/models/stall_scarf.glb",
+      "../../../public/assets/models/stall_caps.glb"
+    ],
+    "manifest": "../review/stall.manifest.json",
+    "base_triangles": 1282,
+    "new_tripo_credits": 0,
+    "note": "原始阶段待办保留作为历史；下游重建修复、环绕及游戏验收详见新manifest"
+  }
 }

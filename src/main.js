@@ -2,7 +2,7 @@ import 'cesium/Build/Cesium/Widgets/widgets.css';
 import './styles.css';
 import * as Cesium from 'cesium';
 
-import { LEVELS, TUNING } from './config.js';
+import { ASSETS, LEVELS, TUNING } from './config.js';
 import { EarthScene } from './scenes/earth.js';
 import { StreetScene } from './scenes/street.js';
 import { dogThumbnail } from './ui/dogArt.js';
@@ -248,7 +248,7 @@ function beginFind() {
   $('stick').hidden = !COARSE;
   $('crouch').hidden = !COARSE;
   $('coach').hidden = false;
-  $('coach').textContent = COARSE ? '左下摇杆移动，拖动画面转视角' : 'WASD 移动，按住鼠标拖动转视角，C 蹲下';
+  $('coach').textContent = COARSE ? '左下摇杆移动，拖动画面转视角' : 'WASD 移动（双击方向键奔跑），按住鼠标拖动转视角，C 蹲下';
   syncHintButton();
   app.mode = 'street';
   street.beginPlay();
@@ -550,7 +550,12 @@ async function boot() {
   earth.setCompleted(app.progress.done);
   earth.goSelectView(true);
 
-  $('thumb').src = dogThumbnail();
+  const thumb = $('thumb');
+  thumb.onerror = () => {
+    thumb.onerror = null;
+    thumb.src = dogThumbnail();
+  };
+  thumb.src = ASSETS.dog.card || dogThumbnail();
   renderFlags();
   street.bindInput();
   street.bindJoystick($('stick'), $('knob'));

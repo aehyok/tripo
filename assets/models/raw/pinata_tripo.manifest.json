@@ -1,7 +1,7 @@
 {
   "asset": "七角星皮纳塔",
   "date": "2026-11-04",
-  "status": "Tripo原始模型，待Blender修整及完整环绕验收",
+  "status": "原始Tripo文件保留未改；已由Blender重建为正式版，见../review/pinata.manifest.json",
   "file": "pinata_tripo.glb",
   "bytes": 1605308,
   "sha256": "16a262d9f4c47d72de7281163f20ae7e1ba88ff1eabc00297002bcf280e2b2c4",

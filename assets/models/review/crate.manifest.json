@@ -1,0 +1,77 @@
+{
+  "asset": "木箱",
+  "date": "2026-11-04",
+  "stage": "Blender手建与Cesium接入",
+  "file": "../../../public/assets/models/crate.glb",
+  "bytes": 871220,
+  "sha256": "e04b1aca17697ccc5e1a6d43a36a3a149b00692c365c33b8211a91f9484377f3",
+  "triangles": 204,
+  "triangle_budget": 300,
+  "dimensions_m": [
+    0.6,
+    0.6,
+    0.6
+  ],
+  "origin": "底面Z=0、水平中心",
+  "front_blender": "-Y",
+  "mesh_audit": {
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "loose_vertices": 0,
+    "closed_shells": 17
+  },
+  "operations": [
+    "0.56米木板箱体+12根0.07米边框木条（对接、不重叠）+4面0.06×0.015米斜撑（低于边框5毫米），共17个封闭盒体",
+    "程序绘制1K木纹图集：上半四块木板（缝隙、钉子、色差），下半边框深色顺纹；法线由木纹高度生成",
+    "斜撑两端插入边框内部，未做布尔合并"
+  ],
+  "new_tripo_credits": 0,
+  "limitations": [
+    "构件为独立封闭盒体，斜撑端部嵌入边框，不作打印级布尔实体认证"
+  ],
+  "previews": [
+    "crate-final-front.png",
+    "crate-final-back.png",
+    "crate-final-left.png",
+    "crate-final-top.png",
+    "crate-final-bottom.png",
+    "crate-final-quarter.png",
+    "crate-final-contact.png",
+    "crate-cesium.png",
+    "props-game.png"
+  ],
+  "evidence": {
+    "validation": "crate.validation.json",
+    "roundtrip": "props-roundtrip.json",
+    "browser_checks": "props-browser-checks.txt",
+    "qa_page": "../../../qa/props-model.html"
+  },
+  "roundtrip": {
+    "dimensions_m": [
+      0.6000000238418579,
+      0.5999999642372131,
+      0.5999999977648258
+    ],
+    "minimum": [
+      -0.30000001192092896,
+      -0.29999998211860657,
+      2.60770320892334e-08
+    ],
+    "maximum": [
+      0.30000001192092896,
+      0.29999998211860657,
+      0.6000000238418579
+    ],
+    "triangles": 204,
+    "materials": [
+      "crate_wood_1K"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 0,
+      "nonmanifold_edges": 24,
+      "loose_vertices": 0
+    }
+  },
+  "game_integration": "z=0.04、ry 0.4；独立碰撞代理0.552米（收缩8%）、高0.6米",
+  "roundtrip_note": "回导焊接时把对接木条重合的角点合并，产生24条非流形边；导出前17个盒体各自封闭"
+}

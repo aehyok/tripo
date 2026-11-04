@@ -1,0 +1,62 @@
+{
+  "crouch": {
+    "min_z_m": -1.8026912584900856e-07,
+    "max_z_m": 1.2561966180801392,
+    "samples": 161,
+    "action_frame_range": [
+      0.0,
+      80.0
+    ],
+    "loop_matrix_max_difference": 0.0
+  },
+  "crouch_down": {
+    "min_z_m": -0.001128148171119392,
+    "max_z_m": 1.5422266721725464,
+    "samples": 21,
+    "action_frame_range": [
+      0.0,
+      10.0
+    ],
+    "loop_matrix_max_difference": 0.7887274771928787
+  },
+  "crouch_up": {
+    "min_z_m": -0.0011270811082795262,
+    "max_z_m": 1.5422266721725464,
+    "samples": 21,
+    "action_frame_range": [
+      0.0,
+      10.0
+    ],
+    "loop_matrix_max_difference": 0.7887274771928787
+  },
+  "idle": {
+    "min_z_m": -5.497677193488926e-07,
+    "max_z_m": 1.5447516441345215,
+    "samples": 161,
+    "action_frame_range": [
+      0.0,
+      80.0
+    ],
+    "loop_matrix_max_difference": 0.0
+  },
+  "run": {
+    "min_z_m": -0.005537240765988827,
+    "max_z_m": 1.5003305673599243,
+    "samples": 49,
+    "action_frame_range": [
+      0.0,
+      24.0
+    ],
+    "loop_matrix_max_difference": 0.0
+  },
+  "walk": {
+    "min_z_m": -0.0007105479016900063,
+    "max_z_m": 1.5288333892822266,
+    "samples": 49,
+    "action_frame_range": [
+      0.0,
+      24.0
+    ],
+    "loop_matrix_max_difference": 0.0
+  }
+}

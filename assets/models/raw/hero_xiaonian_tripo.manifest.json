@@ -1,7 +1,7 @@
 {
   "asset": "小年",
   "date": "2026-11-04",
-  "status": "Tripo模型与Mixamo人形自动绑定已完成，尚未做游戏最终验收",
+  "status": "原始Tripo文件（静态版与Mixamo绑定版）保留未改；已由Blender制作正式动画版（idle/walk/run/crouch及过渡），见../review/hero_xiaonian.manifest.json",
   "source_page": "https://studio.tripo3d.ai/workspace/rigging/e5b2a111-ab37-4098-a214-df8d460c4bc0",
   "inputs": [
     "../../ref/xiaonian_front.png",
@@ -112,5 +112,12 @@
     "添加idle/walk/crouch动画",
     "Cesium加载、碰撞及性能验收"
   ],
-  "preview": "../../ref/tripo-xiaonian-rigged.png"
+  "preview": "../../ref/tripo-xiaonian-rigged.png",
+  "downstream": {
+    "date": "2026-11-04",
+    "stage": "小年Blender修整、5段动画及Cesium接入完成",
+    "manifest": "../review/hero_xiaonian.manifest.json",
+    "final_file": "../../../public/assets/models/hero_xiaonian.glb",
+    "note": "本manifest保留原始Tripo阶段的0动画记录；下游文件含5段动画，详见下游manifest"
+  }
 }

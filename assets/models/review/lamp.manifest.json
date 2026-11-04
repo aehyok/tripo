@@ -1,0 +1,86 @@
+{
+  "asset": "路灯",
+  "date": "2026-11-04",
+  "stage": "Blender修整与Cesium接入",
+  "source": "../raw/lamp_tripo.glb",
+  "source_sha256": "6da086d1a190d2f6ac6fb99d11a7ab281f5e8fd016753bec7405ac8e33e627cc",
+  "file": "../../../public/assets/models/lamp.glb",
+  "bytes": 1151448,
+  "sha256": "2e22af444d4ec822e554b9a69fbbbf2077db253948734c8f974ef94907ce3c4a",
+  "triangles": 1410,
+  "raw_triangles": 1410,
+  "triangle_budget": 1500,
+  "dimensions_m": [
+    0.6663,
+    0.6748,
+    3.2
+  ],
+  "uniform_scale": 3.27247,
+  "base_radius_m": 0.2383,
+  "origin": "水平包围盒中心、底座Z=0",
+  "front_blender": "-Y",
+  "welded_vertices": 592,
+  "mesh_audit": {
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "loose_vertices": 0
+  },
+  "emission": {
+    "color": "#FFC46B",
+    "strength": 2.0,
+    "map": "lamp_emissive（由颜色贴图中低饱和高亮的磨砂玻璃像素生成）",
+    "pane_texels": 101616
+  },
+  "operations": [
+    "保留Tripo造型与贴图，0.1毫米焊接合上UV缝拆开的顶点",
+    "等比缩放至总高3.2米，清除导入自定义法线后按35度分平滑/硬边",
+    "从1K颜色贴图提取磨砂玻璃像素生成#FFC46B发光贴图，强度2.0；灯框不发光",
+    "无实时灯；夜景照明沿用场景贴地暖色光斑"
+  ],
+  "new_tripo_credits": 0,
+  "limitations": [
+    "按总高3.2米等比缩放，灯头宽度超出表格0.4米包络（参考图比例）",
+    "未改动灯帽/底座网格：原模型在正/后/侧/顶/底渲染中轮廓完整",
+    "全量与真实移动设备性能待验收"
+  ],
+  "previews": [
+    "lamp-final-front.png",
+    "lamp-final-back.png",
+    "lamp-final-left.png",
+    "lamp-final-right.png",
+    "lamp-final-quarter.png",
+    "lamp-final-top.png",
+    "lamp-final-bottom.png",
+    "lamp-final-head.png",
+    "lamp-final-night.png",
+    "lamp-final-contact.png",
+    "lamp-cesium-front.png",
+    "lamp-cesium-back.png",
+    "lamp-game.png"
+  ],
+  "surround_review": "Blender正/后/左右/顶/底/3/4及灯头夜景渲染已检查，补齐Tripo网页未完成的侧后与顶底验收；灯帽顶球、灯框、底座与灯杆连接完整",
+  "evidence": {
+    "validation": "lamp.validation.json",
+    "roundtrip": "lamp-roundtrip.json",
+    "browser_checks": "lamp-browser-checks.txt",
+    "qa_page": "../../../qa/lamp-model.html"
+  },
+  "game_integration": {
+    "config": "ASSETS.lamp.glb",
+    "movement_collider": "SMALL_COLLIDER.lamp 0.2→0.22（底座半径0.2383收缩8%）",
+    "prompt_box": [
+      -0.333,
+      0.333,
+      -0.337,
+      0.337
+    ],
+    "fallback": "文件缺失→按新尺寸重做的占位路灯，保留碰撞",
+    "regressions": [
+      "18项路灯检查通过",
+      "皮纳塔21、仙人掌25、摊位25、小吃车21、房屋23、吉拿23项通过（无头Chrome，不含手动按钮回退）",
+      "小年20项（真实浏览器）",
+      "正式选关→墨西哥→开始寻找、W移动、C下蹲移动再站起，控制台无警告/错误",
+      "生产构建通过，既有Cesium入口包体偏大提示仍在"
+    ]
+  }
+}

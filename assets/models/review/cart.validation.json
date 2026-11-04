@@ -1,0 +1,46 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/cart.glb",
+    "bytes": 699056,
+    "sha256": "92e0326820b115fd218a7a2c8ff041118a7fec94d9e2e15df051709a26a0e291",
+    "triangles": 2892,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 2,
+    "embedded_images": [
+      {
+        "name": "cart_normal",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "cart_basecolor",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "cart_metallic-cart_roughness",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

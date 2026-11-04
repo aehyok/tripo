@@ -1,0 +1,46 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/stall.glb",
+    "bytes": 815784,
+    "sha256": "99f3586596e2018f9f188fdcf99c1775789a67c66a250853d92d4ca0277999d6",
+    "triangles": 1282,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 3,
+    "embedded_images": [
+      {
+        "name": "stall_normal",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "stall_basecolor",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "stall_roughness",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

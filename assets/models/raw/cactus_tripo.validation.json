@@ -1,0 +1,46 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/assets/models/raw/cactus_tripo.glb",
+    "bytes": 788384,
+    "sha256": "a3164363634351b6e7a5c3f2b0aa77f2fc742ff8b02c5c0d8d7208b246a2ec35",
+    "triangles": 978,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "tripo_image_a7ee10d3-8acc-4273-b1d2-a1e5057b062f_0_3",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "tripo_image_a7ee10d3-8acc-4273-b1d2-a1e5057b062f_0_0",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "cactus_tripo_metallic-cactus_tripo_roughness",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

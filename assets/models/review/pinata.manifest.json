@@ -1,0 +1,158 @@
+{
+  "asset": "七角星皮纳塔",
+  "date": "2026-11-04",
+  "stage": "Blender重建与Cesium接入",
+  "source": "../raw/pinata_tripo.glb",
+  "source_sha256": "16a262d9f4c47d72de7281163f20ae7e1ba88ff1eabc00297002bcf280e2b2c4",
+  "file": "../../../public/assets/models/pinata.glb",
+  "bytes": 507216,
+  "sha256": "50acae04c3f2fb994ead746644ff6431cb046fa5b763879c4cc3df0b2209b3f5",
+  "triangles": 1400,
+  "raw_triangles": 1337,
+  "triangle_budget": 1500,
+  "dimensions_m": [
+    1.0257,
+    0.5155,
+    1.0
+  ],
+  "bounds_min": [
+    -0.5129,
+    -0.2578,
+    0.0
+  ],
+  "bounds_max": [
+    0.5129,
+    0.2578,
+    1.0
+  ],
+  "origin": "水平包围盒中心、最低两颗尖角Z=0",
+  "front_blender": "-Y",
+  "tip_count": 7,
+  "tip_positions": [
+    [
+      0.0,
+      0.0,
+      1.0
+    ],
+    [
+      -0.4113,
+      0.0,
+      0.8019
+    ],
+    [
+      -0.5129,
+      0.0,
+      0.3569
+    ],
+    [
+      -0.2282,
+      0.0,
+      0.0
+    ],
+    [
+      0.2282,
+      0.0,
+      0.0
+    ],
+    [
+      0.5129,
+      0.0,
+      0.3569
+    ],
+    [
+      0.4113,
+      0.0,
+      0.8019
+    ]
+  ],
+  "shape": {
+    "sphere_center_z": 0.474,
+    "sphere_radius": 0.255,
+    "tip_distance": 0.526
+  },
+  "mesh_audit": {
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "loose_vertices": 0
+  },
+  "hanger": {
+    "file": "../../../public/assets/models/pinata_hanger.glb",
+    "bytes": 20300,
+    "sha256": "17247420fed1c33998a1e8683bb4cf240b926f5f54f11478bf2a9f79dbc9ab10",
+    "triangles": 260,
+    "origin": "立柱底部中心Z=0",
+    "rope_attach_blender": [
+      -1.15,
+      0,
+      2.9
+    ],
+    "body_mount_game": {
+      "x": 1.15,
+      "z": 1.9
+    },
+    "mesh_audit": {
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0
+    }
+  },
+  "operations": [
+    "原始网格有破洞、背面纸片翻折，按参考图重建：球体+七个平面尖角，最低两角Z=0、顶角Z=1",
+    "七段球体纸带与五段尖角纸带使用外翻台阶层叠，下沿朝球体/朝下",
+    "程序绘制1K皱纹纸颜色/法线/粗糙度：12条切口纸条、上沿压影、手册四色",
+    "悬挂立柱、横臂、斜撑、独立绳索与两个绳结单独为pinata_hanger.glb，绳底对准顶角"
+  ],
+  "new_tripo_credits": 0,
+  "limitations": [
+    "按总高1.0米与参考图正七角比例，宽约1.03米、深0.51米，未压缩为表格0.8×0.8包络",
+    "尖角与球体内部交叠，不作打印级布尔实体认证",
+    "静态悬挂，未制作摆动或击打动画",
+    "全量与真实移动设备性能待验收"
+  ],
+  "previews": [
+    "pinata-final-front.png",
+    "pinata-final-back.png",
+    "pinata-final-left.png",
+    "pinata-final-right.png",
+    "pinata-final-top.png",
+    "pinata-final-bottom.png",
+    "pinata-final-quarter.png",
+    "pinata-final-assembly.png",
+    "pinata-final-contact.png",
+    "pinata-cesium-front.png",
+    "pinata-cesium-back.png",
+    "pinata-game.png"
+  ],
+  "evidence": {
+    "validation": [
+      "pinata.validation.json",
+      "pinata-hanger.validation.json"
+    ],
+    "roundtrip": "pinata-roundtrip.json",
+    "browser_checks": "pinata-browser-checks.txt",
+    "qa_page": "../../../qa/pinata-model.html"
+  },
+  "game_integration": {
+    "config": "ASSETS.pinata：基础为pinata_hanger.glb，星体为accessories.body（横臂方向x=1.15、z=1.9）",
+    "movement_collider": "立柱0.25米小碰撞盒，星体下方可通行",
+    "prompt_box": [
+      -0.2,
+      1.67,
+      -0.26,
+      0.26
+    ],
+    "fallbacks": [
+      "悬挂架缺失→完整占位",
+      "星体缺失→保留悬挂架并回退占位星体"
+    ],
+    "regressions": [
+      "21项皮纳塔检查（无头Chrome与真实浏览器均通过）",
+      "摊位27项含两个回退",
+      "小吃车22项",
+      "房屋、吉拿检查通过；小年20项动画检查通过",
+      "正式选关→墨西哥→开始寻找、W移动、C下蹲站起，控制台无警告/错误",
+      "生产构建通过，既有Cesium入口包体偏大提示仍在"
+    ],
+    "observation": "默认俯视角下星体大部分被纸旗串遮挡（占位版同位置同样如此），近看或转视角可见；未改布局"
+  }
+}

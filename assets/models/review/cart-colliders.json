@@ -1,0 +1,16 @@
+{
+  "asset": "cart",
+  "footprint": [
+    -0.92,
+    0.92,
+    -0.46,
+    0.23
+  ],
+  "height": 2.15,
+  "body_center_game": [
+    0,
+    -0.115
+  ],
+  "shrink_percent": 8,
+  "note": "车身宽2.0/深0.75的8%收缩代理；不含台板、篷布、车轮；游戏坐标与Blender XY相反"
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/dog_jina.glb",
+    "bytes": 6004512,
+    "sha256": "036e25e095207d6d3ce5060549ffc31c8814c2275f62ec2f19aad3ce9e998260",
+    "triangles": 7500,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "jina_normal",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "jina_basecolor",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "jina_metallic-jina_roughness",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

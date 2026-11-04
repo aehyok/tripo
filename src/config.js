@@ -30,40 +30,72 @@ export const REGION = {
    hero_xiaonian / dog_jina / house_a|b|c / stall / cart / pinata / ball / cactus / crate / lamp / bunting_unit
    模型按米制、底部贴地、正面朝 -Y 制作，因此 scale 默认 1。 */
 export const ASSETS = {
-  hero: { glb: null, height: 1.9 },
-  dog: { glb: null, height: 0.9 },
-  house: { glb: null, height: 4.8 },
-  stall: { glb: null, height: 2.9 },
-  cart: { glb: null, height: 2.7 },
-  pinata: { glb: null, height: 3.8 },
-  ball: { glb: null, height: 0.55 },
-  cactus: { glb: null, height: 1.7 },
-  crate: { glb: null, height: 1.0 },
-  lamp: { glb: null, height: 3.6 },
-  bunting: { glb: null, height: 4.6 },
+  hero: { glb: 'assets/models/hero_xiaonian.glb', height: 1.55 },
+  dog: { glb: 'assets/models/dog_jina.glb', height: 0.5, minimumPixelSize: 0, card: 'assets/ui/dog_card.png' },
+  house: {
+    glb: 'assets/models/house_a.glb',
+    variants: { a: 'assets/models/house_a.glb', b: 'assets/models/house_b.glb', c: 'assets/models/house_c.glb' },
+    height: 4.5, minimumPixelSize: 0,
+    collider: { footprint: [-2.53, 2.53, -2.07, 2.07], height: 4.2 },
+  },
+  stall: {
+    glb: 'assets/models/stall.glb', height: 2.2, minimumPixelSize: 0,
+    accessories: {
+      scarf: { glb: 'assets/models/stall_scarf.glb', z: 0.51, minimumPixelSize: 0, fallback: 'stallGoods' },
+      caps: { glb: 'assets/models/stall_caps.glb', z: 0.85, minimumPixelSize: 0, fallback: 'stallGoods' },
+    },
+    collider: { footprint: [-1.0764, 1.0764, -0.4876, 0.4876], height: 0.85 },
+  },
+  cart: {
+    glb: 'assets/models/cart.glb', height: 2.4, minimumPixelSize: 0,
+    collider: { footprint: [-0.92, 0.92, -0.46, 0.23], height: 2.15 },
+  },
+  pinata: {
+    glb: 'assets/models/pinata_hanger.glb', height: 3.7, minimumPixelSize: 0,
+    // The star hangs from the arm tip: x is along the arm, z is the body's lowest tips.
+    accessories: { body: { glb: 'assets/models/pinata.glb', x: 1.15, z: 1.9, minimumPixelSize: 0, fallback: 'pinataBody' } },
+    collider: { footprint: [-0.2, 1.67, -0.26, 0.26], height: 3.7 },
+  },
+  ball: {
+    glb: 'assets/models/ball.glb', height: 0.4, minimumPixelSize: 0, // 真实足球0.22米，放大以便俯视可读
+    collider: { footprint: [-0.2, 0.2, -0.2, 0.2], height: 0.4 },
+  },
+  cactus: {
+    glb: 'assets/models/cactus.glb', height: 1.1, minimumPixelSize: 0,
+    collider: { footprint: [-0.343, 0.343, -0.317, 0.317], height: 1.1 },
+  },
+  crate: {
+    glb: 'assets/models/crate.glb', height: 0.6, minimumPixelSize: 0,
+    collider: { footprint: [-0.276, 0.276, -0.276, 0.276], height: 0.6 },
+  },
+  lamp: {
+    glb: 'assets/models/lamp.glb', height: 3.2, minimumPixelSize: 0,
+    collider: { footprint: [-0.333, 0.333, -0.337, 0.337], height: 3.2 },
+  },
+  bunting: { glb: 'assets/models/bunting.glb', height: 4.74, minimumPixelSize: 0 },
 };
 
-/* 场景物件：14 个实例，9 类模型。say 是走近时显示的提示 */
+/* 场景物件：14 个实例，9 类模型。say 是走近时显示的提示；z 为 0.04 的物件立在 4 厘米街道铺装上 */
 export const LAYOUT = [
-  { key: 'house', x: -6, y: -5, ry: 0, tint: '#e5127d', say: '窗户里的人都在看球回放。' },
-  { key: 'house', x: 0, y: -5, ry: 0, tint: '#1cc0c9', say: '门锁着，吉拿进不去。' },
-  { key: 'house', x: 6, y: -5, ry: 0, tint: '#ffb31a', say: '屋里传来电视的声音，没有狗叫。' },
-  { key: 'stall', x: 4.6, y: 3.8, ry: Math.PI, tint: '#e5127d', say: '摊位上只有一条围巾。' },
-  { key: 'stall', x: -8.4, y: -0.2, ry: Math.PI / 2, tint: '#12a66a', say: '这里卖球迷帽，没看见吉拿。' },
+  { key: 'house', variant: 'a', x: -6, y: -5, ry: 0, tint: '#e5127d', say: '窗户里的人都在看球回放。' },
+  { key: 'house', variant: 'b', x: 0, y: -5, ry: 0, tint: '#1cc0c9', say: '门锁着，吉拿进不去。' },
+  { key: 'house', variant: 'c', x: 6, y: -5, ry: 0, tint: '#ffb31a', say: '屋里传来电视的声音，没有狗叫。' },
+  { key: 'stall', accessory: 'scarf', x: 4.6, y: 3.8, ry: Math.PI, tint: '#e5127d', say: '摊位上只有一条围巾。' },
+  { key: 'stall', accessory: 'caps', x: -8.4, y: -0.2, z: 0.04, ry: Math.PI / 2, tint: '#12a66a', say: '这里卖球迷帽，没看见吉拿。' },
   { key: 'cart', x: -3.6, y: 3.6, ry: 0.25, say: '玉米很香，可吉拿不在这儿。' },
-  { key: 'pinata', x: 1.2, y: -1.2, ry: 0.4, say: '皮纳塔里只有糖果。' },
-  { key: 'ball', x: 2.2, y: 1.4, ry: 0, say: '一个足球，皮面被啃得坑坑洼洼。' },
+  { key: 'pinata', accessory: 'body', x: 1.2, y: -1.2, z: 0.04, ry: 0.4, say: '皮纳塔里只有糖果。' },
+  { key: 'ball', x: 2.2, y: 1.4, z: 0.04, ry: 0, say: '一个足球，皮面被啃得坑坑洼洼。' },
   { key: 'ball', x: -1.6, y: 6.0, ry: 1, say: '又一个足球，上面还有小狗牙印。' },
-  { key: 'cactus', x: 8.8, y: -1.0, ry: 0, say: '小心扎手。' },
+  { key: 'cactus', x: 8.8, y: -1.0, z: 0.04, ry: 0, say: '小心扎手。' },
   { key: 'cactus', x: -8.4, y: 5.0, ry: 2, say: '一盆仙人掌，什么也藏不住。' },
-  { key: 'crate', x: 8.2, y: 2.2, ry: 0.4, say: '箱子是空的。' },
-  { key: 'lamp', x: -2.4, y: -1.6, ry: 0, say: '灯下什么也没有。' },
-  { key: 'bunting', x: 0, y: 0.4, ry: 0 },
+  { key: 'crate', x: 8.2, y: 2.2, z: 0.04, ry: 0.4, say: '箱子是空的。' },
+  { key: 'lamp', x: -2.4, y: -1.6, z: 0.04, ry: 0, say: '灯下什么也没有。' },
+  { key: 'bunting', x: 0, y: 0.4, z: 0.04, ry: 0 },
 ];
 
 /* 吉拿的 3 个藏点：开局视角都被挡住，均可从出生点正常走到 */
 export const DOG_SPOTS = [
-  { x: -5.6, y: 2.6, ry: 0.8, note: '小吃车后' },
+  { x: -5.6, y: 2.6, z: 0.04, ry: 0.8, note: '小吃车后' },
   { x: -6.0, y: -7.9, ry: 2.6, note: '粉色房屋后' },
   { x: 6.0, y: -7.9, ry: -0.6, note: '黄色房屋后' },
 ];
@@ -83,7 +115,9 @@ export const TUNING = {
   walkRadius: 11.9, // 可行走边界半径（米）
   groundRadius: 12.6, // 地面石板半径（米）
   heroRadius: 0.3, // 角色碰撞半径（米）
-  walkSpeed: 4.4, // 步行速度（米/秒）
+  walkSpeed: 2.2, // 步行速度（米/秒）；与小年 walk 动画步幅匹配，改动需同步 heroAvatar.js
+  runSpeed: 4.4, // 双击方向键后的奔跑速度（米/秒）；与 run 动画匹配，改动需同步 heroAvatar.js
+  doubleTapMs: 300, // 同一方向键两次按下的最大间隔（毫秒）
   crouchSpeedFactor: 0.6, // 下蹲后速度比例（PRD 6.4）
   crouchDrop: 0.7, // 下蹲相机下降高度（米）
   nearObject: 1.3, // 普通物件提示距离（米，到可交互边界）
@@ -104,4 +138,4 @@ export const TUNING = {
 /* 主要实体：参与碰撞与视线判定；装饰物（围巾、纸旗、串灯）不参与 */
 export const SOLID_KEYS = new Set(['house', 'stall', 'cart']);
 /* 小物件用固定半径碰撞盒，避免视觉包围盒过大堵住通路 */
-export const SMALL_COLLIDER = { pinata: 0.25, lamp: 0.2, ball: 0.3, cactus: 0.4 };
+export const SMALL_COLLIDER = { pinata: 0.25, lamp: 0.22, ball: 0.18, cactus: 0.3 }; // 足球/仙人掌/路灯：球/盆外/底座半径收缩8%

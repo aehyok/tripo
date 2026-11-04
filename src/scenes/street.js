@@ -1,6 +1,7 @@
 import * as Cesium from 'cesium';
-import { ANCHOR, LAYOUT, DOG_SPOTS, TUNING } from '../config.js';
+import { ANCHOR, ASSETS, LAYOUT, DOG_SPOTS, TUNING } from '../config.js';
 import { REDUCED } from '../core/tween.js';
+import { HeroAvatar } from '../core/heroAvatar.js';
 import {
   createProp, createModelEntity, propMeta, makeFrameMatrix, frameQuat, localToWorld, rotate2, C,
 } from './streetProps.js';
@@ -93,6 +94,7 @@ export class StreetScene {
       camDist: TUNING.camDist,
       curDist: TUNING.camDist,
       crouch: false,
+      running: false,
       swingAngle: 0,
       walkAmt: 0,
       playing: false,
@@ -132,8 +134,8 @@ export class StreetScene {
 
     this.buildGround();
     for (const spec of LAYOUT) await this.addObject(spec);
-    this.buildDog();
-    this.buildHero();
+    await this.buildDog();
+    await this.buildHero();
     this.built = true;
   }
 
@@ -230,6 +232,14 @@ export class StreetScene {
     const meta = propMeta(spec);
     const modelEntity = await createModelEntity(viewer, this.frame, spec, spec.key, this.fq);
     const entities = modelEntity ? [modelEntity] : createProp(viewer, this.frame, spec, this.fq).entities;
+    const accessory = modelEntity && ASSETS[spec.key]?.accessories?.[spec.accessory];
+    if (accessory) {
+      const [ax, ay] = rotate2(accessory.x || 0, accessory.y || 0, spec.ry || 0);
+      const mount = { ...spec, x: spec.x + ax, y: spec.y + ay, z: (spec.z || 0) + (accessory.z || 0) };
+      const item = await createModelEntity(viewer, this.frame, mount, spec.key, this.fq, accessory);
+      if (item) entities.push(item);
+      else entities.push(...createProp(viewer, this.frame, { ...spec, key: accessory.fallback }, this.fq).entities);
+    }
     this.entities.push(...entities);
 
     if (meta.box) {
@@ -250,13 +260,26 @@ export class StreetScene {
   }
 
   /* ---------- 吉拿 ---------- */
-  buildDog() {
+  async buildDog() {
     const { viewer } = this;
-    const s = this.s;
     this.dogEntities = [];
     this.dogAnchor = { x: 0, y: 0, yaw: 0 };
 
-    for (const part of DOG_PARTS) {
+    const model = await createModelEntity(viewer, this.frame, { x: 0, y: 0 }, 'dog', this.fq);
+    if (model) {
+      model.name = '吉拿';
+      model.position = new Cesium.CallbackProperty(
+        () => localToWorld(this.frame, this.dogAnchor.x, this.dogAnchor.y, (this.dogAnchor.z || 0) + this.s.hop), false,
+      );
+      model.orientation = new Cesium.CallbackProperty(() => {
+        // Cesium converts glTF +Z forward to local +X; the street uses +Y at yaw 0.
+        const yaw = Cesium.Quaternion.fromAxisAngle(UP, Math.PI / 2 - this.dogAnchor.yaw);
+        return Cesium.Quaternion.multiply(this.fq, yaw, new Cesium.Quaternion());
+      }, false);
+      this.dogEntities.push(model);
+    }
+
+    for (const part of model ? [] : DOG_PARTS) {
       const dims = part.size;
       const opts = {
         position: new Cesium.CallbackProperty(() => this.dogPartPosition(part), false),
@@ -341,7 +364,7 @@ export class StreetScene {
       }
     }
     const [rx, ry] = rotate2(x * DOG_SCALE, y * DOG_SCALE, d.yaw);
-    return localToWorld(this.frame, d.x + rx, d.y + ry, z);
+    return localToWorld(this.frame, d.x + rx, d.y + ry, z + (d.z || 0));
   }
 
   dogPartOrientation(part) {
@@ -355,8 +378,23 @@ export class StreetScene {
   }
 
   /* ---------- 小年 ---------- */
-  buildHero() {
+  async buildHero() {
+    this.heroEntities = [];
+    this.heroSpeed = 0;
+    if (ASSETS.hero.glb) {
+      this.heroAvatar = new HeroAvatar(
+        this.viewer, this.frame, this.fq, () => this.s,
+        () => this.buildHeroPlaceholder(),
+      );
+      if (await this.heroAvatar.load(ASSETS.hero.glb)) return;
+      this.heroAvatar = null;
+    }
+    this.buildHeroPlaceholder();
+  }
+
+  buildHeroPlaceholder() {
     const { viewer } = this;
+    if (this.heroEntities?.length) return;
     this.heroEntities = [];
     for (const part of HERO_PARTS) {
       const opts = {
@@ -410,7 +448,7 @@ export class StreetScene {
     }
     this.s.dogSpot = i;
     const sp = DOG_SPOTS[i];
-    this.dogAnchor = { x: sp.x, y: sp.y, yaw: sp.ry };
+    this.dogAnchor = { x: sp.x, y: sp.y, z: sp.z || 0, yaw: sp.ry };
     this.dogCol = { x0: sp.x - 0.5, x1: sp.x + 0.5, y0: sp.y - 0.5, y1: sp.y + 0.5 };
   }
 
@@ -465,6 +503,8 @@ export class StreetScene {
     this.yawBias = 0;
     this.focusBias = 0;
     this.setCrouch(false);
+    s.running = false;
+    this.lastTap = null;
     this.joy.x = 0;
     this.joy.y = 0;
     for (const k of Object.keys(this.keys)) this.keys[k] = false;
@@ -501,11 +541,14 @@ export class StreetScene {
   bindInput() {
     const canvas = this.viewer.canvas;
     const MOVE = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+    /* 方向键与 WASD 视为同一方向，双击判定不区分两者 */
+    const DIRECTION = { ArrowUp: 'KeyW', ArrowLeft: 'KeyA', ArrowDown: 'KeyS', ArrowRight: 'KeyD' };
 
     window.addEventListener('keydown', (e) => {
       if (!this.active || !this.s.playing) return;
       if (MOVE.includes(e.code)) {
         this.keys[e.code] = true;
+        if (!e.repeat) this.tapDirection(DIRECTION[e.code] || e.code, e.timeStamp);
         e.preventDefault();
       } else if (e.code === 'KeyC' && !e.repeat) {
         this.toggleCrouch();
@@ -585,7 +628,16 @@ export class StreetScene {
     );
   }
 
+  /* 同一方向在 doubleTapMs 内按下两次即开始奔跑，松开全部方向键或蹲下时结束 */
+  tapDirection(dir, time) {
+    const last = this.lastTap;
+    if (last && last.dir === dir && time - last.time <= TUNING.doubleTapMs && !this.s.crouch) this.s.running = true;
+    this.lastTap = { dir, time };
+  }
+
   clearInput() {
+    this.s.running = false;
+    this.lastTap = null;
     for (const k of Object.keys(this.keys)) this.keys[k] = false;
     this.joy.x = 0;
     this.joy.y = 0;
@@ -642,6 +694,7 @@ export class StreetScene {
   /* ---------- 下蹲 ---------- */
   setCrouch(on) {
     this.s.crouch = !!on;
+    if (this.s.crouch) this.s.running = false;
     this.hooks.onCrouch?.(this.s.crouch);
   }
 
@@ -665,6 +718,8 @@ export class StreetScene {
 
   move(dt) {
     const s = this.s;
+    const beforeX = s.x;
+    const beforeY = s.y;
     const k = this.keys;
     const ix = (k.KeyD || k.ArrowRight ? 1 : 0) - (k.KeyA || k.ArrowLeft ? 1 : 0) + this.joy.x;
     const fwd = (k.KeyW || k.ArrowUp ? 1 : 0) - (k.KeyS || k.ArrowDown ? 1 : 0) - this.joy.y;
@@ -682,7 +737,7 @@ export class StreetScene {
       /* 使用包含自动侧移的实际相机角度，前方为 (-sin, -cos)，右方为 (-cos, sin) */
       const mx = -sin * ny - cos * nx;
       const my = -cos * ny + sin * nx;
-      const speed = TUNING.walkSpeed * (s.crouch ? TUNING.crouchSpeedFactor : 1) * dt;
+      const speed = (s.running ? TUNING.runSpeed : TUNING.walkSpeed * (s.crouch ? TUNING.crouchSpeedFactor : 1)) * dt;
       const px = s.x + mx * speed;
       const py = s.y + my * speed;
       if (!this.blocked(px, s.y)) s.x = px;
@@ -696,8 +751,12 @@ export class StreetScene {
         this.movedOnce = true;
         this.hooks.onFirstMove?.();
       }
+    } else {
+      s.running = false;
     }
 
+    this.heroSpeed = dt > 0 ? Math.hypot(s.x - beforeX, s.y - beforeY) / dt : 0;
+    if (this.heroSpeed < 0.02) target = 0;
     s.walkAmt += (target - s.walkAmt) * Math.min(1, dt * 10);
     s.swingAngle = Math.sin((s.walkPhase = (s.walkPhase || 0) + dt * 11 * s.walkAmt)) * 0.5 * s.walkAmt;
     if (s.walkAmt < 0.02) s.swingAngle = 0;
@@ -829,7 +888,7 @@ export class StreetScene {
   /** 视线检测：角色到吉拿之间是否有房屋、摊位、小吃车遮挡 */
   hasLineOfSight() {
     const from = new Cesium.Cartesian3(this.s.x, this.s.y, 1.5);
-    const to = new Cesium.Cartesian3(this.dogAnchor.x, this.dogAnchor.y, 0.55);
+    const to = new Cesium.Cartesian3(this.dogAnchor.x, this.dogAnchor.y, (this.dogAnchor.z || 0) + 0.3);
     const d = Cesium.Cartesian3.subtract(to, from, new Cesium.Cartesian3());
     const len = Cesium.Cartesian3.magnitude(d);
     if (len < 1e-4) return true;
@@ -994,9 +1053,11 @@ export class StreetScene {
     if (!this.active) return;
     if (this.s.playing) this.move(dt);
     else {
+      this.heroSpeed = 0;
       this.s.walkAmt += (0 - this.s.walkAmt) * Math.min(1, dt * 10);
       this.s.swingAngle = 0;
     }
+    this.heroAvatar?.update(dt, this.heroSpeed);
     this.updateCamera(dt);
     this.updateNear();
     this.hooks.onTick?.(this.s.playing ? now - this.startAt : this.elapsed);

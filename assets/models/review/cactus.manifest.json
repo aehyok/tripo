@@ -1,0 +1,86 @@
+{
+  "asset": "盆栽仙人掌",
+  "date": "2026-11-04",
+  "stage": "Blender修整与Cesium接入",
+  "source": "../raw/cactus_tripo.glb",
+  "source_sha256": "a3164363634351b6e7a5c3f2b0aa77f2fc742ff8b02c5c0d8d7208b246a2ec35",
+  "file": "../../../public/assets/models/cactus.glb",
+  "bytes": 1066176,
+  "sha256": "eb9a101874a3abc93ae8fa5eddb44cf0815bc8ff1b9461fb49204c5899d8bf6a",
+  "triangles": 928,
+  "raw_triangles": 978,
+  "triangle_budget": 1000,
+  "dimensions_m": [
+    0.686,
+    0.6333,
+    1.1
+  ],
+  "uniform_scale": 1.12482,
+  "pot_outer_radius_m": 0.3255,
+  "origin": "水平包围盒中心、盆底Z=0",
+  "front_blender": "-Y",
+  "patch": {
+    "weld_mm": 1,
+    "removed_wire_edges": 7,
+    "removed_loose_vertices": 0,
+    "collapsed_pinhole_vertices": 5,
+    "pinhole_span_mm": 2.53,
+    "soil_faces": 60
+  },
+  "mesh_audit": {
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "loose_vertices": 0
+  },
+  "operations": [
+    "保留Tripo造型与仙人掌/花盆手绘贴图，1毫米焊接合上主干前侧裂缝与盆土交接缝，删除焊接残留悬空边，2.5毫米针孔合并到中心",
+    "盆口内朝上的盆土面改为程序深棕土色，去掉绿色溢色与黄点拖影",
+    "等比缩放至总高1.1米，清除导入自定义法线后按50度分平滑/硬边",
+    "重新展UV并烘焙1K颜色/法线/粗糙度，12像素边距；全哑光、金属度0"
+  ],
+  "new_tripo_credits": 0,
+  "limitations": [
+    "按总高1.1米等比缩放，花盆直径与侧枝宽度超出表格0.5米包络",
+    "仙人掌表皮少量刺点在原UV岛边缘有轻微拉长，未逐点重绘",
+    "全量与真实移动设备性能待验收"
+  ],
+  "previews": [
+    "cactus-final-front.png",
+    "cactus-final-back.png",
+    "cactus-final-left.png",
+    "cactus-final-right.png",
+    "cactus-final-top.png",
+    "cactus-final-bottom.png",
+    "cactus-final-quarter.png",
+    "cactus-final-contact.png",
+    "cactus-cesium-front.png",
+    "cactus-cesium-back.png",
+    "cactus-cesium-second.png",
+    "cactus-game.png"
+  ],
+  "back_review": "Blender中性棚拍正/后/左右/顶底/3/4均已检查，补齐Tripo网页未能完成的背面环绕验收",
+  "evidence": {
+    "validation": "cactus.validation.json",
+    "roundtrip": "cactus-roundtrip.json",
+    "browser_checks": "cactus-browser-checks.txt",
+    "qa_page": "../../../qa/cactus-model.html"
+  },
+  "game_integration": {
+    "config": "ASSETS.cactus.glb，两实例(ry 0 / 2)共用",
+    "movement_collider": "SMALL_COLLIDER.cactus 0.4→0.3（盆外半径0.3255收缩8%）",
+    "prompt_box": [
+      -0.343,
+      0.343,
+      -0.317,
+      0.317
+    ],
+    "fallback": "文件缺失→按新尺寸重做的占位仙人掌，保留碰撞",
+    "regressions": [
+      "25项仙人掌检查通过",
+      "皮纳塔21、摊位25、小吃车21、房屋23、吉拿23项（不含手动按钮回退）通过",
+      "小年20项动画检查通过（真实浏览器）",
+      "正式选关→墨西哥→开始寻找、D移动、C下蹲站起，控制台无警告/错误",
+      "生产构建通过，既有Cesium入口包体偏大提示仍在"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "cactus": {
+    "dimensions_m": [
+      0.6860289573669434,
+      0.6333054304122925,
+      1.100000023841858
+    ],
+    "minimum": [
+      -0.3430144786834717,
+      -0.31665271520614624,
+      0.0
+    ],
+    "maximum": [
+      0.3430144786834717,
+      0.31665271520614624,
+      1.100000023841858
+    ],
+    "triangles": 928,
+    "materials": [
+      "cactus_1K_PBR"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0
+    }
+  }
+}

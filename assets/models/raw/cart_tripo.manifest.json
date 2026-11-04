@@ -1,7 +1,7 @@
 {
   "asset": "小吃车",
   "date": "2026-11-04",
-  "status": "Tripo原始模型，待Blender修整、减面及环绕验收",
+  "status": "原始Tripo文件保留未改；已由Blender重拓扑为正式版，见../review/cart.manifest.json",
   "file": "cart_tripo.glb",
   "bytes": 1041144,
   "sha256": "d14db2c1605e8841987c52730f91cafb9f11529ad011aafeca11209cab054019",
@@ -61,5 +61,14 @@
     "灯泡拆分并配置发光材质",
     "独立碰撞代理与Cesium加载验收"
   ],
-  "preview": "../../ref/tripo-cart.png"
+  "preview": "../../ref/tripo-cart.png",
+  "downstream": {
+    "date": "2026-11-04",
+    "stage": "Blender重拓扑、发光材质与Cesium接入完成",
+    "file": "../../../public/assets/models/cart.glb",
+    "manifest": "../review/cart.manifest.json",
+    "triangles": 2892,
+    "new_tripo_credits": 0,
+    "note": "保留原始阶段待办作为历史，下游修复、四轮、环绕与游戏检查见新manifest"
+  }
 }

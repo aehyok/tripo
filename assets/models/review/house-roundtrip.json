@@ -1,0 +1,65 @@
+[
+  {
+    "variant": "a",
+    "bounds_min": [
+      -2.75,
+      -2.25,
+      0.0
+    ],
+    "bounds_max": [
+      2.75,
+      2.25,
+      4.5
+    ],
+    "dimensions": [
+      5.5,
+      4.5,
+      4.5
+    ],
+    "triangles": 3701,
+    "boundary_edges_after_weld": 2,
+    "nonmanifold_edges_after_weld": 7
+  },
+  {
+    "variant": "b",
+    "bounds_min": [
+      -2.75,
+      -2.25,
+      0.0
+    ],
+    "bounds_max": [
+      2.75,
+      2.25,
+      4.5
+    ],
+    "dimensions": [
+      5.5,
+      4.5,
+      4.5
+    ],
+    "triangles": 3701,
+    "boundary_edges_after_weld": 2,
+    "nonmanifold_edges_after_weld": 7
+  },
+  {
+    "variant": "c",
+    "bounds_min": [
+      -2.75,
+      -2.25,
+      0.0
+    ],
+    "bounds_max": [
+      2.75,
+      2.25,
+      4.5
+    ],
+    "dimensions": [
+      5.5,
+      4.5,
+      4.5
+    ],
+    "triangles": 3701,
+    "boundary_edges_after_weld": 2,
+    "nonmanifold_edges_after_weld": 7
+  }
+]

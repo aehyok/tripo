@@ -1,0 +1,55 @@
+{
+  "pinata": {
+    "dimensions_m": [
+      1.025716781616211,
+      0.5155117511749268,
+      0.9999999701976776
+    ],
+    "minimum": [
+      -0.5128583908081055,
+      -0.2577558755874634,
+      2.9802322387695312e-08
+    ],
+    "maximum": [
+      0.5128583908081055,
+      0.2577558755874634,
+      1.0
+    ],
+    "triangles": 1400,
+    "materials": [
+      "pinata_paper_1K"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0
+    }
+  },
+  "pinata_hanger": {
+    "dimensions_m": [
+      1.465000107884407,
+      0.4000000059604645,
+      3.700000286102295
+    ],
+    "minimum": [
+      -1.2650001049041748,
+      -0.20000000298023224,
+      0.0
+    ],
+    "maximum": [
+      0.20000000298023224,
+      0.20000000298023224,
+      3.700000286102295
+    ],
+    "triangles": 260,
+    "materials": [
+      "pinata_post_wood",
+      "pinata_rope"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0
+    }
+  }
+}

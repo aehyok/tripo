@@ -1,7 +1,7 @@
 {
   "asset": "房屋基础造型",
   "date": "2026-11-04",
-  "status": "Tripo原始模型，待Blender修整、轻度减面和制作三配色",
+  "status": "原始Tripo文件保留未改；已由Blender修整并制作三配色正式版，见../review/house_a.manifest.json",
   "file": "house_base_tripo.glb",
   "bytes": 928448,
   "sha256": "75a0108c54f985ba565898da8edbe48358249167afa5dc7b30f1887c2e992387",
@@ -61,5 +61,21 @@
     "制作洋红/青绿/金盏黄三种独立材质变体",
     "独立碰撞代理与Cesium加载验收"
   ],
-  "preview": "../../ref/tripo-house-base.png"
+  "preview": "../../ref/tripo-house-base.png",
+  "downstream": {
+    "date": "2026-11-04",
+    "stage": "Blender三配色与Cesium接入",
+    "files": [
+      "../../../public/assets/models/house_a.glb",
+      "../../../public/assets/models/house_b.glb",
+      "../../../public/assets/models/house_c.glb"
+    ],
+    "records": [
+      "../review/house_a.manifest.json",
+      "../review/house_b.manifest.json",
+      "../review/house_c.manifest.json"
+    ],
+    "triangles_each": 3701,
+    "new_tripo_credits": 0
+  }
 }

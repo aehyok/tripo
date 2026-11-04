@@ -1,6 +1,6 @@
 {
   "asset": "吉拿",
-  "status": "Tripo原始模型，待Blender修整与游戏验收",
+  "status": "原始Tripo文件保留未改；已由Blender修整为正式静态版，见../review/dog_jina.manifest.json",
   "date": "2026-11-04",
   "file": "dog_jina_tripo.glb",
   "bytes": 4043668,
@@ -51,5 +51,12 @@
     "完整检查彩色材质、PBR及表面",
     "Cesium实际加载、藏点和碰撞验收"
   ],
-  "material_preview_note": "Tripo网页PBR预览呈黑色，灰模预览可见；GLB结构内含颜色、粗糙度/金属度和法线贴图，仍需在Blender或引擎中确认实际显示。"
+  "material_preview_note": "Tripo网页PBR预览呈黑色，灰模预览可见；GLB结构内含颜色、粗糙度/金属度和法线贴图，仍需在Blender或引擎中确认实际显示。",
+  "downstream": {
+    "date": "2026-11-04",
+    "stage": "静态吉拿Blender修整与Cesium首批接入完成",
+    "manifest": "../review/dog_jina.manifest.json",
+    "final_file": "../../../public/assets/models/dog_jina.glb",
+    "note": "本manifest保留原始阶段记录；后续完成项及限制见下游manifest"
+  }
 }

@@ -1,0 +1,52 @@
+{
+  "asset": "house_c",
+  "date": "2026-11-04",
+  "source": "../raw/house_base_tripo.glb",
+  "source_sha256": "75a0108c54f985ba565898da8edbe48358249167afa5dc7b30f1887c2e992387",
+  "file": "../../../public/assets/models/house_c.glb",
+  "sha256": "39d15a441a28c9d332de05c491e66fa592ebe190db1ebce339fe8dba07e3ef47",
+  "bytes": 2475644,
+  "triangles": 3701,
+  "raw_triangles": 4295,
+  "merged_vertices": 1154,
+  "dimensions_m": [
+    5.5,
+    4.5,
+    4.5
+  ],
+  "height_note": "总高按女儿墙4.5m；檐口约4.2m，保留原始手工石膏起伏",
+  "origin": "水平中心、最低点Z=0",
+  "front_blender": "-Y",
+  "color": "#FFB31A",
+  "material_method": "对亮色灰泥按55% Multiply烘焙到1K颜色图；线性亮度平滑蒙版保留深色木门窗/铁件；PBR四通道从原始表面重烘焙，UV边距12像素",
+  "mesh_audit": {
+    "boundary_edges": 0,
+    "nonmanifold_edges": 5,
+    "loose_vertices": 0
+  },
+  "previews": [
+    "house_c-front.png",
+    "house_c-back.png",
+    "house_c-left.png",
+    "house_c-right.png",
+    "house_c-top.png",
+    "house_c-bottom.png",
+    "house_c-quarter.png"
+  ],
+  "pending": [
+    "全资产与真实移动设备性能验收",
+    "保留Tripo手工风格的不规则石膏/门框，未重建为严格直角建筑"
+  ],
+  "source_mesh_triangles": 3702,
+  "checks": [
+    "正/后/左/右/顶/底/3/4渲染",
+    "GLB结构检查无警告或错误",
+    "回导米制包围盒与底部原点",
+    "Cesium三栋GPU加载、朝向、通路与单变体失败回退"
+  ],
+  "limitations": [
+    "局部门窗保留原始手工起伏和细微阴影杂点",
+    "源网格边界0/非流形5；GLB导出删除1个退化面，回导焊接后边界2/非流形7；未作打印级流形认证"
+  ],
+  "browser_checks": "house-browser-checks.txt"
+}

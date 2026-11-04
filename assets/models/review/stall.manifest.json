@@ -1,0 +1,112 @@
+{
+  "asset": "球迷摊位",
+  "date": "2026-11-04",
+  "source": "../raw/stall_tripo.glb",
+  "source_sha256": "63b87286007f4af2353f73fd3f727eff2db76c9711c6bd252315cd2a4c964277",
+  "base": {
+    "file": "public/assets/models/stall.glb",
+    "triangles": 1282,
+    "bytes": 815784,
+    "sha256": "99f3586596e2018f9f188fdcf99c1775789a67c66a250853d92d4ca0277999d6"
+  },
+  "accessories": [
+    {
+      "file": "public/assets/models/stall_scarf.glb",
+      "triangles": 60,
+      "bytes": 5044,
+      "sha256": "a5d096ede075808f3a27925ff447e4fc29f8b79b5dc29211c2947b0d7b422ef7"
+    },
+    {
+      "file": "public/assets/models/stall_caps.glb",
+      "triangles": 414,
+      "bytes": 33896,
+      "sha256": "8e6846d1413f436467919d12e5a87355a2fd03ef05a74228ea3f5d9ded1f8b15"
+    }
+  ],
+  "dimensions_m": [
+    2.4,
+    1.2,
+    2.2
+  ],
+  "origin": "底部Z=0、水平中心",
+  "front_blender": "-Y",
+  "countertop_z_m": 0.85,
+  "post_centers": [
+    [
+      -1.055,
+      -0.43
+    ],
+    [
+      -1.055,
+      0.43
+    ],
+    [
+      1.055,
+      -0.43
+    ],
+    [
+      1.055,
+      0.43
+    ]
+  ],
+  "post_count": 4,
+  "canopy_scallops": 8,
+  "emissive_bulbs": {
+    "count": 3,
+    "strength": 1.5,
+    "realtime_lights": false
+  },
+  "source_canvas": "../../ref/awning_stripe.png",
+  "mesh_audit": {
+    "boundary_edges_after_weld": 0,
+    "nonmanifold_edges_after_weld": 0,
+    "loose_vertices": 0
+  },
+  "operations": [
+    "按原始柜台外形重拓扑，复用原始手绘木板纹理",
+    "替换变形柜台、灰色连接残片及原支柱/篷布",
+    "重建四根带倒角木柱及四角斜撑",
+    "按已有帆布贴图重建八瓣垂边与屋脊",
+    "规则低面几何、1K PBR重新烘焙、12像素UV边距",
+    "独立围巾一条、独立三顶球迷帽；商品不混入基础模型",
+    "三颗暖色发光灯泡，Emission强度1.5"
+  ],
+  "mount_z": {
+    "scarf": 0.51,
+    "caps": 0.85
+  },
+  "new_tripo_credits": 0,
+  "limitations": [
+    "静态结构；接合构件有内部交叠，不作打印级流形认证",
+    "全资产与真实移动设备性能仍待验收"
+  ],
+  "previews": [
+    "stall-final-front.png",
+    "stall-final-back.png",
+    "stall-final-left.png",
+    "stall-final-right.png",
+    "stall-final-top.png",
+    "stall-final-bottom.png",
+    "stall-final-quarter.png",
+    "stall-with-scarf.png",
+    "stall-with-caps.png"
+  ],
+  "checks_completed": [
+    "正/后/左/右/顶/底/3/4与商品搭配渲染",
+    "GLB结构检查、内嵌贴图均1K",
+    "回导尺寸/原点/网格边界检查",
+    "27项Cesium浏览器检查，包括GPU加载、材质发光、旋转、商品高度、碰撞、三藏点通路与两种缺失文件回退",
+    "吉拿24项、房屋24项回归检查",
+    "正式游戏选关→墨西哥→开始寻找、W移动、C下蹲/站起，当前控制台无警告/错误"
+  ],
+  "validation": "stall.validation.json",
+  "accessory_validation": "stall-accessories.validation.json",
+  "roundtrip": "stall-roundtrip.json",
+  "browser_checks": "stall-browser-checks.txt",
+  "instance_triangles": {
+    "scarf_stall": 1342,
+    "cap_stall": 1696
+  },
+  "blend": "../blender/stall.blend",
+  "game_preview": "stall-game.png"
+}

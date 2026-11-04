@@ -1,0 +1,54 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>吉拿模型验收</title>
+<style>html,body,#view{margin:0;width:100%;height:100%;overflow:hidden}aside{position:absolute;top:12px;left:12px;background:#181c35ec;color:white;padding:16px;max-width:420px;font:14px/1.6 sans-serif}button{padding:8px;margin:3px}pre{white-space:pre-wrap}img{width:90px;background:#ffb31a;border-radius:12px}</style>
+<div id="view"></div><aside><strong>吉拿模型验收</strong><div><button id="spot0">藏点一</button><button id="spot1">藏点二</button><button id="spot2">藏点三</button><button id="fallback">测试缺失文件回退</button></div><img src="/assets/ui/dog_card.png"><pre id="result">等待加载…</pre></aside>
+<script type="module">
+import 'cesium/Build/Cesium/Widgets/widgets.css';
+import * as C from 'cesium';
+import {StreetScene} from '../src/scenes/street.js';
+import {ASSETS,DOG_SPOTS,TUNING} from '../src/config.js';
+import {localToWorld} from '../src/scenes/streetProps.js';
+C.buildModuleUrl.setBaseUrl('/cesium/');
+for(const cfg of Object.values(ASSETS)){for(const item of Object.values(cfg.accessories||{})){if(item.glb&&!item.glb.startsWith('/'))item.glb='/'+item.glb;}}
+for(const cfg of Object.values(ASSETS)){if(cfg.glb&&!cfg.glb.startsWith('/'))cfg.glb='/'+cfg.glb;for(const k in cfg.variants){if(!cfg.variants[k].startsWith('/'))cfg.variants[k]='/'+cfg.variants[k];}}
+ASSETS.dog.glb='/assets/models/dog_jina.glb';
+const result=document.querySelector('#result');
+const viewer=new C.Viewer('view',{baseLayer:false,geocoder:false,homeButton:false,sceneModePicker:false,baseLayerPicker:false,navigationHelpButton:false,animation:false,timeline:false,fullscreenButton:false,selectionIndicator:false,infoBox:false});
+viewer.scene.globe.show=false;
+const street=new StreetScene(viewer);
+const checks=[];const verify=(name,passed,detail='')=>{checks.push({name,passed,detail});if(!passed)throw Error(name+': '+detail)};
+const print=()=>{result.textContent=checks.map(x=>`${x.passed?'通过':'失败'}：${x.name}${x.detail?' · '+x.detail:''}`).join('\n');result.dataset.status=checks.every(x=>x.passed)?'passed':'failed'};
+function look(i){street.placeDog(i);const p=DOG_SPOTS[i];street.setCameraPose(new C.Cartesian3(p.x,p.y,.28),new C.Cartesian3(p.x+1.05,p.y+1.3,.95));}
+function reachable(){const step=.2,start=[Math.round(TUNING.spawn.x/step),Math.round(TUNING.spawn.y/step)],q=[start],seen=new Set([start.join(',')]);for(let head=0;head<q.length;head++){const [ix,iy]=q[head],x=ix*step,y=iy*step;street.s.x=x;street.s.y=y;if(street.canConfirm())return {x,y,visited:head+1};for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const nx=ix+dx,ny=iy+dy,k=nx+','+ny;if(!seen.has(k)&&!street.blocked(nx*step,ny*step)){seen.add(k);q.push([nx,ny])}}}return null}
+async function gpuReady(entity){const end=performance.now()+20000;while(performance.now()<end){for(let i=0;i<viewer.scene.primitives.length;i++){const p=viewer.scene.primitives.get(i);if(p.id===entity&&p.ready)return p}await new Promise(r=>setTimeout(r,100))}throw Error('GPU模型未就绪')}
+try{
+ await street.build();
+ const dog=street.dogEntities[0];
+ verify('正式GLB替换占位',street.dogEntities.length===1&&!!dog.model);
+ look(0);const primitive=await gpuReady(dog);
+ verify('Cesium GPU渲染就绪',primitive.ready);
+ verify('按米显示且不强制放大',dog.model.scale.getValue()===1&&dog.model.minimumPixelSize.getValue()===0);
+ for(let i=0;i<DOG_SPOTS.length;i++){
+  street.placeDog(i);const t=C.JulianDate.now(),sp=DOG_SPOTS[i];
+  const p=dog.position.getValue(t),expected=localToWorld(street.frame,sp.x,sp.y,sp.z||0);
+  verify(`藏点${i+1}位置`,C.Cartesian3.distance(p,expected)<1e-6);
+  const matrix=C.Matrix3.fromQuaternion(dog.orientation.getValue(t));
+  const front=C.Matrix3.multiplyByVector(matrix,C.Cartesian3.UNIT_X,new C.Cartesian3());
+  const local=C.Matrix4.multiplyByPointAsVector(C.Matrix4.inverseTransformation(street.frame,new C.Matrix4()),front,new C.Cartesian3());
+  verify(`藏点${i+1}朝向`,Math.abs(local.x-Math.sin(sp.ry))<1e-6&&Math.abs(local.y-Math.cos(sp.ry))<1e-6);
+  street.s.x=sp.x;street.s.y=sp.y+.7;street.s.playing=true;street.s.found=false;
+  verify(`藏点${i+1}近处可确认`,street.canConfirm());
+  street.s.x=sp.x+10;verify(`藏点${i+1}远处不可确认`,!street.canConfirm());
+  const route=reachable();verify(`藏点${i+1}绕开碰撞可达`,!!route);
+  street.startAt=performance.now();const found=street.tryConfirm();verify(`藏点${i+1}确认找到`,!!found&&street.s.found&&!street.s.playing);
+ }
+ street.s.hop=.2;verify('跳跃跟随脚底原点',C.Cartesian3.distance(dog.position.getValue(C.JulianDate.now()),localToWorld(street.frame,street.dogAnchor.x,street.dogAnchor.y,(street.dogAnchor.z||0)+.2))<1e-6);street.s.hop=0;
+ verify('目标卡片加载',await new Promise(resolve=>{const im=new Image();im.onload=()=>resolve(im.naturalWidth===1024);im.onerror=()=>resolve(false);im.src='/assets/ui/dog_card.png'}));
+ look(0);print();
+ for(let i=0;i<3;i++)document.querySelector('#spot'+i).onclick=()=>{look(i);result.textContent+=`\n当前查看藏点${i+1}`};
+ document.querySelector('#fallback').onclick=async()=>{
+  const original=ASSETS.dog.glb;ASSETS.dog.glb='/assets/models/intentionally-missing-dog.glb';
+  try{const probe=new StreetScene(viewer);await probe.buildDog();verify('缺失GLB回退到占位',probe.dogEntities.length>1&&probe.dogEntities.every(e=>!e.model));for(const e of probe.dogEntities)viewer.entities.remove(e);viewer.entities.remove(probe.dogMarker);print()}
+  catch(e){result.textContent+='\n失败：'+e.message;result.dataset.status='failed'}finally{ASSETS.dog.glb=original}
+ };
+}catch(e){result.textContent+='\n失败：'+e.message;result.dataset.status='failed';console.error(e)}
+</script></html>

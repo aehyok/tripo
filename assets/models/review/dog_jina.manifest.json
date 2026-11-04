@@ -1,0 +1,166 @@
+{
+  "asset": "吉拿",
+  "date": "2026-11-04",
+  "stage": "Blender修整与游戏接入",
+  "source": "../raw/dog_jina_tripo.glb",
+  "source_sha256": "53d54044979b236d843f3e639d9aba02d16d89dc8642552d29048e51366de2c2",
+  "blend": "../blender/dog_jina.blend",
+  "file": "../../../public/assets/models/dog_jina.glb",
+  "raw_triangles": 15884,
+  "triangles": 7500,
+  "merged_vertices": 4230,
+  "dimensions_m": [
+    0.35,
+    0.55,
+    0.5
+  ],
+  "dimension_note": "按手册表格的包围盒宽深高校正；未将0.5米称为实测肩高",
+  "front_blender": "-Y",
+  "origin": "水平包围盒中心、最低点Z=0",
+  "mesh_audit": {
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "loose_vertices": 0
+  },
+  "operations": [
+    "米制尺寸",
+    "合并0.0001米内重复点",
+    "退化边清理",
+    "重算法线",
+    "Decimate减面",
+    "应用变换",
+    "脚底原点",
+    "从原始高模重新烘焙2K颜色、法线、粗糙度和金属度，16像素边距"
+  ],
+  "pending": [
+    "项目级移动端性能和全部正式资产联调",
+    "如后续玩法要求，再制作四足绑定及动画"
+  ],
+  "previews": [
+    "dog-final-front.png",
+    "dog-final-back.png",
+    "dog-final-left.png",
+    "dog-final-right.png",
+    "dog-final-threequarter.png",
+    "dog-final-top.png",
+    "dog-final-bottom.png"
+  ],
+  "card": "../../../public/assets/ui/dog_card.png",
+  "sha256": "036e25e095207d6d3ce5060549ffc31c8814c2275f62ec2f19aad3ce9e998260",
+  "bytes": 6004512,
+  "embedded_images": [
+    {
+      "name": "jina_normal",
+      "mimeType": "image/png",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "jina_basecolor",
+      "mimeType": "image/png",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "jina_metallic-jina_roughness",
+      "mimeType": "image/png",
+      "size": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "skins": 0,
+  "joint_count": 0,
+  "animations": [],
+  "status": "静态吉拿修整与首批Cesium接入已完成",
+  "roundtrip": {
+    "blender_reimport_bounds_m": {
+      "min": [
+        -0.17499999701976776,
+        -0.27500003576278687,
+        0.0
+      ],
+      "max": [
+        0.17499999701976776,
+        0.27500003576278687,
+        0.5
+      ],
+      "dimensions": [
+        0.3499999940395355,
+        0.5500000715255737,
+        0.5
+      ]
+    },
+    "translation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "pass": true
+  },
+  "browser_checks": [
+    "通过：正式GLB替换占位",
+    "通过：Cesium GPU渲染就绪",
+    "通过：按米显示且不强制放大",
+    "通过：藏点1位置",
+    "通过：藏点1朝向",
+    "通过：藏点1近处可确认",
+    "通过：藏点1远处不可确认",
+    "通过：藏点1绕开碰撞可达",
+    "通过：藏点1确认找到",
+    "通过：藏点2位置",
+    "通过：藏点2朝向",
+    "通过：藏点2近处可确认",
+    "通过：藏点2远处不可确认",
+    "通过：藏点2绕开碰撞可达",
+    "通过：藏点2确认找到",
+    "通过：藏点3位置",
+    "通过：藏点3朝向",
+    "通过：藏点3近处可确认",
+    "通过：藏点3远处不可确认",
+    "通过：藏点3绕开碰撞可达",
+    "通过：藏点3确认找到",
+    "通过：跳跃跟随脚底原点",
+    "通过：目标卡片加载",
+    "通过：缺失GLB回退到占位"
+  ],
+  "checks_completed": [
+    "正、后、左、右、顶部、底部及3/4彩色渲染验收",
+    "四肢及卷尾完整，未见颈侧多余卷尾或背景残片",
+    "GLB回导后包围盒0.35×0.55×0.50米、原点0、单位缩放，最低点0",
+    "7500三角面，3张2K贴图，结构校验无错误/警告",
+    "边界边0、非流形边0、孤立顶点0",
+    "Cesium GPU实际渲染及三藏点位置/朝向/碰撞可达/确认结果验证",
+    "高度偏移匹配首藏点4厘米路面；跳跃跟随",
+    "模型缺失回退和1024透明卡片加载",
+    "正式选关→地球→墨西哥→任务卡→开始寻找已验证，当前游戏无控制台错误",
+    "npm run build通过（存在原有Cesium大包提示）"
+  ],
+  "limitations": [
+    "静态模型，无四足绑定或骨骼动画；当前跳跃是整体位移",
+    "尺寸采用手册包围盒表；0.5米是总高，未声称肩高实测0.5米",
+    "未自动删除不可见内部壳；网格闭合与外观已检查，未声称完整几何认证",
+    "后续整体美术/移动端帧率与全资产性能验收仍需进行"
+  ],
+  "game_config": "src/config.js ASSETS.dog",
+  "cesium_axis_note": "Cesium 1.147将glTF+Z前向转为本地+X；实体绕Z旋转π/2-yaw，与街区+Y前向约定一致",
+  "evidence": [
+    "dog-final-contact.png",
+    "dog-cesium-spot1.png",
+    "dog-cesium-spot2.png",
+    "dog-cesium-spot3.png",
+    "dog-game-task.png",
+    "dog-game-playing.png",
+    "dog-browser-checks.txt"
+  ]
+}

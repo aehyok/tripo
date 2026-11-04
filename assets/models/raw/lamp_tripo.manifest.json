@@ -1,0 +1,95 @@
+{
+  "asset": "路灯",
+  "date": "2026-11-04",
+  "stage": "Tripo原始模型",
+  "status": "原始Tripo文件保留未改；已由Blender修整为正式版，见../review/lamp.manifest.json",
+  "file": "lamp_tripo.glb",
+  "input": "../../ref/lamp.png",
+  "source_page": "https://studio.tripo3d.ai/workspace/generate/589fd091-e1ec-42da-ab6f-6b0d34d6d6d3",
+  "ai_model": "H3.1 Best Quality",
+  "input_mode": "single image",
+  "settings": {
+    "requested_quad_faces": 700,
+    "topology": "Quad",
+    "texture_generated": "2K",
+    "texture_export_target": "1K",
+    "pbr": true,
+    "ultra_mesh_quality": true,
+    "remove_lighting": true,
+    "ai_complete": false,
+    "generate_in_parts": false,
+    "8k_texture": false,
+    "privacy": "Sharing Only（沿用）",
+    "ui_quad_faces": 705,
+    "ui_vertices": 707,
+    "texture_exported": "1K"
+  },
+  "credits_before": 24725,
+  "credits_after_submission": 24675,
+  "credits_used": 50,
+  "generation_submissions": 1,
+  "checks_completed": [
+    "参考图主体完整，单灯头、深绿色灯杆、暖白不透明灯罩，中灰背景",
+    "已核对生成参数及700四边面输入目标",
+    "网页生成完成：705四边面、707顶点",
+    "网页正面PBR真实模型预览正常并已保存",
+    "下载完成通知；原件保留，归档副本与原件字节完全一致",
+    "GLB2.0头、长度、分块及缓冲区范围检查通过",
+    "实际1410三角面≤1500；三张1024×1024内嵌贴图",
+    "一个网格、一个材质，无骨骼和动画；结构报告无错误或警告"
+  ],
+  "checks_pending": [
+    "侧面、背面、顶部及底部完整环绕验收（画布旋转不可靠）",
+    "灯帽/顶球、灯框、底座低面数轮廓和灯杆连接修整",
+    "按0.4×0.4×3.2米、底部原点及正面-Y校正",
+    "灯罩单独材质/遮罩及Emission强度2.0、颜色#FFC46B；当前未配置发光",
+    "碰撞代理、Cesium实际加载及夜景效果/性能验收"
+  ],
+  "bytes": 1083732,
+  "sha256": "6da086d1a190d2f6ac6fb99d11a7ab281f5e8fd016753bec7405ac8e33e627cc",
+  "triangles": 1410,
+  "embedded_images": [
+    {
+      "name": "tripo_image_07109698-3bb5-4829-a23c-e1c5f829a74b_0_3",
+      "mimeType": "image/jpeg",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "name": "tripo_image_07109698-3bb5-4829-a23c-e1c5f829a74b_0_0",
+      "mimeType": "image/jpeg",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "name": "lamp_tripo_metallic-lamp_tripo_roughness",
+      "mimeType": "image/png",
+      "size": [
+        1024,
+        1024
+      ]
+    }
+  ],
+  "materials": 1,
+  "skins": 0,
+  "joint_count": 0,
+  "weighted_primitives": 0,
+  "skinned_nodes": 0,
+  "animations": [],
+  "meshes": 1,
+  "download_original": "/Users/aehyok/Downloads/lamp_tripo.glb",
+  "credits_after": 24675,
+  "preview": "../../ref/tripo-lamp.png",
+  "validation_report": "lamp_tripo.validation.json",
+  "final_triangle_budget": 1500,
+  "visual_review": {
+    "front_pbr": "已观察，深绿色灯杆、单个灯头、暖白色不透明灯罩和加粗底座完整，颜色正常；当前视角未见背景残片或明显破洞",
+    "side_back": "网页未完成；已在Blender正式版渲染中补验通过",
+    "top_bottom": "已在Blender正式版渲染中补验：灯帽顶球与底座封闭完整",
+    "cleanup": "灯帽/顶球和底座低面数轮廓略不规则，需在Blender检查修整；灯罩发光尚未配置"
+  }
+}

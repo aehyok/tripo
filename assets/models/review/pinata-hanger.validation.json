@@ -1,0 +1,21 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/pinata_hanger.glb",
+    "bytes": 20300,
+    "sha256": "17247420fed1c33998a1e8683bb4cf240b926f5f54f11478bf2a9f79dbc9ab10",
+    "triangles": 260,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 2,
+    "embedded_images": [],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

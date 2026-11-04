@@ -1,0 +1,40 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/stall_scarf.glb",
+    "bytes": 5044,
+    "sha256": "a5d096ede075808f3a27925ff447e4fc29f8b79b5dc29211c2947b0d7b422ef7",
+    "triangles": 60,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 2,
+    "embedded_images": [],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  },
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/stall_caps.glb",
+    "bytes": 33896,
+    "sha256": "8e6846d1413f436467919d12e5a87355a2fd03ef05a74228ea3f5d9ded1f8b15",
+    "triangles": 414,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 6,
+    "materials": 4,
+    "embedded_images": [],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

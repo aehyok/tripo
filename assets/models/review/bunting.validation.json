@@ -1,0 +1,30 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/public/assets/models/bunting.glb",
+    "bytes": 1050996,
+    "sha256": "e938d508e049b7af28b60793c9a0b84d3a8dd204ef085ae660ed79b02ee7fa26",
+    "triangles": 1696,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 4,
+    "embedded_images": [
+      {
+        "name": "flags_atlas",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

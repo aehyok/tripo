@@ -1,0 +1,82 @@
+{
+  "asset": "足球",
+  "date": "2026-11-04",
+  "stage": "Blender手建与Cesium接入",
+  "file": "../../../public/assets/models/ball.glb",
+  "bytes": 762964,
+  "sha256": "8a38e5e250274b55dc0bf7032d00aaaad71b9611a0d5731a8d204b2fffa15e58",
+  "triangles": 180,
+  "triangle_budget": 500,
+  "dimensions_m": [
+    0.3918,
+    0.3918,
+    0.3918
+  ],
+  "origin": "球体最低点Z=0、水平中心",
+  "panels": {
+    "pentagon": 12,
+    "hexagon": 20
+  },
+  "tooth_dents": 9,
+  "mesh_audit": {
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "loose_vertices": 0
+  },
+  "operations": [
+    "截角二十面体：12块墨色五边形+20块奶油白六边形，每块中心加点，投影到直径0.4米球面（180三角面）；按游戏可读性放大，真实足球为0.22米",
+    "高模细分并位移：缝线凹槽、一侧两排9个牙印凹坑、轻微磨损",
+    "从高模烘焙1K颜色与法线到低模UV；牙印处带污渍"
+  ],
+  "new_tripo_credits": 0,
+  "limitations": [
+    "低模为180面多面体，球面最大偏差约4毫米",
+    "未做滚动动画"
+  ],
+  "previews": [
+    "ball-final-front.png",
+    "ball-final-back.png",
+    "ball-final-left.png",
+    "ball-final-right.png",
+    "ball-final-top.png",
+    "ball-final-bite.png",
+    "ball-final-contact.png",
+    "ball-cesium.png",
+    "props-game.png"
+  ],
+  "evidence": {
+    "validation": "ball.validation.json",
+    "roundtrip": "props-roundtrip.json",
+    "browser_checks": "props-browser-checks.txt",
+    "qa_page": "../../../qa/props-model.html"
+  },
+  "roundtrip": {
+    "dimensions_m": [
+      0.3917728364467621,
+      0.3917728364467621,
+      0.3917728364467621
+    ],
+    "minimum": [
+      -0.19588641822338104,
+      -0.19588641822338104,
+      0.004113584756851196
+    ],
+    "maximum": [
+      0.19588641822338104,
+      0.19588641822338104,
+      0.3958864212036133
+    ],
+    "triangles": 180,
+    "materials": [
+      "ball_1K"
+    ],
+    "mesh_audit_after_weld": {
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0
+    }
+  },
+  "roundtrip_note": "包围盒0.392米：180面多面体顶点都在0.4米球面上，但轴向没有顶点",
+  "size_decision": "手册为真实尺寸0.22米；按用户要求放大到0.4米以便默认俯视角可读，仍小于吉拿（0.5米）",
+  "game_integration": "两实例共用；铺装上的一个z=0.04；SMALL_COLLIDER.ball 0.18（半径收缩8%）"
+}
