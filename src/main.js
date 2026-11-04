@@ -76,7 +76,7 @@ $('flags').addEventListener('click', (e) => {
 function updateEarthLine() {
   const done = app.progress.done;
   $('earthLine').textContent = done
-    ? '墨西哥点亮了！点击发光区域，再次挑战第一关。'
+    ? '墨西哥点亮了！点击发光区域，请挑战第一关。'
     : '小年，墨西哥的球迷街传来了求助。点击发光区域，去看看吧。';
   $('earthDone').hidden = !done;
   $('earthBack').hidden = done;

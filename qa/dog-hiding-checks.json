@@ -1,0 +1,57 @@
+{
+  "checked_on": "2026-11-05",
+  "fix": "move_cart_spot_behind_body",
+  "cart_spot": {
+    "x": -3.85,
+    "y": 2.4,
+    "z": 0.04
+  },
+  "desktop": {
+    "viewport": [
+      1440,
+      900
+    ],
+    "all_three_spots_occluded_in_overview_and_start": true
+  },
+  "mobile": {
+    "viewport": [
+      390,
+      844
+    ],
+    "all_three_spots_occluded_in_overview_and_start": true
+  },
+  "reachability": [
+    {
+      "spot": 0,
+      "reachable": true,
+      "goal": {
+        "x": -2,
+        "y": 3.1500000000000004,
+        "distance": 1.9962464777677134
+      }
+    },
+    {
+      "spot": 1,
+      "reachable": true,
+      "goal": {
+        "x": -4,
+        "y": -7.6,
+        "distance": 2.022374841615669
+      }
+    },
+    {
+      "spot": 2,
+      "reachable": true,
+      "goal": {
+        "x": 4,
+        "y": -7.6,
+        "distance": 2.022374841615669
+      }
+    }
+  ],
+  "reveal_control": {
+    "visible_sampled_pixels": 38,
+    "can_confirm": true
+  },
+  "build_passed": true
+}

@@ -18,7 +18,7 @@ OUT = ROOT / "public/assets/audio"
 RATE = 24000
 LINES = [
     ("mo-intro", "mo", "小年，墨西哥的球迷街传来了求助。点击发光区域，去看看吧。"),
-    ("mo-complete", "mo", "墨西哥点亮了！点击发光区域，再次挑战第一关。"),
+    ("mo-complete", "mo", "墨西哥点亮了！点击发光区域，请挑战第一关。"),
     ("lupe-task", "lupe", "吉拿一转眼就跑丢了。它穿着绿色球衣，你能帮我找找吗？"),
     ("lupe-thanks", "lupe", "谢谢你，小年！它总爱追着足球跑。"),
     ("xiaonian-start", "xiaonian", "交给我吧，我去找找！"),
