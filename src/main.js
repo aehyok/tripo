@@ -175,16 +175,23 @@ async function enterStreet() {
   hideTip();
 
   journey.start();
-  const landed = await earth.flyToAnchor((progress) => journey.setProgress(progress));
+  let irisClosing = null;
+  const landed = await earth.flyToAnchor((progress) => {
+    journey.setProgress(progress);
+    /* 最后进近时同步收拢虹膜，用遮罩衔接云层与街区，避免落地后再次黑屏。 */
+    if (!REDUCED && progress >= 0.8 && !irisClosing) irisClosing = iris(false, 320);
+  });
   if (token !== app.round) return;
   if (!landed) {
+    if (irisClosing) await iris(true, 160);
     journey.stop();
     earth.setControlsEnabled(true);
     app.mode = 'earth';
     return;
   }
 
-  await iris(false, 260);
+  if (irisClosing) await irisClosing;
+  else await iris(false, 260);
   if (token !== app.round) return;
 
   setGlobeVisible(false);
@@ -225,6 +232,7 @@ async function enterStreet() {
   ]);
   if (token !== app.round) return;
 
+  journey.stop();
   app.mode = 'street';
   showTask();
 }

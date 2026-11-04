@@ -51,7 +51,10 @@ const DOG_SCALE = 1.35;
 
 function angleOf(swing, s) {
   if (s.crouch) return swing.startsWith('leg') ? 0.55 : -0.25;
-  return swing.startsWith('leg') ? s.swingAngle : -s.swingAngle * 0.8;
+  /* 左右腿交替迈步，同侧手臂与腿反向摆动，避免四肢同向甩动。 */
+  const side = swing.endsWith('L') ? 1 : -1;
+  const base = swing.startsWith('leg') ? s.swingAngle : -s.swingAngle * 0.65;
+  return base * side;
 }
 
 export class StreetScene {
@@ -78,6 +81,7 @@ export class StreetScene {
     this.movedOnce = false;
     this.pitchBias = 0;
     this.yawBias = 0;
+    this.focusBias = 0;
     this.timers = new Set();
 
     this.s = {
@@ -459,6 +463,7 @@ export class StreetScene {
     s.celebrate = 0;
     this.pitchBias = 0;
     this.yawBias = 0;
+    this.focusBias = 0;
     this.setCrouch(false);
     this.joy.x = 0;
     this.joy.y = 0;
@@ -546,7 +551,8 @@ export class StreetScene {
       const dy = e.clientY - t.y;
       if (Math.hypot(dx, dy) > 1) this.dragActive = true;
       if (this.pointers.size === 1 && !this.s.found) {
-        this.s.camYaw -= dx * 0.006;
+        /* 第三人称视角：向右拖动时镜头向右看，向左拖动则反向。 */
+        this.s.camYaw += dx * 0.006;
         this.s.camPitch = Math.max(0.1, Math.min(1.2, this.s.camPitch + dy * 0.004));
       }
       t.x = e.clientX;
@@ -670,9 +676,10 @@ export class StreetScene {
       const nx = ix * n;
       const ny = fwd * n;
       target = Math.min(1, len);
-      const sin = Math.sin(s.camYaw);
-      const cos = Math.cos(s.camYaw);
-      /* 相机朝向的前方为 (-sin, -cos)，右方为 (-cos, sin) */
+      const moveYaw = s.camYaw + this.yawBias;
+      const sin = Math.sin(moveYaw);
+      const cos = Math.cos(moveYaw);
+      /* 使用包含自动侧移的实际相机角度，前方为 (-sin, -cos)，右方为 (-cos, sin) */
       const mx = -sin * ny - cos * nx;
       const my = -cos * ny + sin * nx;
       const speed = TUNING.walkSpeed * (s.crouch ? TUNING.crouchSpeedFactor : 1) * dt;
@@ -692,7 +699,7 @@ export class StreetScene {
     }
 
     s.walkAmt += (target - s.walkAmt) * Math.min(1, dt * 10);
-    s.swingAngle = Math.sin((s.walkPhase = (s.walkPhase || 0) + dt * 11 * s.walkAmt)) * 0.75 * s.walkAmt;
+    s.swingAngle = Math.sin((s.walkPhase = (s.walkPhase || 0) + dt * 11 * s.walkAmt)) * 0.5 * s.walkAmt;
     if (s.walkAmt < 0.02) s.swingAngle = 0;
   }
 
@@ -727,39 +734,42 @@ export class StreetScene {
     const s = this.s;
     const full = s.found ? Math.min(s.camDist, 7) : s.camDist;
     const need = Math.min(full, 5.5);
-    const clear = this.clearAlong(s.camYaw, s.camPitch);
+    const viewYaw = s.camYaw + this.yawBias;
+    const viewPitch = Math.max(0.1, Math.min(1.25, s.camPitch + this.pitchBias));
+    const clear = this.clearAlong(viewYaw, viewPitch);
 
     /* 被建筑挡住时缓慢转到开阔方向，玩家正在拖动时不干预 */
     if (!this.dragActive && this.pointers.size === 0 && clear < need) {
       const offsets = [0.35, -0.35, 0.7, -0.7, 1.05, -1.05, 1.4, -1.4, 1.75, -1.75, 2.1, -2.1, 2.6, -2.6, 3.14];
       for (const off of offsets) {
-        if (this.clearAlong(s.camYaw + off, s.camPitch) >= need) {
+        if (this.clearAlong(viewYaw + off, viewPitch) >= need) {
           s.camYaw += Math.sign(off) * Math.min(Math.abs(off), dt * 2.6);
           break;
         }
       }
     }
 
-    /* 贴墙时抬高视角，避免角色被墙挡住；离开后自动恢复 */
+    /* 主动拖动时冻结自动偏移，避免相机与玩家反向争夺控制。 */
     const nearDog = this.nearKey === 'dog' || s.found;
-    const wantPitchBias = (!this.dragActive && clear < 2.8 ? 0.55 : 0) + (nearDog ? 0.12 : 0);
-    this.pitchBias += (wantPitchBias - this.pitchBias) * Math.min(1, dt * 2.2);
+    if (!this.dragActive) {
+      const wantPitchBias = (clear < 2.8 ? 0.55 : 0) + (nearDog ? 0.12 : 0);
+      this.pitchBias += (wantPitchBias - this.pitchBias) * Math.min(1, dt * 2.2);
+      const wantYawBias = nearDog ? 0.42 : 0;
+      this.yawBias += (wantYawBias - this.yawBias) * Math.min(1, dt * 2);
+    }
     const pitch = Math.max(0.1, Math.min(1.25, s.camPitch + this.pitchBias));
-
-    /* 靠近吉拿时相机绕到侧面，避免小狗正好被角色挡住 */
-    const wantYawBias = nearDog && !this.dragActive ? 0.42 : 0;
-    this.yawBias += (wantYawBias - this.yawBias) * Math.min(1, dt * 2);
     const yaw = s.camYaw + this.yawBias;
 
     const want = Math.max(0.9, Math.min(full, this.clearAlong(yaw, pitch) - 0.3));
     const k = want < s.curDist ? 1 - Math.exp(-dt * 18) : 1 - Math.exp(-dt * 3);
     s.curDist += (want - s.curDist) * (dt >= 1 ? 1 : k);
 
-    /* 靠近吉拿时焦点向它偏移，避免小狗被角色完全挡住 */
-    const bias = s.found ? 0.55 : nearDog ? 0.45 : 0;
+    /* 环绕中心平滑偏移，避免进入提示范围时画面突然跳到一侧。 */
+    const wantFocusBias = s.found ? 0.55 : nearDog ? 0.45 : 0;
+    this.focusBias += (wantFocusBias - this.focusBias) * Math.min(1, dt * 4);
     const focusLocal = new Cesium.Cartesian3(
-      s.x + (this.dogAnchor.x - s.x) * bias,
-      s.y + (this.dogAnchor.y - s.y) * bias,
+      s.x + (this.dogAnchor.x - s.x) * this.focusBias,
+      s.y + (this.dogAnchor.y - s.y) * this.focusBias,
       this.focusHeight(),
     );
     const dir = this.cameraDir(yaw, pitch);
@@ -783,7 +793,7 @@ export class StreetScene {
     const fovy = this.viewer.camera.frustum.fovy;
     const halfFov = Math.min(fovy / 2, Math.atan(Math.tan(fovy / 2) * aspect));
     const radius = TUNING.groundRadius + 2;
-    const distance = radius / Math.sin(halfFov) / 0.75 * this.overviewZoom;
+    const distance = radius / Math.sin(halfFov) / 0.68 * this.overviewZoom;
     const pitch = Cesium.Math.clamp(this.s.camPitch, 0.4, 1.2);
     const direction = this.cameraDir(this.s.camYaw, pitch);
     const focus = new Cesium.Cartesian3(0, 0, 1.7);
@@ -883,8 +893,9 @@ export class StreetScene {
     this.hintState.used++;
     const used = this.hintState.used;
 
-    const fx = -Math.sin(this.s.camYaw);
-    const fy = -Math.cos(this.s.camYaw);
+    const hintYaw = this.s.camYaw + this.yawBias;
+    const fx = -Math.sin(hintYaw);
+    const fy = -Math.cos(hintYaw);
     const dx = this.dogAnchor.x - this.s.x;
     const dy = this.dogAnchor.y - this.s.y;
     const cross = fx * dy - fy * dx;

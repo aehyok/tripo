@@ -1,0 +1,65 @@
+{
+  "asset": "小吃车",
+  "date": "2026-11-04",
+  "status": "Tripo原始模型，待Blender修整、减面及环绕验收",
+  "file": "cart_tripo.glb",
+  "bytes": 1041144,
+  "sha256": "d14db2c1605e8841987c52730f91cafb9f11529ad011aafeca11209cab054019",
+  "source_page": "https://studio.tripo3d.ai/workspace/generate/a9b90eae-1254-43b5-a19d-708450937620",
+  "input": "../../ref/cart.png",
+  "ai_model": "H3.1 Best Quality",
+  "input_mode": "single image",
+  "settings": {
+    "requested_quad_faces": 1300,
+    "ui_quad_faces": 1763,
+    "texture_generated": "2K",
+    "texture_exported": "1K",
+    "pbr": true,
+    "ultra_mesh_quality": true,
+    "remove_lighting": true,
+    "ai_complete": false
+  },
+  "triangles": 3495,
+  "embedded_images": [
+    {
+      "name": "tripo_image_478c49d2-bc7e-4554-825b-4043aea93d81_0_3",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/jpeg"
+    },
+    {
+      "name": "tripo_image_478c49d2-bc7e-4554-825b-4043aea93d81_0_0",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/jpeg"
+    },
+    {
+      "name": "cart_tripo_metallic-cart_tripo_roughness",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/png"
+    }
+  ],
+  "materials": 1,
+  "credits_used": 50,
+  "checks_completed": [
+    "GLB2.0头、长度及分块完整",
+    "内嵌贴图均为1K",
+    "网页正面可见洋红和奶油白车体、不透明展示窗、台板、轮子和顶部灯泡"
+  ],
+  "checks_pending": [
+    "篷布边缘、车体与台板不规则表面需修整",
+    "减至3000三角面预算",
+    "侧面、背面、底部及四轮完整性验收",
+    "按目标米制尺寸、朝向及地面原点校正",
+    "灯泡拆分并配置发光材质",
+    "独立碰撞代理与Cesium加载验收"
+  ],
+  "preview": "../../ref/tripo-cart.png"
+}

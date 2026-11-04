@@ -1,0 +1,39 @@
+{
+  "asset": "盆栽仙人掌",
+  "date": "2026-11-04",
+  "stage": "Tripo原始模型",
+  "status": "已提交，生成中，尚未下载",
+  "file": "cactus_tripo.glb",
+  "source_page": "https://studio.tripo3d.ai/workspace/generate/3ea48efd-26ab-404a-84a1-e0c8a957022b",
+  "input": "../../ref/cactus.png",
+  "ai_model": "H3.1 Best Quality",
+  "input_mode": "single image",
+  "settings": {
+    "requested_quad_faces": 500,
+    "texture_generated": "2K",
+    "texture_export_target": "1K",
+    "pbr": true,
+    "ultra_mesh_quality": true,
+    "remove_lighting": true,
+    "ai_complete": false,
+    "generate_in_parts": false,
+    "8k_texture": false,
+    "topology": "Quad",
+    "privacy": "Sharing Only（沿用）"
+  },
+  "credits_before": 24775,
+  "credits_after_submission": 24725,
+  "credits_used": 50,
+  "generation_submissions": 1,
+  "checks_completed": [
+    "参考图主体完整，两个向上侧枝分离，橙色花盆，未生成立体刺"
+  ],
+  "checks_pending": [
+    "等待生成完成",
+    "正面、侧面、背面及顶部/底部验收",
+    "GLB导出、结构校验与预览归档",
+    "最终1000三角面预算、1K贴图验收",
+    "Blender修整：0.5×0.5×1.1米、底部原点及朝向",
+    "Cesium实际加载"
+  ]
+}

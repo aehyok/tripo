@@ -32,7 +32,7 @@ function ringTexture(size, color, width) {
   return cv.toDataURL();
 }
 
-function dotTexture(size, color, core) {
+function dotTexture(size, color, core, outline = '#fff4dc') {
   const cv = document.createElement('canvas');
   cv.width = cv.height = size;
   const c = cv.getContext('2d');
@@ -41,11 +41,55 @@ function dotTexture(size, color, core) {
   c.beginPath();
   c.arc(r, r, r * core, 0, Math.PI * 2);
   c.fill();
-  c.strokeStyle = '#fff4dc';
+  c.strokeStyle = outline;
   c.lineWidth = size * 0.06;
   c.beginPath();
   c.arc(r, r, r * core, 0, Math.PI * 2);
   c.stroke();
+  return cv.toDataURL();
+}
+
+/** 单张贴图依次合成光晕、星芒和白核，避免多层 Billboard 互相覆盖。 */
+function sparkleTexture(size) {
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = size;
+  const c = cv.getContext('2d');
+  const r = size / 2;
+  const glow = c.createRadialGradient(r, r, 0, r, r, r);
+  glow.addColorStop(0, 'rgba(235,253,255,.92)');
+  glow.addColorStop(0.14, 'rgba(83,237,255,.88)');
+  glow.addColorStop(0.38, 'rgba(112,91,255,.72)');
+  glow.addColorStop(0.68, 'rgba(174,72,255,.3)');
+  glow.addColorStop(1, 'rgba(151,64,255,0)');
+  c.fillStyle = glow;
+  c.fillRect(0, 0, size, size);
+
+  c.translate(r, r);
+  for (let i = 0; i < 4; i++) {
+    c.rotate(Math.PI / 2);
+    const beam = c.createLinearGradient(0, 0, r, 0);
+    beam.addColorStop(0, 'rgba(255,255,255,1)');
+    beam.addColorStop(0.35, 'rgba(135,248,255,1)');
+    beam.addColorStop(0.72, 'rgba(190,229,255,.9)');
+    beam.addColorStop(1, 'rgba(148,100,255,0)');
+    c.fillStyle = beam;
+    c.beginPath();
+    c.moveTo(0, -size * 0.018);
+    c.lineTo(r * 0.98, 0);
+    c.lineTo(0, size * 0.018);
+    c.closePath();
+    c.fill();
+  }
+  const core = c.createRadialGradient(0, 0, 0, 0, 0, size * 0.11);
+  core.addColorStop(0, '#ffffff');
+  core.addColorStop(0.36, '#f4ffff');
+  core.addColorStop(0.62, '#65edff');
+  core.addColorStop(0.84, '#9a68ff');
+  core.addColorStop(1, 'rgba(138,82,255,0)');
+  c.fillStyle = core;
+  c.beginPath();
+  c.arc(0, 0, size * 0.11, 0, Math.PI * 2);
+  c.fill();
   return cv.toDataURL();
 }
 
@@ -54,6 +98,7 @@ export class EarthScene {
     this.viewer = viewer;
     this.mexEntities = [];
     this.dotEntities = [];
+    this.sparkleEntities = [];
     this.completed = false;
     this.flightToken = 0;
     this.spin = true;
@@ -155,7 +200,25 @@ export class EarthScene {
       },
     });
     this.dotEntities.push(ripple, dot);
-    this.regionPickables = new Set([...this.mexEntities, ...this.dotEntities]);
+
+    /* 电光青 + 蓝紫星芒与绿色区域形成强对比，闪烁峰值更亮、节奏更清晰。 */
+    const sparklePos = Cesium.Cartesian3.fromDegrees(REGION.sparkle.lon, REGION.sparkle.lat, 0);
+    const sparklePulse = () => {
+      const wave = (Math.sin((performance.now() / 950) * Math.PI * 2) + 1) / 2;
+      return Math.pow(wave, 1.45);
+    };
+    const sparkle = viewer.entities.add({
+      position: sparklePos,
+      billboard: {
+        image: sparkleTexture(128),
+        scale: new Cesium.CallbackProperty(() => 0.72 + sparklePulse() * 0.28, false),
+        color: new Cesium.CallbackProperty(() => Cesium.Color.WHITE.withAlpha(0.5 + sparklePulse() * 0.5), false),
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+      },
+    });
+    /* 环境装饰光点不受关卡完成状态影响，绿色高亮时依然可见 */
+    this.sparkleEntities.push(sparkle);
+    this.regionPickables = new Set([...this.mexEntities, ...this.dotEntities, ...this.sparkleEntities]);
   }
 
   setCompleted(done) {
@@ -237,13 +300,14 @@ export class EarthScene {
     this.spin = false;
     this.setControlsEnabled(false);
     this.journeyProgress = 0;
+    this.flightFovBase = camera.frustum.fov;
     if (!REDUCED) this.buildFlightEffects();
     const stages = REDUCED
       ? [{ lon: ANCHOR.lon, lat: ANCHOR.lat, height: ANCHOR.height + 700, heading: 0, pitch: -55, roll: 0, duration: 0, from: 0, to: 1 }]
       : [
-        { lon: ANCHOR.lon - 6, lat: ANCHOR.lat - 3, height: 4.8e6, heading: 22, pitch: -72, roll: -7, duration: 1.05, from: 0, to: 0.24 },
-        { lon: ANCHOR.lon - 0.14, lat: ANCHOR.lat - 0.12, height: 95000, heading: -12, pitch: -64, roll: 9, duration: 1.8, from: 0.24, to: 0.72 },
-        { lon: ANCHOR.lon, lat: ANCHOR.lat, height: ANCHOR.height + 700, heading: 0, pitch: -55, roll: 0, duration: 1.25, from: 0.72, to: 1 },
+        { lon: REGION.sparkle.lon - 6, lat: REGION.sparkle.lat - 3, height: 4.8e6, heading: 22, pitch: -72, roll: -7, duration: 1, from: 0, to: 0.24, easing: Cesium.EasingFunction.SINUSOIDAL_IN },
+        { lon: REGION.sparkle.lon - 0.14, lat: REGION.sparkle.lat - 0.12, height: 95000, heading: -12, pitch: -64, roll: 9, duration: 1.55, from: 0.24, to: 0.72, easing: Cesium.EasingFunction.LINEAR },
+        { lon: REGION.sparkle.lon, lat: REGION.sparkle.lat, height: ANCHOR.height + 700, heading: 0, pitch: -55, roll: 0, duration: 1.15, from: 0.72, to: 1, easing: Cesium.EasingFunction.SINUSOIDAL_OUT },
       ];
 
     for (const stage of stages) {
@@ -259,7 +323,7 @@ export class EarthScene {
             roll: Cesium.Math.toRadians(stage.roll),
           },
           duration: stage.duration,
-          easingFunction: Cesium.EasingFunction.SINUSOIDAL_IN_OUT,
+          easingFunction: stage.easing || Cesium.EasingFunction.SINUSOIDAL_IN_OUT,
           complete: () => resolve(token === this.flightToken),
           cancel: () => resolve(false),
         });
@@ -283,10 +347,10 @@ export class EarthScene {
     const positions = Array.from({ length: 97 }, (_, i) => {
       const t = i / 96;
       // 最短经度方向，地表上方拱起的航线不会穿入地球。
-      const delta = Cesium.Math.negativePiToPi(Cesium.Math.toRadians(ANCHOR.lon - lon));
+      const delta = Cesium.Math.negativePiToPi(Cesium.Math.toRadians(REGION.sparkle.lon - lon));
       return Cesium.Cartesian3.fromDegrees(
         lon + Cesium.Math.toDegrees(delta) * t,
-        lat + (ANCHOR.lat - lat) * t,
+        lat + (REGION.sparkle.lat - lat) * t,
         ANCHOR.height + 2000 + Math.sin(t * Math.PI) * 8e5,
       );
     });
@@ -306,7 +370,7 @@ export class EarthScene {
         return Math.max(45, Math.min(6e5, viewer.camera.positionCartographic.height * 0.12)) * (0.3 + t);
       };
       this.flightEntities.push(viewer.entities.add({
-        position: Cesium.Cartesian3.fromDegrees(ANCHOR.lon, ANCHOR.lat, ANCHOR.height + 30),
+        position: Cesium.Cartesian3.fromDegrees(REGION.sparkle.lon, REGION.sparkle.lat, ANCHOR.height + 30),
         ellipse: {
           semiMajorAxis: new Cesium.CallbackProperty(radius, false),
           semiMinorAxis: new Cesium.CallbackProperty(radius, false),
@@ -323,6 +387,11 @@ export class EarthScene {
     this.flightStage = null;
     this.flightEntities?.forEach((entity) => this.viewer.entities.remove(entity));
     this.flightEntities = [];
+    /* 完成、取消和销毁都必须还原透视视野，不能把跃迁 FOV 带回选关页。 */
+    if (Number.isFinite(this.flightFovBase)) {
+      this.viewer.camera.frustum.fov = this.flightFovBase;
+      this.flightFovBase = null;
+    }
   }
 
   /** 离开街区后回到地球浏览视角 */
@@ -387,7 +456,14 @@ export class EarthScene {
       this.flightEffectTime = performance.now();
       const s = this.flightStage;
       const t = Math.min(1, (performance.now() - s.started) / Math.max(1, s.duration * 1000));
-      this.journeyProgress = s.from + (s.to - s.from) * t;
+      const eased = s.easing ? s.easing(t) : t;
+      this.journeyProgress = s.from + (s.to - s.from) * eased;
+      /* 中段视野从 60° 平滑拉到约 74°，进出都归零，制造加速与俯冲张力。 */
+      const fovPhase = Cesium.Math.clamp((this.journeyProgress - 0.14) / 0.7, 0, 1);
+      const fovPulse = Math.sin(Math.PI * fovPhase);
+      if (Number.isFinite(this.flightFovBase)) {
+        this.viewer.camera.frustum.fov = this.flightFovBase * (1 + 0.24 * fovPulse);
+      }
       this.setCloudAlpha(0.48 * (1 - this.journeyProgress));
       s.onProgress?.(this.journeyProgress);
     }

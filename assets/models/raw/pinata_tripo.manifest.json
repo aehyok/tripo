@@ -1,0 +1,65 @@
+{
+  "asset": "七角星皮纳塔",
+  "date": "2026-11-04",
+  "status": "Tripo原始模型，待Blender修整及完整环绕验收",
+  "file": "pinata_tripo.glb",
+  "bytes": 1605308,
+  "sha256": "16a262d9f4c47d72de7281163f20ae7e1ba88ff1eabc00297002bcf280e2b2c4",
+  "source_page": "https://studio.tripo3d.ai/workspace/generate/fd2411b0-6e53-48dc-9c50-184833976d84",
+  "input": "../../ref/pinata.png",
+  "ai_model": "H3.1 Best Quality",
+  "input_mode": "single image",
+  "settings": {
+    "requested_quad_faces": 600,
+    "ui_quad_faces": 702,
+    "texture_generated": "2K",
+    "texture_exported": "1K",
+    "pbr": true,
+    "ultra_mesh_quality": true,
+    "remove_lighting": true,
+    "ai_complete": false
+  },
+  "triangles": 1337,
+  "embedded_images": [
+    {
+      "name": "tripo_image_11c1b5dc-5884-4348-bd5a-21af1effe4fc_0_3",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/jpeg"
+    },
+    {
+      "name": "tripo_image_11c1b5dc-5884-4348-bd5a-21af1effe4fc_0_0",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/jpeg"
+    },
+    {
+      "name": "pinata_tripo_metallic-pinata_tripo_roughness",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/png"
+    }
+  ],
+  "materials": 1,
+  "credits_used": 50,
+  "checks_completed": [
+    "GLB2.0头、长度及分块完整",
+    "内嵌贴图均为1K",
+    "网页正面可见七个尖角及洋红、金盏黄、青绿、奶油白色块",
+    "重新加载预览资源后正常显示，没有重复生成"
+  ],
+  "checks_pending": [
+    "纸条边界、底部尖角连接处及不规则表面需要修整",
+    "侧面与背面完整环绕验收",
+    "按0.8×0.8×1.0米、目标朝向及原点校正",
+    "悬挂绳在Blender中单独制作",
+    "Cesium加载与悬挂位置验收"
+  ],
+  "preview": "../../ref/tripo-pinata.png"
+}

@@ -19,6 +19,8 @@ export const ANCHOR = {
 export const REGION = {
   name: '墨西哥',
   dot: { lon: -101.5, lat: 21.2 },
+  /* 西北部补充光点：蓝紫配色，与原始地球一致 */
+  sparkle: { lon: -109.0, lat: 27.0 },
   /* 进入关卡时镜头飞向的区域中心 */
   focus: { lon: -101.0, lat: 20.4 },
 };
@@ -88,13 +90,13 @@ export const TUNING = {
   nearDog: 2.2, // 吉拿确认距离（米，中心水平距离）
   hintsPerRound: 2,
   hintHighlightMs: 2800,
-  camDist: 14.5,
+  camDist: 18,
   camPitch: 0.55,
   overviewPitch: 0.8,
   overviewYaw: 0.35,
   camFocusHeight: 1.2,
   camMinDist: 4,
-  camMaxDist: 22,
+  camMaxDist: 26,
   star3: { time: 60000, hints: 0 },
   star2: { time: 120000, hints: 1 },
 };

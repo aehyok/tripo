@@ -1,0 +1,66 @@
+{
+  "asset": "球迷摊位基础造型",
+  "date": "2026-11-04",
+  "status": "Tripo原始模型，待Blender修整及完整环绕验收",
+  "file": "stall_tripo.glb",
+  "bytes": 839472,
+  "sha256": "63b87286007f4af2353f73fd3f727eff2db76c9711c6bd252315cd2a4c964277",
+  "source_page": "https://studio.tripo3d.ai/workspace/generate/4f89de43-2913-4cfb-887f-d0d4597db735",
+  "input": "../../ref/stall.png",
+  "ai_model": "H3.1 Best Quality",
+  "input_mode": "single image",
+  "settings": {
+    "requested_quad_faces": 800,
+    "ui_quad_faces": 1010,
+    "texture_generated": "2K",
+    "texture_exported": "1K",
+    "pbr": true,
+    "ultra_mesh_quality": true,
+    "remove_lighting": true,
+    "ai_complete": false
+  },
+  "triangles": 2018,
+  "embedded_images": [
+    {
+      "name": "tripo_image_0cfd1c7a-81cf-47dd-a6bc-ff3362af8f09_0_3",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/jpeg"
+    },
+    {
+      "name": "tripo_image_0cfd1c7a-81cf-47dd-a6bc-ff3362af8f09_0_0",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/jpeg"
+    },
+    {
+      "name": "stall_tripo_metallic-stall_tripo_roughness",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/png"
+    }
+  ],
+  "materials": 1,
+  "credits_used": 50,
+  "checks_completed": [
+    "GLB2.0头、长度及分块完整",
+    "内嵌贴图均为1K",
+    "网页正面可见空柜台、木柱与黄白条纹篷布",
+    "网页顶视图确认篷布立体轮廓"
+  ],
+  "checks_pending": [
+    "木柱连接处杂面、灰色斑块与篷布边缘需要修整",
+    "轻度减面：2018三角面略高于2000预算",
+    "侧面、背面和四根支柱完整环绕验收",
+    "按2.4×1.2×2.2米、目标朝向及地面原点校正",
+    "补充围巾/帽子独立道具，制作两个摊位实例",
+    "独立碰撞代理与Cesium加载验收"
+  ],
+  "preview": "../../ref/tripo-stall.png"
+}

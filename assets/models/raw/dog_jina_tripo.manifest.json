@@ -1,0 +1,55 @@
+{
+  "asset": "吉拿",
+  "status": "Tripo原始模型，待Blender修整与游戏验收",
+  "date": "2026-11-04",
+  "file": "dog_jina_tripo.glb",
+  "bytes": 4043668,
+  "sha256": "53d54044979b236d843f3e639d9aba02d16d89dc8642552d29048e51366de2c2",
+  "source_page": "https://studio.tripo3d.ai/workspace/generate/0e87ee65-b586-4443-8199-ec563086b7b6",
+  "input_reference": "../../ref/jina_front34.png",
+  "input_mode": "single image",
+  "model": "H3.1 Best Quality",
+  "ui_quad_faces": 7942,
+  "export_triangles": 15884,
+  "texture_resolution": [
+    2048,
+    2048
+  ],
+  "embedded_textures": [
+    "baseColor",
+    "metallicRoughness",
+    "normal"
+  ],
+  "raw_mesh_bounds": {
+    "min": [
+      -25.262033462524414,
+      0.0,
+      -48.84274673461914
+    ],
+    "max": [
+      25.262033462524414,
+      97.90332794189453,
+      48.84274673461914
+    ]
+  },
+  "skins": 0,
+  "animations": 0,
+  "generation_credits_used": 100,
+  "free_retries": 1,
+  "rejected_multiview_page": "https://studio.tripo3d.ai/workspace/generate/e28bd949-e502-43e0-8336-38b801e582b1",
+  "rejected_multiview_reason": "颈侧出现类似卷尾的额外凸起，免费重试后仍存在；改用3/4母图单图生成后消失。",
+  "checks_completed": [
+    "GLB 2.0头、文件长度及JSON/BIN结构完整",
+    "两份下载文件SHA-256一致",
+    "3张内嵌贴图均为2048x2048",
+    "网页灰模侧面和背面检查：四肢可区分，未见多余颈侧卷尾"
+  ],
+  "checks_pending": [
+    "Blender按米校正尺寸与脚底原点",
+    "确认正面朝Blender -Y",
+    "减面至5000–8000三角面",
+    "完整检查彩色材质、PBR及表面",
+    "Cesium实际加载、藏点和碰撞验收"
+  ],
+  "material_preview_note": "Tripo网页PBR预览呈黑色，灰模预览可见；GLB结构内含颜色、粗糙度/金属度和法线贴图，仍需在Blender或引擎中确认实际显示。"
+}

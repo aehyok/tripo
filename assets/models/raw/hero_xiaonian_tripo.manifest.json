@@ -1,0 +1,116 @@
+{
+  "asset": "小年",
+  "date": "2026-11-04",
+  "status": "Tripo模型与Mixamo人形自动绑定已完成，尚未做游戏最终验收",
+  "source_page": "https://studio.tripo3d.ai/workspace/rigging/e5b2a111-ab37-4098-a214-df8d460c4bc0",
+  "inputs": [
+    "../../ref/xiaonian_front.png",
+    "../../ref/xiaonian_side.png",
+    "../../ref/xiaonian_back.png"
+  ],
+  "input_mode": "multi-view front/left/back; right optional slot left empty",
+  "ai_model": "H3.1 Best Quality",
+  "settings": {
+    "ultra_mesh_quality": true,
+    "texture": "2K",
+    "pbr": true,
+    "remove_lighting": true,
+    "topology": "Quad",
+    "requested_polycount": 7000,
+    "ui_reported_quad_faces": 7141
+  },
+  "credits": {
+    "generation": 50,
+    "auto_rig": 20,
+    "total": 70
+  },
+  "rig_preset": "Humanoid / Mixamo",
+  "files": [
+    {
+      "file": "hero_xiaonian_tripo.glb",
+      "bytes": 4612392,
+      "sha256": "b13de0c501a07b558324c42a9ab04d1fe7d90af49ab774e96df493c7d350df2d",
+      "triangles": 14240,
+      "embedded_images": [
+        {
+          "name": "hero_xiaonian_tripo_basecolor.jpg",
+          "size": [
+            2048,
+            2048
+          ],
+          "mimeType": "image/jpeg"
+        },
+        {
+          "name": "hero_xiaonian_tripo_rm.png",
+          "size": [
+            2048,
+            2048
+          ],
+          "mimeType": "image/png"
+        },
+        {
+          "name": "hero_xiaonian_tripo_normal.png",
+          "size": [
+            2048,
+            2048
+          ],
+          "mimeType": "image/png"
+        }
+      ],
+      "skins": 0,
+      "joint_count": 0,
+      "has_joint_weights": false,
+      "animations": 0
+    },
+    {
+      "file": "hero_xiaonian_rigged_tripo.glb",
+      "bytes": 5846296,
+      "sha256": "28a42941f5b4ebc7333eebd52cc6ba36c568b5c0ed64a2e875d823356490ee0d",
+      "triangles": 14240,
+      "embedded_images": [
+        {
+          "name": "hero_xiaonian_rigged_tripo_basecolor.jpg",
+          "size": [
+            2048,
+            2048
+          ],
+          "mimeType": "image/jpeg"
+        },
+        {
+          "name": "hero_xiaonian_rigged_tripo_rm.png",
+          "size": [
+            2048,
+            2048
+          ],
+          "mimeType": "image/png"
+        },
+        {
+          "name": "hero_xiaonian_rigged_tripo_normal.png",
+          "size": [
+            2048,
+            2048
+          ],
+          "mimeType": "image/png"
+        }
+      ],
+      "skins": 1,
+      "joint_count": 65,
+      "has_joint_weights": true,
+      "animations": 0
+    }
+  ],
+  "checks_completed": [
+    "前侧后灰模外形检查",
+    "手臂与躯干、双腿可分离，背包可见",
+    "GLB头、文件总长度及分块完整",
+    "所有内嵌图像均为2K",
+    "绑定版含骨骼、关节索引与蒙皮权重"
+  ],
+  "checks_pending": [
+    "校正身高1.55米、脚底原点与模型朝向",
+    "绑定权重实际动作变形检查",
+    "添加idle/walk/crouch动画",
+    "Cesium加载、碰撞及性能验收"
+  ],
+  "preview": "../../ref/tripo-xiaonian-rigged.png"
+}

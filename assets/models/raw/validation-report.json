@@ -1,0 +1,310 @@
+[
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/assets/models/raw/cart_tripo.glb",
+    "bytes": 1041144,
+    "sha256": "d14db2c1605e8841987c52730f91cafb9f11529ad011aafeca11209cab054019",
+    "triangles": 3495,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "tripo_image_478c49d2-bc7e-4554-825b-4043aea93d81_0_3",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "tripo_image_478c49d2-bc7e-4554-825b-4043aea93d81_0_0",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "cart_tripo_metallic-cart_tripo_roughness",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  },
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/assets/models/raw/dog_jina_tripo.glb",
+    "bytes": 4043668,
+    "sha256": "53d54044979b236d843f3e639d9aba02d16d89dc8642552d29048e51366de2c2",
+    "triangles": 15884,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "dog_jina_tripo_basecolor.jpg",
+        "mimeType": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "dog_jina_tripo_rm.png",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "dog_jina_tripo_normal.png",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  },
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/assets/models/raw/hero_xiaonian_rigged_tripo.glb",
+    "bytes": 5846296,
+    "sha256": "28a42941f5b4ebc7333eebd52cc6ba36c568b5c0ed64a2e875d823356490ee0d",
+    "triangles": 14240,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "hero_xiaonian_rigged_tripo_basecolor.jpg",
+        "mimeType": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "hero_xiaonian_rigged_tripo_rm.png",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "hero_xiaonian_rigged_tripo_normal.png",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "skins": 1,
+    "joint_count": 65,
+    "weighted_primitives": 1,
+    "skinned_nodes": 1,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  },
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/assets/models/raw/hero_xiaonian_tripo.glb",
+    "bytes": 4612392,
+    "sha256": "b13de0c501a07b558324c42a9ab04d1fe7d90af49ab774e96df493c7d350df2d",
+    "triangles": 14240,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "hero_xiaonian_tripo_basecolor.jpg",
+        "mimeType": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "hero_xiaonian_tripo_rm.png",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "hero_xiaonian_tripo_normal.png",
+        "mimeType": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  },
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/assets/models/raw/house_base_tripo.glb",
+    "bytes": 928448,
+    "sha256": "75a0108c54f985ba565898da8edbe48358249167afa5dc7b30f1887c2e992387",
+    "triangles": 4295,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "tripo_image_6b2dd6d1-2888-4cba-8b34-568d721a4163_0_3",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "tripo_image_6b2dd6d1-2888-4cba-8b34-568d721a4163_0_0",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "house_base_tripo_metallic-house_base_tripo_roughness",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  },
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/assets/models/raw/pinata_tripo.glb",
+    "bytes": 1605308,
+    "sha256": "16a262d9f4c47d72de7281163f20ae7e1ba88ff1eabc00297002bcf280e2b2c4",
+    "triangles": 1337,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "tripo_image_11c1b5dc-5884-4348-bd5a-21af1effe4fc_0_3",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "tripo_image_11c1b5dc-5884-4348-bd5a-21af1effe4fc_0_0",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "pinata_tripo_metallic-pinata_tripo_roughness",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  },
+  {
+    "file": "/Users/aehyok/Desktop/shangdan/tripo/assets/models/raw/stall_tripo.glb",
+    "bytes": 839472,
+    "sha256": "63b87286007f4af2353f73fd3f727eff2db76c9711c6bd252315cd2a4c964277",
+    "triangles": 2018,
+    "primitive_modes": [
+      4
+    ],
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": [
+      {
+        "name": "tripo_image_0cfd1c7a-81cf-47dd-a6bc-ff3362af8f09_0_3",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "tripo_image_0cfd1c7a-81cf-47dd-a6bc-ff3362af8f09_0_0",
+        "mimeType": "image/jpeg",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "name": "stall_tripo_metallic-stall_tripo_roughness",
+        "mimeType": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "skins": 0,
+    "joint_count": 0,
+    "weighted_primitives": 0,
+    "skinned_nodes": 0,
+    "animations": [],
+    "warnings": [],
+    "errors": []
+  }
+]

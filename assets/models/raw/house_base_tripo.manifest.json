@@ -1,0 +1,65 @@
+{
+  "asset": "房屋基础造型",
+  "date": "2026-11-04",
+  "status": "Tripo原始模型，待Blender修整、轻度减面和制作三配色",
+  "file": "house_base_tripo.glb",
+  "bytes": 928448,
+  "sha256": "75a0108c54f985ba565898da8edbe48358249167afa5dc7b30f1887c2e992387",
+  "source_page": "https://studio.tripo3d.ai/workspace/generate/19fa7ede-5e72-4b47-b67d-727ad0ca7b4c",
+  "input": "../../ref/house_base.png",
+  "ai_model": "H3.1 Best Quality",
+  "input_mode": "single image",
+  "settings": {
+    "requested_quad_faces": 1800,
+    "ui_quad_faces": 2168,
+    "texture_generated": "2K",
+    "texture_exported": "1K",
+    "pbr": true,
+    "ultra_mesh_quality": true,
+    "remove_lighting": true,
+    "ai_complete": false
+  },
+  "triangles": 4295,
+  "embedded_images": [
+    {
+      "name": "tripo_image_6b2dd6d1-2888-4cba-8b34-568d721a4163_0_3",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/jpeg"
+    },
+    {
+      "name": "tripo_image_6b2dd6d1-2888-4cba-8b34-568d721a4163_0_0",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/jpeg"
+    },
+    {
+      "name": "house_base_tripo_metallic-house_base_tripo_roughness",
+      "size": [
+        1024,
+        1024
+      ],
+      "mimeType": "image/png"
+    }
+  ],
+  "materials": 1,
+  "credits_used": 50,
+  "checks_completed": [
+    "GLB2.0头、长度及分块完整",
+    "3张内嵌贴图均为1K",
+    "网页观察正面、侧面、背面与屋顶，确认有完整立体体量",
+    "网页彩色预览可见灰泥、木门窗与阳台"
+  ],
+  "checks_pending": [
+    "墙面及门窗周边不规则几何需要Blender修整",
+    "减至2000–4000三角面预算",
+    "按目标米制尺寸、朝向及地面原点校正",
+    "制作洋红/青绿/金盏黄三种独立材质变体",
+    "独立碰撞代理与Cesium加载验收"
+  ],
+  "preview": "../../ref/tripo-house-base.png"
+}

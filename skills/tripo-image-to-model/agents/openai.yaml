@@ -1,0 +1,4 @@
+interface:
+  display_name: "图片转 Tripo 模型"
+  short_description: "从参考图上传、Tripo建模到GLB下载校验与进度归档"
+  default_prompt: "使用 $tripo-image-to-model 检查当前目录的资产进度，并把下一张参考图制作成 Tripo GLB 模型。"
