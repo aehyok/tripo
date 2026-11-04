@@ -245,11 +245,12 @@ export class EarthScene {
     });
   }
 
-  /** 选关页：地球作为背景缓慢自转，镜头略偏北让地球落在画面下方 */
+  /** 选关页：略抬高视线，让地球下移，露出卡片下方的大陆与球体轮廓。 */
   goSelectView(instant = false, onDone) {
     const { camera } = this.viewer;
     const dest = Cesium.Cartesian3.fromDegrees(-64, 32, 3.15e7);
-    const orientation = { heading: 0, pitch: -Math.PI / 2, roll: 0 };
+    const portrait = this.viewer.canvas.clientHeight > this.viewer.canvas.clientWidth;
+    const orientation = { heading: 0, pitch: Cesium.Math.toRadians(portrait ? -90 : -83), roll: 0 };
     this.setCloudAlpha(0.3);
     this.cancelFlight();
     this.spin = false;

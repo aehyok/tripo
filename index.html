@@ -102,20 +102,45 @@
         <p>吉拿一转眼就跑丢了。它穿着绿色球衣，你能帮我找找吗？</p>
       </div>
     </div>
-    <ul class="task-list">
-      <li>目标：找到小狗<b>吉拿</b>（穿绿色球衣）</li>
-      <li>电脑：WASD 移动，双击方向键奔跑，按住鼠标拖动转视角，C 键蹲下，E 键确认</li>
-      <li>手机：左下摇杆移动，拖动画面转视角，右侧按钮蹲下或确认</li>
-    </ul>
-    <p class="task-note">可拖动画面环看街区，阅读任务不计时。点击“开始寻找”后开始计时。</p>
-    <button class="primary" id="startFind" type="button">开始寻找</button>
+    <div class="task-goal">
+      <span class="task-label">寻找目标</span>
+      <p>小狗<b>吉拿</b><span class="task-clue">穿绿色球衣</span></p>
+    </div>
+    <div class="task-controls" aria-label="操作说明">
+      <section class="task-device" aria-labelledby="taskDesktop">
+        <h3 id="taskDesktop">电脑</h3>
+        <ul>
+          <li><kbd>WASD</kbd> 移动<span class="task-control-extra">双击方向键奔跑</span></li>
+          <li>按住鼠标拖动，转动视角</li>
+          <li><kbd>C</kbd> 蹲下<span class="task-control-extra"><kbd>E</kbd> 确认</span></li>
+        </ul>
+      </section>
+      <section class="task-device" aria-labelledby="taskMobile">
+        <h3 id="taskMobile">手机</h3>
+        <ul>
+          <li>左下摇杆移动，拖动画面转视角</li>
+          <li>右侧按钮蹲下或确认</li>
+        </ul>
+      </section>
+    </div>
+    <div class="task-footer">
+      <p class="task-note">先拖动画面，环看街区。<br><strong>阅读不计时</strong>，开始寻找后计时。</p>
+      <button class="primary" id="startFind" type="button">开始寻找</button>
+    </div>
   </div>
+</div>
+
+<!-- 找到目标后先在街区内庆祝，再显示结算 -->
+<div id="foundCelebration" class="found-celebration" hidden role="status" aria-live="polite">
+  <span class="found-celebration-icon" aria-hidden="true">🎉</span>
+  <strong>祝贺你，找到了！</strong>
+  <span>小狗吉拿和你一起欢呼！</span>
 </div>
 
 <!-- 结算 -->
 <div id="result" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="resultTitle">
   <div class="card">
-    <h2 id="resultTitle">找到吉拿啦</h2>
+    <h2 id="resultTitle">祝贺你，找到了！</h2>
     <p class="stars" id="stars" aria-label="本局星级"></p>
     <div class="talk">
       <div class="avatar" data-who="卢">卢</div>
@@ -129,12 +154,22 @@
     <p class="res-note" id="resNote"></p>
     <div class="card-actions">
       <button class="primary" id="again" type="button">再玩一次</button>
-      <button class="chip" id="toEarth" type="button">回到地球</button>
+      <button class="chip" id="resultToSelect" type="button">回到选关</button>
     </div>
   </div>
 </div>
 
-<div id="near" hidden role="status"><span id="nearText"></span></div>
+<div id="near" hidden role="status"><span id="nearText"></span><button id="nearInspect" type="button" hidden>放大查看</button></div>
+<aside id="inspect" hidden aria-label="物品近景">
+  <div class="inspect-caption"><b id="inspectTitle"></b><span id="inspectText"></span></div>
+  <div class="inspect-controls" aria-label="近景控制">
+    <button class="chip" id="inspectZoomOut" type="button" aria-label="缩小近景">−</button>
+    <button class="chip" id="inspectZoomIn" type="button" aria-label="放大近景">+</button>
+    <button class="chip" id="inspectReset" type="button">重置角度</button>
+    <button class="chip" id="inspectClose" type="button">返回视角</button>
+  </div>
+  <small>拖动调整角度 · 滚轮或双指缩放 · 查看时暂停计时</small>
+</aside>
 <div id="tip" hidden></div>
 <div id="toast" role="status" hidden></div>
 

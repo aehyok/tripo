@@ -45,6 +45,7 @@ export class HeroAvatar {
         minimumPixelSize: 0,
         clampAnimations: false,
         shadows: Cesium.ShadowMode.ENABLED,
+        environmentMapOptions: { enabled: false },
         id: { name: '小年', type: 'hero' },
       });
       this.model = this.viewer.scene.primitives.add(model);

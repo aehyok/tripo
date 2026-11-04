@@ -1,0 +1,135 @@
+[
+  {
+    "id": "mo-intro",
+    "role": "mo",
+    "text": "小年，墨西哥的球迷街传来了求助。点击发光区域，去看看吧。",
+    "file": "mo-intro.mp3",
+    "voice": "zm_yunyang"
+  },
+  {
+    "id": "mo-complete",
+    "role": "mo",
+    "text": "墨西哥点亮了！点击发光区域，再次挑战第一关。",
+    "file": "mo-complete.mp3",
+    "voice": "zm_yunyang"
+  },
+  {
+    "id": "lupe-task",
+    "role": "lupe",
+    "text": "吉拿一转眼就跑丢了。它穿着绿色球衣，你能帮我找找吗？",
+    "file": "lupe-task.mp3",
+    "voice": "zf_xiaoxiao"
+  },
+  {
+    "id": "lupe-thanks",
+    "role": "lupe",
+    "text": "谢谢你，小年！它总爱追着足球跑。",
+    "file": "lupe-thanks.mp3",
+    "voice": "zf_xiaoxiao"
+  },
+  {
+    "id": "xiaonian-start",
+    "role": "xiaonian",
+    "text": "交给我吧，我去找找！",
+    "file": "xiaonian-start.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "xiaonian-found",
+    "role": "xiaonian",
+    "text": "是吉拿！",
+    "file": "xiaonian-found.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-01",
+    "role": "xiaonian",
+    "text": "窗户里的人都在看球回放。",
+    "file": "look-01.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-02",
+    "role": "xiaonian",
+    "text": "门锁着，吉拿进不去。",
+    "file": "look-02.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-03",
+    "role": "xiaonian",
+    "text": "屋里传来电视的声音，没有狗叫。",
+    "file": "look-03.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-04",
+    "role": "xiaonian",
+    "text": "摊位上只有一条围巾。",
+    "file": "look-04.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-05",
+    "role": "xiaonian",
+    "text": "这里卖球迷帽，没看见吉拿。",
+    "file": "look-05.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-06",
+    "role": "xiaonian",
+    "text": "玉米很香，可吉拿不在这儿。",
+    "file": "look-06.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-07",
+    "role": "xiaonian",
+    "text": "皮纳塔里只有糖果。",
+    "file": "look-07.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-08",
+    "role": "xiaonian",
+    "text": "一个足球，皮面被啃得坑坑洼洼。",
+    "file": "look-08.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-09",
+    "role": "xiaonian",
+    "text": "又一个足球，上面还有小狗牙印。",
+    "file": "look-09.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-10",
+    "role": "xiaonian",
+    "text": "小心扎手。",
+    "file": "look-10.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-11",
+    "role": "xiaonian",
+    "text": "一盆仙人掌，什么也藏不住。",
+    "file": "look-11.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-12",
+    "role": "xiaonian",
+    "text": "箱子是空的。",
+    "file": "look-12.mp3",
+    "voice": "zm_yunxi"
+  },
+  {
+    "id": "look-13",
+    "role": "xiaonian",
+    "text": "灯下什么也没有。",
+    "file": "look-13.mp3",
+    "voice": "zm_yunxi"
+  }
+]

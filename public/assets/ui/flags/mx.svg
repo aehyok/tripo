@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180" preserveAspectRatio="none">
+  <path fill="#006847" d="M0 0h100v180H0z"/>
+  <path fill="#fffdf7" d="M100 0h100v180H100z"/>
+  <path fill="#ce1126" d="M200 0h100v180H200z"/>
+  <!-- Simplified eagle and wreath, drawn for the small destination banner. -->
+  <g transform="translate(150 91)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-23 12Q-24 35 0 39Q24 35 23 12" fill="none" stroke="#648844" stroke-width="4"/>
+    <path d="m-21 21-8-4m12 14-9 1m47-11 8-4m-12 14 9 1" stroke="#648844" stroke-width="4"/>
+    <path d="m-5 13-17-10 5-21 13 11 8 2 9 19-9 7z" fill="#86602e"/>
+    <path d="m-8 0-10-28 13 9L7-7 1 6z" fill="#a47b36"/>
+    <path d="m5-7 1-14 8-4 8 7-10 2-1 14" fill="#86602e"/>
+    <path d="m17-19 10 3-10 3M-4 18l-5 10m13-10 9 10" fill="none" stroke="#b8963c" stroke-width="3"/>
+    <path d="M15-12q16 5 8 16q-8 8 0 13" fill="none" stroke="#648844" stroke-width="3"/>
+    <path d="M-12 29H14" stroke="#648844" stroke-width="4"/>
+  </g>
+</svg>

@@ -1,5 +1,5 @@
 import * as Cesium from 'cesium';
-import { ANCHOR, ASSETS, LAYOUT, DOG_SPOTS, TUNING } from '../config.js';
+import { ANCHOR, ASSETS, LAYOUT, DOG_SPOTS, TUNING, INSPECTABLES } from '../config.js';
 import { REDUCED } from '../core/tween.js';
 import { HeroAvatar } from '../core/heroAvatar.js';
 import {
@@ -69,6 +69,8 @@ export class StreetScene {
     this.colliders = [];
     this.solids = [];
     this.sights = [];
+    this.inspectables = [];
+    this.inspectByEntity = new Map();
     this.entities = [];
     this.nearKey = null;
     this.pointer = null;
@@ -115,28 +117,45 @@ export class StreetScene {
   async build() {
     if (this.built) return;
     const { viewer } = this;
-    const scene = viewer.scene;
-
-    scene.globe.enableLighting = false;
-    /* 夜景主光源：一盏方向光，局部灯光只靠明亮材质表现（PRD 10.3） */
-    const dir = Cesium.Matrix4.multiplyByPointAsVector(
-      this.frame,
-      new Cesium.Cartesian3(0.35, 0.55, -0.75),
-      new Cesium.Cartesian3(),
-    );
-    scene.light = new Cesium.DirectionalLight({
-      direction: Cesium.Cartesian3.normalize(dir, dir),
-      intensity: 1.6,
-    });
-    scene.globe.showGroundAtmosphere = false;
-    scene.skyAtmosphere.show = false;
-    scene.backgroundColor = Cesium.Color.fromCssColorString('#121636');
+    this.applyLight();
 
     this.buildGround();
     for (const spec of LAYOUT) await this.addObject(spec);
     await this.buildDog();
     await this.buildHero();
     this.built = true;
+  }
+
+  applyLight() {
+    const scene = this.viewer.scene;
+    this.previousLighting ??= {
+      light: scene.light,
+      backgroundColor: scene.backgroundColor,
+      skyBox: scene.skyBox.show,
+      skyAtmosphere: scene.skyAtmosphere.show,
+      groundAtmosphere: scene.globe.showGroundAtmosphere,
+      globeLighting: scene.globe.enableLighting,
+      sphericalHarmonicCoefficients: scene.sphericalHarmonicCoefficients,
+    };
+
+    scene.globe.enableLighting = false;
+    // 主光照向房屋正面，柔和的蓝色环境光补亮背光面。
+    const dir = Cesium.Matrix4.multiplyByPointAsVector(
+      this.frame,
+      new Cesium.Cartesian3(0.3, -0.5, -0.85),
+      new Cesium.Cartesian3(),
+    );
+    scene.light = new Cesium.DirectionalLight({
+      direction: Cesium.Cartesian3.normalize(dir, dir),
+      intensity: 3.2,
+    });
+    scene.sphericalHarmonicCoefficients = Array.from({ length: 9 }, (_, i) =>
+      i === 0 ? new Cesium.Cartesian3(1.05, 1.1, 1.2) : new Cesium.Cartesian3(),
+    );
+    scene.globe.showGroundAtmosphere = false;
+    scene.skyAtmosphere.show = false;
+    scene.skyBox.show = false;
+    scene.backgroundColor = Cesium.Color.fromCssColorString('#6378a5');
   }
 
   buildGround() {
@@ -152,7 +171,7 @@ export class StreetScene {
           semiMinorAxis: r,
           height: h,
           extrudedHeight: h - 0.7,
-          material: Cesium.Color.fromCssColorString('#57496b'),
+          material: Cesium.Color.fromCssColorString('#998baa'),
         },
       }),
       viewer.entities.add({
@@ -162,7 +181,7 @@ export class StreetScene {
           semiMinorAxis: r - 0.6,
           height: h - 0.7,
           extrudedHeight: h - 4.2,
-          material: Cesium.Color.fromCssColorString('#2e2545'),
+          material: Cesium.Color.fromCssColorString('#665577'),
         },
       }),
       /* 街道铺装与地标线 */
@@ -170,7 +189,7 @@ export class StreetScene {
         position: localToWorld(this.frame, 0, 0.2, 0.02),
         box: {
           dimensions: new Cesium.Cartesian3(20, 5.2, 0.04),
-          material: Cesium.Color.fromCssColorString('#3b3560'),
+          material: Cesium.Color.fromCssColorString('#746d92'),
         },
       }),
     );
@@ -242,6 +261,16 @@ export class StreetScene {
     }
     this.entities.push(...entities);
 
+    let inspectable = null;
+    if (INSPECTABLES[spec.key]) {
+      inspectable = {
+        id: `${spec.key}:${spec.x}:${spec.y}`, spec, entities, box: meta.box,
+        title: spec.key === 'stall' ? (spec.accessory === 'scarf' ? '球迷围巾摊' : '球迷帽子摊') : INSPECTABLES[spec.key],
+      };
+      this.inspectables.push(inspectable);
+      for (const entity of entities) this.inspectByEntity.set(entity, inspectable);
+    }
+
     if (meta.box) {
       const b = meta.box;
       if (meta.small) {
@@ -250,7 +279,7 @@ export class StreetScene {
         this.colliders.push({ x0: b.x0, x1: b.x1, y0: b.y0, y1: b.y1 });
       }
       if (meta.solid) this.solids.push(b);
-      this.sights.push({ key: spec.key, say: spec.say, box: b });
+      this.sights.push({ key: spec.key, say: spec.say, box: b, inspectable });
     }
     if (meta.poles) {
       for (const x of [-meta.poles, meta.poles]) {
@@ -453,6 +482,7 @@ export class StreetScene {
   }
 
   enterRound({ spot = null } = {}) {
+    this.applyLight();
     this.round++;
     this.placeDog(spot);
     this.resetHero();
@@ -576,7 +606,7 @@ export class StreetScene {
     });
 
     canvas.addEventListener('pointerdown', (e) => {
-      if (!this.active) return;
+      if (!this.active || this.inspecting) return;
       this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
       this.pinch = 0;
       this.dragActive = false;
@@ -587,7 +617,7 @@ export class StreetScene {
       }
     });
     canvas.addEventListener('pointermove', (e) => {
-      if (!this.active) return;
+      if (!this.active || this.inspecting) return;
       const t = this.pointers.get(e.pointerId);
       if (!t) return;
       const dx = e.clientX - t.x;
@@ -620,7 +650,7 @@ export class StreetScene {
     canvas.addEventListener(
       'wheel',
       (e) => {
-        if (!this.active) return;
+        if (!this.active || this.inspecting) return;
         e.preventDefault();
         this.zoomCamera(Math.max(0.1, 1 + e.deltaY * 0.001));
       },
@@ -940,7 +970,7 @@ export class StreetScene {
         }
         : null;
 
-    this.hooks.onNear?.(key ? { key, dog: dogNear, text: dogNear ? '汪！是吉拿！' : best.say, target } : null);
+    this.hooks.onNear?.(key ? { key, dog: dogNear, text: dogNear ? '汪！是吉拿！' : best.say, target, inspectable: best?.inspectable || null } : null);
     this.nearKey = key;
   }
 
@@ -1039,6 +1069,18 @@ export class StreetScene {
 
   /* ---------- 退出 ---------- */
   exit() {
+    const previous = this.previousLighting;
+    if (previous) {
+      const scene = this.viewer.scene;
+      scene.light = previous.light;
+      scene.backgroundColor = previous.backgroundColor;
+      scene.skyBox.show = previous.skyBox;
+      scene.skyAtmosphere.show = previous.skyAtmosphere;
+      scene.globe.showGroundAtmosphere = previous.groundAtmosphere;
+      scene.globe.enableLighting = previous.globeLighting;
+      scene.sphericalHarmonicCoefficients = previous.sphericalHarmonicCoefficients;
+      this.previousLighting = null;
+    }
     this.active = false;
     this.s.playing = false;
     this.s.found = false;

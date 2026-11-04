@@ -1,0 +1,701 @@
+{
+  "checked_on": "2026-11-04",
+  "checks": [
+    {
+      "name": "all_27_assets_decode",
+      "state": {
+        "scene": "earth",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step2",
+          "step4",
+          "step3",
+          "step0",
+          "step1",
+          "dog",
+          "xiaonian-found",
+          "xiaonian-start",
+          "look-01",
+          "lupe-thanks",
+          "look-03",
+          "look-04",
+          "lupe-task",
+          "look-02",
+          "look-06",
+          "look-09",
+          "look-07",
+          "look-10",
+          "mo-complete",
+          "look-05",
+          "mo-intro",
+          "look-08",
+          "look-12",
+          "look-11",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [
+          "music"
+        ],
+        "effects": 0,
+        "voice": "mo-intro",
+        "seen": [],
+        "ducked": true,
+        "rms": 0.004043236970598881,
+        "plays": {},
+        "lastPans": {},
+        "gains": {
+          "music": 0.012227321974933147
+        }
+      }
+    },
+    {
+      "name": "observation_once",
+      "state": {
+        "scene": "street",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step2",
+          "step4",
+          "step3",
+          "step0",
+          "step1",
+          "dog",
+          "xiaonian-found",
+          "xiaonian-start",
+          "look-01",
+          "lupe-thanks",
+          "look-03",
+          "look-04",
+          "lupe-task",
+          "look-02",
+          "look-06",
+          "look-09",
+          "look-07",
+          "look-10",
+          "mo-complete",
+          "look-05",
+          "mo-intro",
+          "look-08",
+          "look-12",
+          "look-11",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [
+          "music",
+          "crowd"
+        ],
+        "effects": 0,
+        "voice": null,
+        "seen": [
+          "say:箱子是空的。"
+        ],
+        "ducked": false,
+        "rms": 0.01521037683511805,
+        "plays": {
+          "xiaonian-start": 1,
+          "look-12": 1
+        },
+        "lastPans": {
+          "xiaonian-start": 0,
+          "look-12": 0
+        },
+        "gains": {
+          "music": 0.11584962904453278,
+          "crowd": 0.08536295592784882
+        }
+      }
+    },
+    {
+      "name": "success_and_lupe_thanks",
+      "state": {
+        "scene": "result",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step2",
+          "step4",
+          "step3",
+          "step0",
+          "step1",
+          "dog",
+          "xiaonian-found",
+          "xiaonian-start",
+          "look-01",
+          "lupe-thanks",
+          "look-03",
+          "look-04",
+          "lupe-task",
+          "look-02",
+          "look-06",
+          "look-09",
+          "look-07",
+          "look-10",
+          "mo-complete",
+          "look-05",
+          "mo-intro",
+          "look-08",
+          "look-12",
+          "look-11",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [
+          "music",
+          "crowd"
+        ],
+        "effects": 1,
+        "voice": "lupe-thanks",
+        "seen": [
+          "say:箱子是空的。",
+          "dog"
+        ],
+        "ducked": true,
+        "rms": 0.015032793328478648,
+        "plays": {
+          "xiaonian-start": 1,
+          "look-12": 1,
+          "dog": 2,
+          "lupe-thanks": 1
+        },
+        "lastPans": {
+          "xiaonian-start": 0,
+          "look-12": 0,
+          "dog": 0,
+          "lupe-thanks": 0
+        },
+        "gains": {
+          "music": 0.0464809313416481,
+          "crowd": 0.02860363945364952
+        }
+      }
+    },
+    {
+      "name": "replay_single_loops",
+      "state": {
+        "scene": "street",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step2",
+          "step4",
+          "step3",
+          "step0",
+          "step1",
+          "dog",
+          "xiaonian-found",
+          "xiaonian-start",
+          "look-01",
+          "lupe-thanks",
+          "look-03",
+          "look-04",
+          "lupe-task",
+          "look-02",
+          "look-06",
+          "look-09",
+          "look-07",
+          "look-10",
+          "mo-complete",
+          "look-05",
+          "mo-intro",
+          "look-08",
+          "look-12",
+          "look-11",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [
+          "music",
+          "crowd"
+        ],
+        "effects": 1,
+        "voice": "xiaonian-start",
+        "seen": [],
+        "ducked": true,
+        "rms": 0.0024883534445099818,
+        "plays": {
+          "xiaonian-start": 2,
+          "look-12": 1,
+          "dog": 2,
+          "lupe-thanks": 1
+        },
+        "lastPans": {
+          "xiaonian-start": 0,
+          "look-12": 0,
+          "dog": 0,
+          "lupe-thanks": 0
+        },
+        "gains": {
+          "music": 0.02109486609697342,
+          "crowd": 0.01512257568538189
+        }
+      }
+    },
+    {
+      "name": "leave_cancels_street",
+      "state": {
+        "scene": "earth",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step2",
+          "step4",
+          "step3",
+          "step0",
+          "step1",
+          "dog",
+          "xiaonian-found",
+          "xiaonian-start",
+          "look-01",
+          "lupe-thanks",
+          "look-03",
+          "look-04",
+          "lupe-task",
+          "look-02",
+          "look-06",
+          "look-09",
+          "look-07",
+          "look-10",
+          "mo-complete",
+          "look-05",
+          "mo-intro",
+          "look-08",
+          "look-12",
+          "look-11",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [
+          "music"
+        ],
+        "effects": 0,
+        "voice": "mo-complete",
+        "seen": [],
+        "ducked": true,
+        "rms": 0.004043236970598881,
+        "plays": {
+          "xiaonian-start": 2,
+          "look-12": 1,
+          "dog": 2,
+          "lupe-thanks": 1
+        },
+        "lastPans": {
+          "xiaonian-start": 0,
+          "look-12": 0,
+          "dog": 0,
+          "lupe-thanks": 0
+        },
+        "gains": {
+          "music": 0.012227321974933147
+        }
+      }
+    },
+    {
+      "name": "background_silent",
+      "state": {
+        "scene": "earth",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": false,
+        "context": "running",
+        "loaded": [
+          "step2",
+          "step4",
+          "step3",
+          "step0",
+          "step1",
+          "dog",
+          "xiaonian-found",
+          "xiaonian-start",
+          "look-01",
+          "lupe-thanks",
+          "look-03",
+          "look-04",
+          "lupe-task",
+          "look-02",
+          "look-06",
+          "look-09",
+          "look-07",
+          "look-10",
+          "mo-complete",
+          "look-05",
+          "mo-intro",
+          "look-08",
+          "look-12",
+          "look-11",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [],
+        "effects": 0,
+        "voice": null,
+        "seen": [],
+        "ducked": false,
+        "rms": 0,
+        "plays": {
+          "xiaonian-start": 2,
+          "look-12": 1,
+          "dog": 2,
+          "lupe-thanks": 1
+        },
+        "lastPans": {
+          "xiaonian-start": 0,
+          "look-12": 0,
+          "dog": 0,
+          "lupe-thanks": 0
+        },
+        "gains": {}
+      }
+    },
+    {
+      "name": "foreground_single_music",
+      "state": {
+        "scene": "earth",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step2",
+          "step4",
+          "step3",
+          "step0",
+          "step1",
+          "dog",
+          "xiaonian-found",
+          "xiaonian-start",
+          "look-01",
+          "lupe-thanks",
+          "look-03",
+          "look-04",
+          "lupe-task",
+          "look-02",
+          "look-06",
+          "look-09",
+          "look-07",
+          "look-10",
+          "mo-complete",
+          "look-05",
+          "mo-intro",
+          "look-08",
+          "look-12",
+          "look-11",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [
+          "music"
+        ],
+        "effects": 0,
+        "voice": null,
+        "seen": [],
+        "ducked": false,
+        "rms": 0,
+        "plays": {
+          "xiaonian-start": 2,
+          "look-12": 1,
+          "dog": 2,
+          "lupe-thanks": 1
+        },
+        "lastPans": {
+          "xiaonian-start": 0,
+          "look-12": 0,
+          "dog": 0,
+          "lupe-thanks": 0
+        },
+        "gains": {
+          "music": 0
+        }
+      }
+    },
+    {
+      "name": "cancel_delayed_dialogue",
+      "state": {
+        "scene": "select",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step2",
+          "step4",
+          "step3",
+          "step0",
+          "step1",
+          "dog",
+          "xiaonian-found",
+          "xiaonian-start",
+          "look-01",
+          "lupe-thanks",
+          "look-03",
+          "look-04",
+          "lupe-task",
+          "look-02",
+          "look-06",
+          "look-09",
+          "look-07",
+          "look-10",
+          "mo-complete",
+          "look-05",
+          "mo-intro",
+          "look-08",
+          "look-12",
+          "look-11",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [
+          "music"
+        ],
+        "effects": 0,
+        "voice": null,
+        "seen": [],
+        "ducked": false,
+        "rms": 0.00024313928837325086,
+        "plays": {
+          "xiaonian-start": 2,
+          "look-12": 1,
+          "dog": 2,
+          "lupe-thanks": 1
+        },
+        "lastPans": {
+          "xiaonian-start": 0,
+          "look-12": 0,
+          "dog": 0,
+          "lupe-thanks": 0
+        },
+        "gains": {
+          "music": 0.005629673134535551
+        }
+      }
+    },
+    {
+      "name": "mute_all_channels",
+      "state": {
+        "scene": "earth",
+        "soundOn": false,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step2",
+          "step4",
+          "step3",
+          "step0",
+          "step1",
+          "dog",
+          "xiaonian-found",
+          "xiaonian-start",
+          "look-01",
+          "lupe-thanks",
+          "look-03",
+          "look-04",
+          "lupe-task",
+          "look-02",
+          "look-06",
+          "look-09",
+          "look-07",
+          "look-10",
+          "mo-complete",
+          "look-05",
+          "mo-intro",
+          "look-08",
+          "look-12",
+          "look-11",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [],
+        "effects": 0,
+        "voice": null,
+        "seen": [],
+        "ducked": false,
+        "rms": 0,
+        "plays": {
+          "xiaonian-start": 2,
+          "look-12": 1,
+          "dog": 2,
+          "lupe-thanks": 1
+        },
+        "lastPans": {
+          "xiaonian-start": 0,
+          "look-12": 0,
+          "dog": 0,
+          "lupe-thanks": 0
+        },
+        "gains": {}
+      }
+    },
+    {
+      "name": "mute_persists_reload",
+      "state": {
+        "scene": "select",
+        "soundOn": false,
+        "unlocked": false,
+        "pageActive": true,
+        "context": "none",
+        "loaded": [],
+        "failed": [],
+        "loops": [],
+        "effects": 0,
+        "voice": null,
+        "seen": [],
+        "ducked": false,
+        "rms": 0,
+        "plays": {},
+        "lastPans": {},
+        "gains": {}
+      }
+    },
+    {
+      "name": "unmute_resumes",
+      "state": {
+        "scene": "earth",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step1",
+          "step0",
+          "dog",
+          "step2",
+          "step4",
+          "step3",
+          "mo-intro",
+          "mo-complete",
+          "xiaonian-start",
+          "xiaonian-found",
+          "lupe-task",
+          "look-02",
+          "look-01",
+          "look-04",
+          "lupe-thanks",
+          "look-07",
+          "look-06",
+          "look-05",
+          "look-08",
+          "look-03",
+          "look-09",
+          "look-10",
+          "look-11",
+          "look-12",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [
+          "music"
+        ],
+        "effects": 1,
+        "voice": "mo-complete",
+        "seen": [],
+        "ducked": true,
+        "rms": 0.0006573224337267425,
+        "plays": {
+          "mo-complete": 1
+        },
+        "lastPans": {
+          "mo-complete": 0
+        },
+        "gains": {
+          "music": 0.0011432567844167352
+        }
+      }
+    },
+    {
+      "name": "delayed_voice_stays_cancelled_after_deadline",
+      "state": {
+        "scene": "select",
+        "soundOn": true,
+        "unlocked": true,
+        "pageActive": true,
+        "context": "running",
+        "loaded": [
+          "step1",
+          "step0",
+          "dog",
+          "step2",
+          "step4",
+          "step3",
+          "mo-intro",
+          "mo-complete",
+          "xiaonian-start",
+          "xiaonian-found",
+          "lupe-task",
+          "look-02",
+          "look-01",
+          "look-04",
+          "lupe-thanks",
+          "look-07",
+          "look-06",
+          "look-05",
+          "look-08",
+          "look-03",
+          "look-09",
+          "look-10",
+          "look-11",
+          "look-12",
+          "look-13",
+          "music",
+          "crowd"
+        ],
+        "failed": [],
+        "loops": [
+          "music"
+        ],
+        "effects": 0,
+        "voice": null,
+        "seen": [],
+        "ducked": false,
+        "rms": 0.003913462443956593,
+        "plays": {
+          "mo-complete": 1
+        },
+        "lastPans": {
+          "mo-complete": 0
+        },
+        "gains": {
+          "music": 0.12995707988739014
+        }
+      }
+    }
+  ],
+  "asset_validation": {
+    "files": 27,
+    "all_fully_decoded": true,
+    "total_mp3_bytes": 1265823
+  }
+}

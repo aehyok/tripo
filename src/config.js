@@ -93,6 +93,17 @@ export const LAYOUT = [
   { key: 'bunting', x: 0, y: 0.4, z: 0.04, ry: 0 },
 ];
 
+/* 走近后可点击推近镜头的物品。房屋、整组串灯及寻物目标不进入近景。 */
+export const INSPECTABLES = {
+  ball: '足球',
+  pinata: '皮纳塔',
+  crate: '木箱',
+  cactus: '仙人掌',
+  cart: '玉米小吃车',
+  stall: '球迷纪念品摊',
+  lamp: '街道路灯',
+};
+
 /* 吉拿的 3 个藏点：开局视角都被挡住，均可从出生点正常走到 */
 export const DOG_SPOTS = [
   { x: -5.6, y: 2.6, z: 0.04, ry: 0.8, note: '小吃车后' },
@@ -101,12 +112,12 @@ export const DOG_SPOTS = [
 ];
 
 export const LEVELS = [
-  { nation: '墨西哥', where: '世界杯球迷街', state: 'open' },
-  { nation: '日本', where: '宇治茶屋', state: 'wip' },
-  { nation: '韩国', where: '首尔甜品街', state: 'wip' },
-  { nation: '意大利', where: '雪山缆车', state: 'wip' },
-  { nation: '埃及', where: '法老陵墓', state: 'wip' },
-  { nation: '阿联酋', where: '海底沉船', state: 'wip' },
+  { nation: '墨西哥', country: 'mx', where: '世界杯球迷街', state: 'open' },
+  { nation: '日本', country: 'jp', where: '宇治茶屋', state: 'wip' },
+  { nation: '韩国', country: 'kr', where: '首尔甜品街', state: 'wip' },
+  { nation: '意大利', country: 'it', where: '雪山缆车', state: 'wip' },
+  { nation: '埃及', country: 'eg', where: '法老陵墓', state: 'wip' },
+  { nation: '阿联酋', country: 'ae', where: '海底沉船', state: 'wip' },
 ];
 
 /* 玩法数值：沿用原型工作默认值，试玩后按手感调整并同步 PRD */

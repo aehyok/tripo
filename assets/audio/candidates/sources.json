@@ -1,0 +1,156 @@
+{
+  "checked_on": "2026-11-04",
+  "note": "候选素材，已核对来源与格式，未作听感验收；pack_preview 是整包演示，正式接入应下载原包选单条。",
+  "assets": [
+    {
+      "id": "interface-sounds",
+      "source": "https://kenney.nl/assets/interface-sounds",
+      "error": "IncompleteRead(327347 bytes read, 18431 more expected)"
+    },
+    {
+      "id": "impact-sounds",
+      "title": "Kenney 拟音整包试听",
+      "use": "脚步、木箱等物件拟音",
+      "source": "https://kenney.nl/assets/impact-sounds",
+      "download": "https://kenney.nl/media/pages/assets/impact-sounds/4ef56f2408-1677589755/foley-preview.ogg",
+      "file": "impact-sounds-pack-preview.ogg",
+      "kind": "pack_preview",
+      "license": "CC0",
+      "author": "Kenney",
+      "bytes": 541087,
+      "sha256": "c4080ddd6efa1bc3042446e7d81c7dc1558e4f74e1641d04bf1cf408d9e5be9f",
+      "status": "downloaded_not_auditioned",
+      "validation": "format_and_decode_passed",
+      "media_info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vorbis",
+            "sample_rate": "48000",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "54.766000"
+        }
+      }
+    },
+    {
+      "id": "music-jingles",
+      "title": "Kenney 短乐句整包试听",
+      "use": "通关与星级结算",
+      "source": "https://kenney.nl/assets/music-jingles",
+      "download": "https://kenney.nl/media/pages/assets/music-jingles/5d3327d2da-1677590394/preview-5.ogg",
+      "file": "music-jingles-pack-preview.ogg",
+      "kind": "pack_preview",
+      "license": "CC0",
+      "author": "Kenney",
+      "bytes": 155244,
+      "sha256": "e3cf15383007de5c5f5dd68027ea87ee4c8c0a7e382a2252ead55c1f21608c60",
+      "status": "downloaded_not_auditioned",
+      "validation": "format_and_decode_passed",
+      "media_info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vorbis",
+            "sample_rate": "48000",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "13.017021"
+        }
+      }
+    },
+    {
+      "id": "sci-fi-sounds",
+      "title": "Kenney 科幻音效整包试听",
+      "use": "地球跃迁与落地",
+      "source": "https://kenney.nl/assets/sci-fi-sounds",
+      "download": "https://kenney.nl/media/pages/assets/sci-fi-sounds/36169cf1c4-1677589400/preview.ogg",
+      "file": "sci-fi-sounds-pack-preview.ogg",
+      "kind": "pack_preview",
+      "license": "CC0",
+      "author": "Kenney",
+      "bytes": 612820,
+      "sha256": "1abd5fd0a67e43f8179b023557afef41155763034c4a55ecab31f8e8ff7a6c45",
+      "status": "downloaded_not_auditioned",
+      "validation": "format_and_decode_passed",
+      "media_info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vorbis",
+            "sample_rate": "48000",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "53.031125"
+        }
+      }
+    },
+    {
+      "id": "dog-bark",
+      "title": "小狗叫声原始录音",
+      "use": "吉拿提示与找到反馈",
+      "source": "https://bigsoundbank.com/small-dog-barking-s0612.html",
+      "download": "https://bigsoundbank.com/UPLOAD/mp3/0612.mp3",
+      "file": "dog-bark-source.mp3",
+      "kind": "source_recording",
+      "license": "CC0",
+      "author": "Joseph SARDIN",
+      "bytes": 1888448,
+      "sha256": "f831f699d0884b2e8a364aced3cdb302b39f86a817bec04915baeb4cdd7ea2b0",
+      "status": "downloaded_not_auditioned",
+      "validation": "format_and_decode_passed",
+      "media_info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "48000",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "47.187200"
+        }
+      }
+    },
+    {
+      "id": "market",
+      "title": "法国露天市场原始录音",
+      "use": "街区人群氛围候选；非墨西哥实录",
+      "source": "https://bigsoundbank.com/outdoor-market-2-s2729.html",
+      "download": "https://bigsoundbank.com/UPLOAD/mp3/2729.mp3",
+      "file": "market-source.mp3",
+      "kind": "source_recording",
+      "license": "CC0",
+      "author": "Joseph SARDIN",
+      "bytes": 3112928,
+      "sha256": "4812e0b02e8e0def194a8bbb7141cc3b831a7ce70de5d79aab5f129fda1a9ae9",
+      "status": "downloaded_not_auditioned",
+      "validation": "format_and_decode_passed",
+      "media_info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "48000",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "129.701333"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "checked_on": "2026-11-04",
+  "behavior": "walk_near_then_click_for_in_world_camera_closeup",
+  "object_types": [
+    {
+      "key": "ball",
+      "distance": 1.1553982705322436,
+      "heroVisible": true
+    },
+    {
+      "key": "pinata",
+      "distance": 7.890218796398586,
+      "heroVisible": true
+    },
+    {
+      "key": "crate",
+      "distance": 1.8982344263663875,
+      "heroVisible": true
+    },
+    {
+      "key": "cactus",
+      "distance": 2.553654570129615,
+      "heroVisible": true
+    },
+    {
+      "key": "cart",
+      "distance": 5.717145056708624,
+      "heroVisible": true
+    },
+    {
+      "key": "stall",
+      "distance": 4.7232495975166495,
+      "heroVisible": true
+    },
+    {
+      "key": "lamp",
+      "distance": 6.675913781414962,
+      "heroVisible": true
+    }
+  ],
+  "checks": {
+    "far_click_requires_approach": true,
+    "actual_keyboard_walk_then_canvas_click": true,
+    "world_and_character_preserved": true,
+    "no_modal_or_isolated_background": true,
+    "camera_moves_to_object": true,
+    "zoom_controls": true,
+    "drag_changes_angle": true,
+    "timer_paused": true,
+    "return_restores_play_and_position": true,
+    "hint_count_unchanged": true,
+    "leave_during_closeup_restores_earth": true
+  },
+  "mobile": {
+    "viewport": [
+      390,
+      844
+    ],
+    "pinch_zoom": true,
+    "touch_rotation": true,
+    "timer_paused": true,
+    "gesture_cleanup": true,
+    "controls_inside_viewport": true
+  }
+}

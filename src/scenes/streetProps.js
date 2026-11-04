@@ -376,6 +376,8 @@ export async function createModelEntity(viewer, frame, spec, key, fq, assetOverr
       scale: cfg.scale ?? 1,
       minimumPixelSize: cfg.minimumPixelSize ?? 24,
       heightReference: Cesium.HeightReference.NONE,
+      // 街区统一使用固定环境光，避免暗部随现实时间变黑。
+      environmentMapOptions: { enabled: false },
     },
   });
 }

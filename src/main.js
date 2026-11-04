@@ -9,19 +9,23 @@ import { dogThumbnail } from './ui/dogArt.js';
 import { getProgress, updateProgress, recordClear } from './core/progress.js';
 import { runTweens, REDUCED } from './core/tween.js';
 import { JourneyEffects } from './core/journey.js';
+import { ObjectInspector } from './ui/objectInspector.js';
 import * as sfx from './core/audio.js';
 import {
-  $, fmtTime, toast, showScreen, iris, irisInstant,
+  $, fmtTime, toast, hideToast, showScreen, iris, irisInstant,
   loadingStart, loadingReady, loadingFail, onRetry,
   bindSoundButtons, syncSoundButtons,
 } from './core/ui.js';
 
 const COARSE = window.matchMedia('(pointer: coarse)').matches;
+// 暂时关闭物品近景入口与交互，保留实现以便后续恢复。
+const OBJECT_INSPECTION_ENABLED = false;
 
 let viewer = null;
 let earth = null;
 let street = null;
 let journey = null;
+let inspector = null;
 
 const app = {
   mode: 'boot',
@@ -31,6 +35,7 @@ const app = {
   street: null,
   progress: getProgress(),
   nearTarget: null,
+  nearInspectable: null,
   resultTimer: 0,
   lastTimer: '',
   streetReady: false,
@@ -40,34 +45,29 @@ const app = {
 function renderFlags() {
   const p = app.progress;
   const stars = p.stars || 0;
+  const playIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5 15 10l-8 5.5Z" fill="currentColor"/></svg>';
+  const lockIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4.5" y="8.5" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7 8.5V6a3 3 0 0 1 6 0v2.5" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>';
   $('flags').innerHTML = LEVELS.map((lv, i) => {
     const open = lv.state === 'open';
-    const state = open
-      ? p.done
-        ? `${'★'.repeat(stars)}${'☆'.repeat(3 - stars)} · 再玩一次`
-        : '点击开始'
-      : '制作中';
-    return `<li><button class="flag ${open ? 'open' : 'locked'}" data-i="${i}"
+    const state = open ? p.done ? '再玩一次' : '点击开始' : '制作中';
+    return `<li class="${open ? 'is-open' : 'is-locked'}">
+      ${open ? '<span class="flag-availability">现已开放</span>' : ''}
+      <button type="button" class="flag ${open ? 'open' : 'locked'}" data-i="${i}" data-country="${lv.country}" ${open ? '' : 'disabled'}
       aria-label="第 ${i + 1} 关，${lv.nation}，${lv.where}，${state}">
+      <img class="flag-art" src="${import.meta.env.BASE_URL}assets/ui/flags/${lv.country}.svg" alt="" aria-hidden="true" draggable="false">
       <span class="no">${i + 1}</span>
       <span class="nation">${lv.nation}</span>
       <span class="where">${lv.where}</span>
-      <span class="state">${state}</span></button></li>`;
+      ${open && p.done ? `<span class="flag-best" aria-label="最佳成绩 ${stars} 星">最佳 ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}</span>` : ''}
+      <span class="state">${open ? playIcon : lockIcon}${state}${open ? '<span class="flag-arrow" aria-hidden="true">→</span>' : ''}</span></button></li>`;
   }).join('');
 }
 
 $('flags').addEventListener('click', (e) => {
   const btn = e.target.closest('.flag');
-  if (!btn) return;
+  if (!btn || btn.disabled) return;
   sfx.unlock();
-  const i = Number(btn.dataset.i);
-  if (i !== 0) {
-    btn.classList.remove('shake');
-    void btn.offsetWidth;
-    btn.classList.add('shake');
-    toast('当前版本仅开放第一关。');
-    return;
-  }
+  if (LEVELS[Number(btn.dataset.i)]?.state !== 'open') return;
   sfx.blip();
   enterEarth();
 });
@@ -87,8 +87,10 @@ async function enterEarth() {
   app.mode = 'earth';
   const token = ++app.round;
   showScreen('earth');
+  sfx.setScene('earth');
   earth.setCompleted(app.progress.done);
   updateEarthLine();
+  sfx.speak(app.progress.done ? 'mo-complete' : 'mo-intro', { delay: 300 });
   earth.setControlsEnabled(true);
   sfx.unlock();
   await earth.flyToRegion();
@@ -96,13 +98,14 @@ async function enterEarth() {
 }
 
 function toSelect() {
-  if (app.mode === 'select' || app.mode === 'street' || app.mode === 'result') return;
+  if (app.mode === 'select' || app.mode === 'street' || app.mode === 'result' || app.mode === 'inspect') return;
   app.round++;
   earth.cancelFlight();
   journey.stop();
   // 取消进场时同时使旧遮罩动画失效，并立即恢复选关画面。
   irisInstant(true);
   app.mode = 'select';
+  sfx.setScene('select');
   setGlobeVisible(true);
   earth.setCompleted(app.progress.done);
   earth.setControlsEnabled(false);
@@ -118,7 +121,9 @@ function streetHooks() {
   return {
     onNear(info) {
       app.nearTarget = info?.target || null;
+      app.nearInspectable = info?.inspectable || null;
       renderNear(info);
+      sfx.observe(info);
     },
     onTick(ms) {
       const t = fmtTime(ms);
@@ -154,6 +159,8 @@ function resetStreetUI() {
   $('hint').hidden = true;
   $('coach').hidden = true;
   $('near').hidden = true;
+  $('nearInspect').hidden = true;
+  app.nearInspectable = null;
   $('takeDog').hidden = true;
   $('stick').hidden = true;
   $('crouch').hidden = true;
@@ -170,11 +177,13 @@ function syncHintButton() {
 async function enterStreet() {
   if (app.mode !== 'earth') return;
   app.mode = 'flying';
+  sfx.setScene('flying');
   const token = ++app.round;
   sfx.blip();
   hideTip();
 
   journey.start();
+  sfx.warp();
   let irisClosing = null;
   const landed = await earth.flyToAnchor((progress) => {
     journey.setProgress(progress);
@@ -187,6 +196,7 @@ async function enterStreet() {
     journey.stop();
     earth.setControlsEnabled(true);
     app.mode = 'earth';
+    sfx.setScene('earth');
     return;
   }
 
@@ -202,12 +212,14 @@ async function enterStreet() {
     journey.stop();
     loadingFail('街区资源加载失败，请刷新页面重试。');
     app.mode = 'error';
+    sfx.setScene('error');
     return;
   }
   loadingReady();
   if (token !== app.round) return;
 
   street.enterRound();
+  sfx.resetRound();
   showScreen('street');
   resetStreetUI();
   // 从街区上空轻轻落入跟随视角，遮罩揭开后仍有真实的镜头运动。
@@ -222,6 +234,7 @@ async function enterStreet() {
     camera.setView({ destination: Cesium.Cartesian3.add(destination, offset, new Cesium.Cartesian3()), orientation });
   }
   journey.arrive();
+  sfx.arrive();
   await Promise.all([
     iris(true, 650),
     new Promise((resolve) => camera.flyTo({
@@ -234,31 +247,37 @@ async function enterStreet() {
 
   journey.stop();
   app.mode = 'street';
+  sfx.setScene('street');
   showTask();
 }
 
 function showTask() {
   $('task').hidden = false;
+  sfx.speak('lupe-task', { delay: 200 });
   $('startFind').focus({ preventScroll: true });
 }
 
 function beginFind() {
+  sfx.stopVoice();
   $('task').hidden = true;
   $('hint').hidden = false;
   $('stick').hidden = !COARSE;
   $('crouch').hidden = !COARSE;
   $('coach').hidden = false;
-  $('coach').textContent = COARSE ? '左下摇杆移动，拖动画面转视角' : 'WASD 移动（双击方向键奔跑），按住鼠标拖动转视角，C 蹲下';
+  const movementGuide = COARSE ? '摇杆移动，拖动转视角' : 'WASD 移动（双击奔跑），拖动转视角，C 蹲下';
+  $('coach').textContent = movementGuide + (OBJECT_INSPECTION_ENABLED ? '，点击物品放大查看' : '');
   syncHintButton();
   app.mode = 'street';
   street.beginPlay();
-  sfx.crowdOn(true);
-  sfx.bark(0);
+  sfx.setScene('street');
+  sfx.speak('xiaonian-start');
 }
 
-async function leaveStreet() {
+async function leaveStreet(destination = 'earth') {
+  if (app.mode === 'inspect') inspector.close();
   if (app.mode !== 'street' && app.mode !== 'result') return;
   app.mode = 'leaving';
+  sfx.setScene('leaving');
   journey.stop();
   const token = ++app.round;
   sfx.blip();
@@ -269,20 +288,30 @@ async function leaveStreet() {
   $('near').hidden = true;
   $('takeDog').hidden = true;
   street.exit();
-  sfx.crowdOn(false);
 
   await iris(false, 380);
   if (token !== app.round) return;
 
   setGlobeVisible(true);
-  showScreen('earth');
-  earth.setControlsEnabled(true);
   earth.setCompleted(app.progress.done);
-  updateEarthLine();
-  app.mode = 'earth';
+  if (destination === 'select') {
+    app.mode = 'select';
+    sfx.setScene('select');
+    showScreen('select');
+    renderFlags();
+    hideTip();
+    earth.goSelectView(true);
+  } else {
+    showScreen('earth');
+    earth.setControlsEnabled(true);
+    updateEarthLine();
+    app.mode = 'earth';
+    sfx.setScene('earth');
+    sfx.speak(app.progress.done ? 'mo-complete' : 'mo-intro', { delay: 500 });
+  }
   await iris(true, 420);
   if (token !== app.round) return;
-  await earth.flyBack();
+  if (destination !== 'select') await earth.flyBack();
 }
 
 function replay() {
@@ -292,6 +321,7 @@ function replay() {
   hideResult();
   $('result').hidden = true;
   street.enterRound();
+  sfx.resetRound();
   resetStreetUI();
   beginFind();
 }
@@ -307,10 +337,12 @@ function clearResultTimer() {
 function handleFound({ ms, hints, stars }) {
   const token = ++app.round;
   app.mode = 'result';
+  sfx.setScene('result');
   app.progress = recordClear(stars);
   renderFlags();
   sfx.bark(0);
   sfx.fanfare();
+  $('foundCelebration').hidden = false;
   burstConfetti();
   $('hint').hidden = true;
   $('coach').hidden = true;
@@ -322,6 +354,7 @@ function handleFound({ ms, hints, stars }) {
   clearResultTimer();
   app.resultTimer = setTimeout(() => {
     if (token !== app.round) return;
+    $('foundCelebration').hidden = true;
     $('stars').innerHTML = '★'.repeat(stars) + `<i>${'★'.repeat(3 - stars)}</i>`;
     $('stars').setAttribute('aria-label', `获得 ${stars} 颗星`);
     $('resTime').textContent = fmtTime(ms);
@@ -333,18 +366,23 @@ function handleFound({ ms, hints, stars }) {
         ? '3 星条件：60 秒内找到，且不用提示。'
         : '2 星条件：120 秒内找到，提示最多 1 次。';
     $('result').hidden = false;
+    sfx.speak('lupe-thanks', { delay: 150 });
     $('again').focus({ preventScroll: true });
   }, 1700);
 }
 
 function hideResult() {
   $('result').hidden = true;
+  $('foundCelebration').hidden = true;
+  clearConfetti();
 }
 
 /* ---------- 附近提示 ---------- */
 function renderNear(info) {
   const el = $('near');
   const take = $('takeDog');
+  $('nearInspect').hidden = !OBJECT_INSPECTION_ENABLED || !info?.inspectable;
+  if (OBJECT_INSPECTION_ENABLED && info?.inspectable) $('nearInspect').setAttribute('aria-label', `放大查看${info.inspectable.title}`);
   if (!info) {
     el.hidden = true;
     take.hidden = true;
@@ -379,23 +417,113 @@ function renderNear(info) {
   el.style.top = `${top}px`;
 }
 
+/* ---------- 物品放大查看 ---------- */
+function openInspection(item) {
+  if (!OBJECT_INSPECTION_ENABLED) return;
+  if (app.mode !== 'street' || !street.s.playing || !$('task').hidden || !item) return;
+  if (!inspector.inReach(item)) {
+    toast('走近物品后，再点击查看。');
+    return;
+  }
+  hideToast();
+  try {
+    if (!inspector.open(item)) return;
+  } catch (error) {
+    console.error('物品查看失败', error);
+    inspector.close();
+    toast('暂时无法查看这个物品，请稍后再试。');
+    return;
+  }
+  street.pauseTimer();
+  street.s.playing = false;
+  street.clearInput();
+  app.inspectCoachHidden = $('coach').hidden;
+  app.inspectControls = ['hint', 'stick', 'crouch', 'takeDog'].map((id) => [id, $(id).hidden]);
+  for (const [id] of app.inspectControls) $(id).hidden = true;
+  app.mode = 'inspect';
+  $('coach').hidden = true;
+  $('near').hidden = true;
+  sfx.setScene('inspect');
+  sfx.blip();
+  sfx.describeObject(item.spec.say);
+}
+
+function endInspection() {
+  if (app.mode !== 'inspect') return;
+  street.clearInput();
+  street.s.playing = true;
+  if (!document.hidden) street.resumeTimer();
+  app.mode = 'street';
+  for (const [id, hidden] of app.inspectControls) $(id).hidden = hidden;
+  $('coach').hidden = app.inspectCoachHidden;
+  viewer.canvas.style.cursor = 'grab';
+  sfx.setScene('street');
+}
+
+function bindObjectInspection() {
+  const canvas = viewer.canvas;
+  let tap = null;
+  let lastHover = 0;
+  const canInspect = () => app.mode === 'street' && street.s.playing && $('task').hidden;
+  canvas.addEventListener('pointerdown', (e) => {
+    if (!canInspect() || e.button > 0) return;
+    if (tap) { tap.multi = true; return; }
+    tap = { id: e.pointerId, x: e.clientX, y: e.clientY, moved: false, multi: false };
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (tap?.id === e.pointerId && Math.hypot(e.clientX - tap.x, e.clientY - tap.y) > 8) tap.moved = true;
+    if (!canInspect() || e.pointerType !== 'mouse' || tap || performance.now() - lastHover < 70) return;
+    lastHover = performance.now();
+    canvas.style.cursor = inspector.inReach(inspector.pick(e.clientX, e.clientY)) ? 'pointer' : 'grab';
+  });
+  canvas.addEventListener('pointerup', (e) => {
+    if (!tap || tap.id !== e.pointerId) return;
+    const down = tap;
+    tap = null;
+    if (!canInspect() || down.multi || down.moved || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 8) return;
+    openInspection(inspector.pick(e.clientX, e.clientY));
+  });
+  canvas.addEventListener('pointercancel', () => { tap = null; });
+  window.addEventListener('blur', () => { tap = null; });
+  $('nearInspect').addEventListener('click', () => openInspection(app.nearInspectable));
+}
+
 /* ---------- 彩纸 ---------- */
+let confettiLayer = null;
+let confettiTimer = 0;
+
+function clearConfetti() {
+  clearTimeout(confettiTimer);
+  confettiTimer = 0;
+  confettiLayer?.remove();
+  confettiLayer = null;
+}
+
 function burstConfetti() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  clearConfetti();
+  if (REDUCED) return;
   const cols = ['#e5127d', '#ffb31a', '#1cc0c9', '#12a66a', '#fff4dc'];
   const layer = document.createElement('div');
   layer.className = 'confetti-layer';
+  layer.setAttribute('aria-hidden', 'true');
+  confettiLayer = layer;
   document.body.appendChild(layer);
-  for (let i = 0; i < 70; i++) {
+  // 两侧礼花分两轮向上散开，彩纸继续飘落到成绩页出现之后。
+  const count = window.innerWidth < 600 ? 100 : 160;
+  for (let i = 0; i < count; i++) {
     const p = document.createElement('i');
+    const side = i % 2 === 0 ? 1 : -1;
+    const volley = i < count / 2 ? 0 : 0.55;
     const size = 6 + Math.random() * 8;
-    p.style.cssText = `left:${50 + (Math.random() - 0.5) * 26}%;top:${40 + Math.random() * 12}%;
+    p.style.cssText = `left:${side === 1 ? 8 : 92}%;top:65%;
       width:${size}px;height:${size * 1.3}px;background:${cols[i % 5]};
-      animation-delay:${Math.random() * 0.18}s;animation-duration:${1.1 + Math.random() * 0.9}s;
-      --dx:${(Math.random() - 0.5) * 420}px;--rot:${Math.random() * 720 - 360}deg;`;
+      border-radius:${i % 3 === 0 ? '50%' : '2px'};
+      animation-delay:${volley + Math.random() * 0.2}s;animation-duration:${2.8 + Math.random() * 0.6}s;
+      --dx:${side * (12 + Math.random() * 64)}vw;--rise:${-(25 + Math.random() * 38)}vh;
+      --rot:${Math.random() * 1080 - 540}deg;`;
     layer.appendChild(p);
   }
-  setTimeout(() => layer.remove(), 2400);
+  confettiTimer = setTimeout(clearConfetti, 4400);
 }
 
 /* ---------- 地球指针交互 ---------- */
@@ -407,6 +535,8 @@ function hideTip() {
 /** 街区是悬在地球上方的独立场景，进入后隐藏地球避免远处地表穿帮 */
 function setGlobeVisible(on) {
   if (viewer) viewer.scene.globe.show = on;
+  // Globe billboards must not float above the street when its camera is near the ground.
+  if (earth?.regionPickables) for (const entity of earth.regionPickables) entity.show = on;
 }
 
 function bindEarthPointer() {
@@ -510,6 +640,7 @@ function startLoop() {
     runTweens(dt);
     if (app.mode === 'select' || app.mode === 'earth' || app.mode === 'flying') earth.update(dt);
     if (app.mode === 'street' || app.mode === 'result' || app.mode === 'leaving') street.update(dt, now);
+    sfx.updateFootsteps(dt, app.mode === 'street' && street.s.playing ? street.heroSpeed : 0, street.s.crouch);
     journey.update(now);
   });
 }
@@ -528,12 +659,14 @@ async function boot() {
 
   viewer.scene.renderError.addEventListener((scene, error) => {
     console.error('渲染错误', error);
+    sfx.setScene('error');
     loadingFail('3D 渲染出错，请刷新页面重试。');
   });
 
   earth = new EarthScene(viewer);
   street = new StreetScene(viewer, streetHooks());
   journey = new JourneyEffects(viewer);
+  if (OBJECT_INSPECTION_ENABLED) inspector = new ObjectInspector(viewer, street, endInspection);
   app.earth = earth;
   app.street = street;
   app.viewer = viewer;
@@ -560,13 +693,19 @@ async function boot() {
   street.bindInput();
   street.bindJoystick($('stick'), $('knob'));
   bindEarthPointer();
+  if (OBJECT_INSPECTION_ENABLED) bindObjectInspection();
   bindSoundButtons((on) => {
     app.progress = updateProgress({ sound: on });
-    if (on) sfx.crowdOn(app.mode === 'street' || app.mode === 'result');
-    else sfx.crowdOn(false);
+    if (on && app.mode === 'street' && !$('task').hidden) sfx.speak('lupe-task');
+    else if (on && app.mode === 'earth') sfx.speak(app.progress.done ? 'mo-complete' : 'mo-intro');
   });
   sfx.setSound(app.progress.sound);
   syncSoundButtons();
+  document.addEventListener('pointerdown', sfx.unlock, { once: true });
+  document.addEventListener('keydown', sfx.unlock, { once: true });
+  document.addEventListener('visibilitychange', () => sfx.setPageActive(!document.hidden));
+  window.addEventListener('blur', () => sfx.setPageActive(false));
+  window.addEventListener('focus', () => sfx.setPageActive(!document.hidden));
 
   $('earthBack').addEventListener('click', toSelect);
   $('earthDone').addEventListener('click', toSelect);
@@ -576,7 +715,7 @@ async function boot() {
   $('takeDog').addEventListener('click', () => street.tryConfirm());
   $('crouch').addEventListener('click', () => street.toggleCrouch());
   $('again').addEventListener('click', replay);
-  $('toEarth').addEventListener('click', leaveStreet);
+  $('resultToSelect').addEventListener('click', () => leaveStreet('select'));
 
   startLoop();
   irisInstant(false);
@@ -588,7 +727,7 @@ async function boot() {
   /* 调试接口：仅开发环境可用，便于自动化验收 */
   if (import.meta.env.DEV) {
     window.__hq = {
-      app, viewer, earth, street, Cesium, enterEarth, enterStreet, leaveStreet, toSelect, beginFind, replay, useHint,
+      app, viewer, earth, street, Cesium, audio: sfx, inspector, openInspection, enterEarth, enterStreet, leaveStreet, toSelect, beginFind, replay, useHint,
     };
   }
 }
@@ -601,7 +740,7 @@ function useHint() {
     return;
   }
   syncHintButton();
-  sfx.bark(r.pan);
+  sfx.hint(r.pan);
   toast(r.text, 3000);
 }
 
